@@ -9,7 +9,7 @@ class ItemRuangan extends React.Component {
       <tbody>
         <tr>
           <td>
-            <a href="pages/examples/invoice.html">{Order_ID}</a>
+            <a href="/detailorder">{Order_ID}</a>
           </td>
           <td>{Nama_Pelanggan}</td>
           <td>ROOM-001</td>
