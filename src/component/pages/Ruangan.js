@@ -53,7 +53,7 @@ class Ruangan extends Component {
             Place New Order
           </a>
           <a href="/" className="btn btn-sm btn-secondary float-right">
-            View All Orders
+            Print Laporan
           </a>
         </div>
         {/* /.card-footer */}
