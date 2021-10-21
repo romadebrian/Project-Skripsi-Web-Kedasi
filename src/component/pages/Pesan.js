@@ -21,160 +21,261 @@ function Pesan() {
             href="/"
             className="list-group-item list-group-item-action active py-3 lh-tight"
             aria-current="true"
+            style={{ paddingLeft: "10px" }}
           >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small>Wed</small>
-            </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="/"
-            className="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small className="text-muted">Tues</small>
-            </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="/"
-            className="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small className="text-muted">Mon</small>
-            </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
+            <div className="row align-items-center">
+              <div className="col-2">
+                <img
+                  className="direct-chat-img"
+                  src="dist/img/user2-160x160.jpg"
+                  alt="message_users_image"
+                />
+              </div>
+              <div className="col-10">
+                <div className="d-flex w-100 align-items-center justify-content-between">
+                  <strong>List group item heading</strong>
+                  <small>Wed</small>
+                </div>
+                <div className="mb-1 small" style={{ marginRight: "20px" }}>
+                  Some placeholder content in a paragraph below the heading and
+                  date.
+                </div>
+              </div>
             </div>
           </a>
           <a
             href="/"
             className="list-group-item list-group-item-action py-3 lh-tight"
             aria-current="true"
+            style={{ paddingLeft: "10px" }}
           >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small className="text-muted">Wed</small>
-            </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
+            <div className="row align-items-center">
+              <div className="col-2">
+                <img
+                  className="direct-chat-img"
+                  src="dist/img/user2-160x160.jpg"
+                  alt="message_users_image"
+                />
+              </div>
+              <div className="col-10">
+                <div className="d-flex w-100 align-items-center justify-content-between">
+                  <strong>List group item heading</strong>
+                  <small>Tues</small>
+                </div>
+                <div className="mb-1 small" style={{ marginRight: "20px" }}>
+                  Some placeholder content in a paragraph below the heading and
+                  date.
+                </div>
+              </div>
             </div>
           </a>
+
           <a
             href="/"
             className="list-group-item list-group-item-action py-3 lh-tight"
+            aria-current="true"
+            style={{ paddingLeft: "10px" }}
           >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small className="text-muted">Tues</small>
-            </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="/"
-            className="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small className="text-muted">Mon</small>
-            </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
+            <div className="row align-items-center">
+              <div className="col-2">
+                <img
+                  className="direct-chat-img"
+                  src="dist/img/user2-160x160.jpg"
+                  alt="message_users_image"
+                />
+              </div>
+              <div className="col-10">
+                <div className="d-flex w-100 align-items-center justify-content-between">
+                  <strong>List group item heading</strong>
+                  <small>Tues</small>
+                </div>
+                <div className="mb-1 small" style={{ marginRight: "20px" }}>
+                  Some placeholder content in a paragraph below the heading and
+                  date.
+                </div>
+              </div>
             </div>
           </a>
           <a
             href="/"
             className="list-group-item list-group-item-action py-3 lh-tight"
             aria-current="true"
+            style={{ paddingLeft: "10px" }}
           >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small className="text-muted">Wed</small>
-            </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="/"
-            className="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small className="text-muted">Tues</small>
-            </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="/"
-            className="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small className="text-muted">Mon</small>
-            </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
+            <div className="row align-items-center">
+              <div className="col-2">
+                <img
+                  className="direct-chat-img"
+                  src="dist/img/user2-160x160.jpg"
+                  alt="message_users_image"
+                />
+              </div>
+              <div className="col-10">
+                <div className="d-flex w-100 align-items-center justify-content-between">
+                  <strong>List group item heading</strong>
+                  <small>Tues</small>
+                </div>
+                <div className="mb-1 small" style={{ marginRight: "20px" }}>
+                  Some placeholder content in a paragraph below the heading and
+                  date.
+                </div>
+              </div>
             </div>
           </a>
           <a
             href="/"
             className="list-group-item list-group-item-action py-3 lh-tight"
             aria-current="true"
+            style={{ paddingLeft: "10px" }}
           >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small className="text-muted">Wed</small>
-            </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
+            <div className="row align-items-center">
+              <div className="col-2">
+                <img
+                  className="direct-chat-img"
+                  src="dist/img/user2-160x160.jpg"
+                  alt="message_users_image"
+                />
+              </div>
+              <div className="col-10">
+                <div className="d-flex w-100 align-items-center justify-content-between">
+                  <strong>List group item heading</strong>
+                  <small>Tues</small>
+                </div>
+                <div className="mb-1 small" style={{ marginRight: "20px" }}>
+                  Some placeholder content in a paragraph below the heading and
+                  date.
+                </div>
+              </div>
             </div>
           </a>
           <a
             href="/"
             className="list-group-item list-group-item-action py-3 lh-tight"
+            aria-current="true"
+            style={{ paddingLeft: "10px" }}
           >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small className="text-muted">Tues</small>
-            </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
+            <div className="row align-items-center">
+              <div className="col-2">
+                <img
+                  className="direct-chat-img"
+                  src="dist/img/user2-160x160.jpg"
+                  alt="message_users_image"
+                />
+              </div>
+              <div className="col-10">
+                <div className="d-flex w-100 align-items-center justify-content-between">
+                  <strong>List group item heading</strong>
+                  <small>Tues</small>
+                </div>
+                <div className="mb-1 small" style={{ marginRight: "20px" }}>
+                  Some placeholder content in a paragraph below the heading and
+                  date.
+                </div>
+              </div>
             </div>
           </a>
           <a
             href="/"
             className="list-group-item list-group-item-action py-3 lh-tight"
+            aria-current="true"
+            style={{ paddingLeft: "10px" }}
           >
-            <div className="d-flex w-100 align-items-center justify-content-between">
-              <strong className="mb-1">List group item heading</strong>
-              <small className="text-muted">Mon</small>
+            <div className="row align-items-center">
+              <div className="col-2">
+                <img
+                  className="direct-chat-img"
+                  src="dist/img/user2-160x160.jpg"
+                  alt="message_users_image"
+                />
+              </div>
+              <div className="col-10">
+                <div className="d-flex w-100 align-items-center justify-content-between">
+                  <strong>List group item heading</strong>
+                  <small>Tues</small>
+                </div>
+                <div className="mb-1 small" style={{ marginRight: "20px" }}>
+                  Some placeholder content in a paragraph below the heading and
+                  date.
+                </div>
+              </div>
             </div>
-            <div className="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
+          </a>
+          <a
+            href="/"
+            className="list-group-item list-group-item-action py-3 lh-tight"
+            aria-current="true"
+            style={{ paddingLeft: "10px" }}
+          >
+            <div className="row align-items-center">
+              <div className="col-2">
+                <img
+                  className="direct-chat-img"
+                  src="dist/img/user2-160x160.jpg"
+                  alt="message_users_image"
+                />
+              </div>
+              <div className="col-10">
+                <div className="d-flex w-100 align-items-center justify-content-between">
+                  <strong>List group item heading</strong>
+                  <small>Tues</small>
+                </div>
+                <div className="mb-1 small" style={{ marginRight: "20px" }}>
+                  Some placeholder content in a paragraph below the heading and
+                  date.
+                </div>
+              </div>
+            </div>
+          </a>
+          <a
+            href="/"
+            className="list-group-item list-group-item-action py-3 lh-tight"
+            aria-current="true"
+            style={{ paddingLeft: "10px" }}
+          >
+            <div className="row align-items-center">
+              <div className="col-2">
+                <img
+                  className="direct-chat-img"
+                  src="dist/img/user2-160x160.jpg"
+                  alt="message_users_image"
+                />
+              </div>
+              <div className="col-10">
+                <div className="d-flex w-100 align-items-center justify-content-between">
+                  <strong>List group item heading</strong>
+                  <small>Tues</small>
+                </div>
+                <div className="mb-1 small" style={{ marginRight: "20px" }}>
+                  Some placeholder content in a paragraph below the heading and
+                  date.
+                </div>
+              </div>
+            </div>
+          </a>
+          <a
+            href="/"
+            className="list-group-item list-group-item-action py-3 lh-tight"
+            aria-current="true"
+            style={{ paddingLeft: "10px" }}
+          >
+            <div className="row align-items-center">
+              <div className="col-2">
+                <img
+                  className="direct-chat-img"
+                  src="dist/img/user2-160x160.jpg"
+                  alt="message_users_image"
+                />
+              </div>
+              <div className="col-10">
+                <div className="d-flex w-100 align-items-center justify-content-between">
+                  <strong>List group item heading</strong>
+                  <small>Tues</small>
+                </div>
+                <div className="mb-1 small" style={{ marginRight: "20px" }}>
+                  Some placeholder content in a paragraph below the heading and
+                  date.
+                </div>
+              </div>
             </div>
           </a>
         </div>
@@ -186,33 +287,6 @@ function Pesan() {
       <div className="card col-md-8 direct-chat direct-chat-primary">
         <div className="card-header">
           <h3 className="card-title">Direct Chat</h3>
-          <div className="card-tools">
-            <span title="3 New Messages" className="badge badge-primary">
-              3
-            </span>
-            <button
-              type="button"
-              className="btn btn-tool"
-              data-card-widget="collapse"
-            >
-              <i className="fas fa-minus" />
-            </button>
-            <button
-              type="button"
-              className="btn btn-tool"
-              title="Contacts"
-              data-widget="chat-pane-toggle"
-            >
-              <i className="fas fa-comments" />
-            </button>
-            <button
-              type="button"
-              className="btn btn-tool"
-              data-card-widget="remove"
-            >
-              <i className="fas fa-times" />
-            </button>
-          </div>
         </div>
         {/* /.card-header */}
         <div className="card-body">

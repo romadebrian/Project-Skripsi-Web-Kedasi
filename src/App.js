@@ -10,7 +10,8 @@ import Notifikasi from "./component/pages/Notifikasi";
 import Pesan from "./component/pages/Pesan";
 import Profile from "./component/pages/Profile";
 
-import DetailOrder from "./component/pages/props/DetailOrder";
+import DetailOrder from "./component/pages/props/Ruangan/DetailOrder";
+import PrintLaporan from "./component/pages/props/Ruangan/PrintLaporan";
 
 // Fungsi untuk yang di tampilkan ke index.html
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Route path="/pesan" exact component={Pesan} />
             <Route path="/profile" exact component={Profile} />
             <Route path="/detailorder" exact component={DetailOrder} />
+            <Route path="/printlaporan" exact component={PrintLaporan} />
           </div>
         </Switch>
 

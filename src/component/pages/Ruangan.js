@@ -1,5 +1,5 @@
 import React, { Component } from "react"; //rce
-import ItemRuangan from "./props/ItemRuangan";
+import ItemRuangan from "./props/Ruangan/ItemRuangan";
 
 class Ruangan extends Component {
   render() {
@@ -52,9 +52,19 @@ class Ruangan extends Component {
           <a href="/" className="btn btn-sm btn-info float-left">
             Place New Order
           </a>
-          <a href="/" className="btn btn-sm btn-secondary float-right">
+          <a
+            href="/printlaporan"
+            className="btn btn-sm btn-secondary float-right"
+          >
             Print Laporan
           </a>
+          <input
+            type="text"
+            className="float-right"
+            name="daterange"
+            value="01/01/2018 - 01/15/2018"
+            style={{ marginRight: "20px" }}
+          />
         </div>
         {/* /.card-footer */}
       </div>

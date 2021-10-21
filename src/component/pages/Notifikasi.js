@@ -1,6 +1,6 @@
 // rce
 import React, { Component } from "react";
-import ItemNotification from "./props/ItemNotification";
+import ItemNotification from "./props/Notifikasi/ItemNotification";
 
 // menggunakan komponen
 var tanggal = " 08 Sep 2021";
@@ -9,8 +9,10 @@ class Notifikasi extends Component {
   render() {
     return (
       <div>
-        <div className="card-header border-transparent">
-          <h3 className="card-title">Latest Orders</h3>
+        <div className="card-header ">
+          <a href="/printlaporan" className="btn btn-primary">
+            Buat Pemperitahuan
+          </a>
           <div className="card-tools">
             {/* Right navbar links */}
             <ul className="navbar-nav ml-auto">
@@ -19,7 +21,7 @@ class Notifikasi extends Component {
                 <a
                   className="nav-link"
                   data-widget="navbar-search"
-                  href="#"
+                  href="/"
                   role="button"
                 >
                   <i className="fas fa-search" />
