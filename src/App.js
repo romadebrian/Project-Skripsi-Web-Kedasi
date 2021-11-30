@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import $ from "jquery";
 import Header from "./component/Header/Header";
@@ -17,25 +18,39 @@ import PrintLaporan from "./pages/Ruangan/props/Ruangan/PrintLaporan";
 function App() {
   return (
     <Router>
-      <>
+      <div>
         <Header />
         <SideNav />
 
         {/* Konten */}
-        <Switch>
-          <div className="content-wrapper">
-            <Route path="/" exart component={Home} />
-            <Route path="/ruangan" exart component={Ruangan} />
-            <Route path="/notifikasi" exact component={Notifikasi} />
-            <Route path="/pesan" exact component={Pesan} />
-            <Route path="/profile" exact component={Profile} />
-            <Route path="/detailorder" exact component={DetailOrder} />
-            <Route path="/printlaporan" exact component={PrintLaporan} />
-          </div>
-        </Switch>
+        <div className="content-wrapper">
+          <Switch>
+            <Route path="/ruangan">
+              <Ruangan />
+            </Route>
+            <Route path="/notifikasi">
+              <Notifikasi />
+            </Route>
+            <Route path="/pesan">
+              <Pesan />
+            </Route>
+            <Route path="/profile">
+              <Profile />
+            </Route>
+            <Route path="/detailorder">
+              <DetailOrder />
+            </Route>
+            <Route path="/printlaporan">
+              <PrintLaporan />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </div>
 
         <Footer />
-      </>
+      </div>
     </Router>
   );
 }
