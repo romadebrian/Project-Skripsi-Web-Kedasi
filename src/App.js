@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import $ from "jquery";
 import Header from "./component/Header/Header";
 import SideNav from "./component/SideNav/SideNav";
-import Footer from "./component/Footer/Footer";
+import Footer from "./modules/Main/Footer/Footer";
 
 import Home from "./pages/Home/Home";
 import Ruangan from "./pages/Ruangan/Ruangan";
@@ -13,6 +13,7 @@ import Profile from "./pages/Profile/Profile";
 
 import DetailOrder from "./pages/Ruangan/props/Ruangan/DetailOrder";
 import PrintLaporan from "./pages/Ruangan/props/Ruangan/PrintLaporan";
+import Login from "./modules/Login/Login";
 
 // Fungsi untuk yang di tampilkan ke index.html
 function App() {
@@ -43,11 +44,16 @@ function App() {
             <Route path="/printlaporan">
               <PrintLaporan />
             </Route>
+
             <Route path="/">
               <Home />
             </Route>
           </Switch>
         </div>
+
+        <Route path="/login">
+          <Login />
+        </Route>
 
         <Footer />
       </div>
