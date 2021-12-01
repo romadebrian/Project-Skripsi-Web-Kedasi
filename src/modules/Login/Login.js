@@ -1,11 +1,42 @@
-import React from "react"; //rfce
+import React, { Component } from "react"; //rfce
 import "./Login.css";
+import appFirebase from "../../config/firebase";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
-function Login() {
-  return (
-    <div className="badan text-center">
-      <div className="form-signin">
-        <form>
+class Login extends Component {
+  state = {
+    email: "",
+    password: "",
+  };
+
+  handleChangeInput = (e) => {
+    this.setState({
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  handleLogin = () => {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, this.state.email, this.state.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        // ...
+        this.props.history.push("/");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("error code: ", errorCode);
+        console.log("error messege: ", errorMessage);
+      });
+  };
+
+  render() {
+    return (
+      <div className="badan text-center">
+        <div className="form-signin">
           <img
             className="mb-4"
             src="/dist/img/kedasi logo.jpg"
@@ -18,16 +49,18 @@ function Login() {
             <input
               type="email"
               className="form-control"
-              id="floatingInput"
-              placeholder="name@example.com"
+              id="email"
+              placeholder="Email"
+              onChange={this.handleChangeInput}
             />
           </div>
           <div className="form-floating">
             <input
               type="password"
               className="form-control"
-              id="floatingPassword"
+              id="password"
               placeholder="Password"
+              onChange={this.handleChangeInput}
             />
           </div>
           <div className="checkbox mb-3">
@@ -38,7 +71,7 @@ function Login() {
           </div>
           <button
             className="w-100 btn btn-lg btn-primary btn-login"
-            type="submit"
+            onClick={this.handleLogin}
           >
             Sign in
           </button>
@@ -54,10 +87,10 @@ function Login() {
             </a>
           </div>
           <p className="mt-5 mb-3 text-muted Copyright">© 2020–2025</p>
-        </form>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default Login;
