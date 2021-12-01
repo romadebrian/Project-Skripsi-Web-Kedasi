@@ -1,61 +1,69 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import $ from "jquery";
-import Header from "./component/Header/Header";
-import SideNav from "./component/SideNav/SideNav";
-import Footer from "./modules/Main/Footer/Footer";
+import Header from "./Header/Header";
+import SideNav from "./SideNav/SideNav";
+import Footer from "./Footer/Footer";
 
-import Home from "./pages/Home/Home";
-import Ruangan from "./pages/Ruangan/Ruangan";
-import Notifikasi from "./pages/Notifikasi/Notifikasi";
-import Pesan from "./pages/Pesan/Pesan";
-import Profile from "./pages/Profile/Profile";
+import Home from "../../pages/Home/Home";
+import Ruangan from "../../pages/Ruangan/Ruangan";
+import Notifikasi from "../../pages/Notifikasi/Notifikasi";
+import Pesan from "../../pages/Pesan/Pesan";
+import Profile from "../../pages/Profile/Profile";
 
-import DetailOrder from "./pages/Ruangan/props/Ruangan/DetailOrder";
-import PrintLaporan from "./pages/Ruangan/props/Ruangan/PrintLaporan";
-import Login from "./modules/Login/Login";
+import DetailOrder from "../../pages/Ruangan/props/Ruangan/DetailOrder";
+import PrintLaporan from "../../pages/Ruangan/props/Ruangan/PrintLaporan";
 
 // Fungsi untuk yang di tampilkan ke index.html
 function App() {
   return (
     <Router>
-      <div>
-        <Header />
-        <SideNav />
+      <div className="hold-transition sidebar-mini layout-fixed">
+        <div class="wrapper">
+          {/* Preloader */}
+          <div className="preloader flex-column justify-content-center align-items-center">
+            <img
+              className="animation__shake"
+              src="/dist/img/kedasi logo.jpg"
+              alt="AdminLTELogo"
+              height={60}
+              width={60}
+            />
+          </div>
 
-        {/* Konten */}
-        <div className="content-wrapper">
-          <Switch>
-            <Route path="/ruangan">
-              <Ruangan />
-            </Route>
-            <Route path="/notifikasi">
-              <Notifikasi />
-            </Route>
-            <Route path="/pesan">
-              <Pesan />
-            </Route>
-            <Route path="/profile">
-              <Profile />
-            </Route>
-            <Route path="/detailorder">
-              <DetailOrder />
-            </Route>
-            <Route path="/printlaporan">
-              <PrintLaporan />
-            </Route>
+          <Header />
+          <SideNav />
 
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
+          {/* Konten */}
+          <div className="content-wrapper">
+            <Switch>
+              <Route path="/ruangan">
+                <Ruangan />
+              </Route>
+              <Route path="/notifikasi">
+                <Notifikasi />
+              </Route>
+              <Route path="/pesan">
+                <Pesan />
+              </Route>
+              <Route path="/profile">
+                <Profile />
+              </Route>
+              <Route path="/detailorder">
+                <DetailOrder />
+              </Route>
+              <Route path="/printlaporan">
+                <PrintLaporan />
+              </Route>
+
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+          </div>
+
+          <Footer />
         </div>
-
-        <Route path="/login">
-          <Login />
-        </Route>
-
-        <Footer />
       </div>
     </Router>
   );

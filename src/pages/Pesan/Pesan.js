@@ -1,5 +1,5 @@
 import React from "react";
-import "../../style/sidebars.css";
+import "./Sidebars/Sidebars.css";
 // import "../../style/sidebars.js";
 
 function Pesan() {

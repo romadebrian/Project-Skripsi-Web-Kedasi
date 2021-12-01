@@ -1,9 +1,6 @@
-html,
-body {
+.badan {
   height: 100%;
-}
 
-body {
   display: flex;
   align-items: center;
   padding-top: 40px;
@@ -38,7 +35,7 @@ body {
   border-top-right-radius: 0;
 }
 
-/* ================================= */
+/* ===================================== */
 
 .bd-placeholder-img {
   font-size: 1.125rem;
