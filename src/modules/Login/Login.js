@@ -2,6 +2,7 @@ import React, { Component } from "react"; //rfce
 import "./Login.css";
 import appFirebase from "../../config/firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { withRouter } from "react-router-dom";
 
 class Login extends Component {
   state = {
@@ -93,4 +94,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);
