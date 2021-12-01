@@ -19,7 +19,7 @@ function App() {
   return (
     <Router>
       <div className="hold-transition sidebar-mini layout-fixed">
-        <div class="wrapper">
+        <div className="wrapper">
           {/* Preloader */}
           <div className="preloader flex-column justify-content-center align-items-center">
             <img
