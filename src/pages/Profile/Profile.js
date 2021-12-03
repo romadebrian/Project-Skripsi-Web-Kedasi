@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getDatabase, ref, set } from "firebase/database";
+import firebase from "../../config/firebase";
 
 class Profile extends Component {
   state = {
@@ -12,14 +12,27 @@ class Profile extends Component {
   };
 
   handleSaveProfile = () => {
-    const db = getDatabase();
-    set(ref(db, "users/" + this.state.userId), {
-      Nama: this.state.nama,
-      Email: this.state.email,
-      Telepon: this.state.telepon,
-      Alamat: this.state.alamat,
-      Profile_Picture: this.state.foto,
-    });
+    firebase
+      .database()
+      .ref("users/" + this.state.userId)
+      .set(
+        {
+          Nama: this.state.nama,
+          Email: this.state.email,
+          Telepon: this.state.telepon,
+          Alamat: this.state.alamat,
+          Profile_Picture: this.state.foto,
+        },
+        (error) => {
+          if (error) {
+            // The write failed...
+            alert("Gagal Simpan");
+          } else {
+            // Data saved successfully!
+            alert("Profile Berhasil Di Update");
+          }
+        }
+      );
   };
 
   render() {
@@ -59,7 +72,7 @@ class Profile extends Component {
           </div>
           {/* /.card-header */}
           {/* form start */}
-          <form>
+          <div className="FormProfile">
             <div className="card-body">
               <div className="form-group">
                 <label htmlFor="exampleInputEmail1">Nama</label>
@@ -130,7 +143,7 @@ class Profile extends Component {
                 Simpan
               </button>
             </div>
-          </form>
+          </div>
           <div className="card-header">
             <h3 className="card-title">Ganti Password</h3>
           </div>
