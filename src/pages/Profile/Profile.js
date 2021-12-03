@@ -11,6 +11,28 @@ class Profile extends Component {
     foto: "romadebrian.jpg",
   };
 
+  componentDidMount() {
+    return firebase
+      .database()
+      .ref("/users/" + this.state.userId)
+      .once("value")
+      .then((snapshot) => {
+        const getNama = snapshot.val() && snapshot.val().Nama;
+        const getEmail = snapshot.val() && snapshot.val().Email;
+        const getTelepon = snapshot.val() && snapshot.val().Telepon;
+        const getAlamat = snapshot.val() && snapshot.val().Alamat;
+        const getFoto = snapshot.val() && snapshot.val().Profile_Picture;
+        // console.log(username);
+        this.setState({
+          nama: getNama,
+          email: getEmail,
+          telepon: getTelepon,
+          alamat: getAlamat,
+          foto: getFoto,
+        });
+      });
+  }
+
   handleSaveProfile = () => {
     firebase
       .database()
@@ -61,7 +83,9 @@ class Profile extends Component {
               height: 180,
             }}
           >
-            <h3 className="widget-user-username text-right">Roma Debrian</h3>
+            <h3 className="widget-user-username text-right">
+              {this.state.nama}
+            </h3>
             <h5 className="widget-user-desc text-right">Web Designer</h5>
           </div>
           <div className="widget-user-image">
@@ -94,6 +118,7 @@ class Profile extends Component {
                   className="form-control"
                   id="nama"
                   placeholder="Nama"
+                  value={this.state.nama}
                   onChange={this.handleChangeInput}
                 />
               </div>
@@ -104,6 +129,7 @@ class Profile extends Component {
                   className="form-control"
                   id="email"
                   placeholder="Email"
+                  value={this.state.email}
                   onChange={this.handleChangeInput}
                 />
               </div>
@@ -114,6 +140,7 @@ class Profile extends Component {
                   className="form-control"
                   id="telepon"
                   placeholder="Nomor Telepon"
+                  value={this.state.telepon}
                   onChange={this.handleChangeInput}
                 />
               </div>
@@ -123,7 +150,7 @@ class Profile extends Component {
                   className="form-control"
                   rows={3}
                   placeholder="Alamat"
-                  defaultValue={""}
+                  value={this.state.alamat}
                   id="alamat"
                   onChange={this.handleChangeInput}
                 />
@@ -143,7 +170,7 @@ class Profile extends Component {
                       className="custom-file-label"
                       htmlFor="exampleInputFile"
                     >
-                      Choose file
+                      {this.state.foto}
                     </label>
                   </div>
                   <div className="input-group-append">
