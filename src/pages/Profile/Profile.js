@@ -4,10 +4,10 @@ import firebase from "../../config/firebase";
 class Profile extends Component {
   state = {
     userId: "zAhbiHR06ZQbwSdTiT6ftB91BH62",
-    nama: "Roma Debrian",
-    email: "roma_coll04@yahoo.com",
-    telepon: "083877434091",
-    alamat: "Bekasi",
+    nama: "",
+    email: "",
+    telepon: "",
+    alamat: "",
     foto: "romadebrian.jpg",
   };
 
@@ -30,9 +30,22 @@ class Profile extends Component {
           } else {
             // Data saved successfully!
             alert("Profile Berhasil Di Update");
+            console.log(
+              this.state.nama,
+              this.state.email,
+              this.state.telepon,
+              this.state.alamat,
+              this.state.foto
+            );
           }
         }
       );
+  };
+
+  handleChangeInput = (e) => {
+    this.setState({
+      [e.target.id]: e.target.value,
+    });
   };
 
   render() {
@@ -79,8 +92,9 @@ class Profile extends Component {
                 <input
                   type="text"
                   className="form-control"
-                  id="InputNama"
+                  id="nama"
                   placeholder="Nama"
+                  onChange={this.handleChangeInput}
                 />
               </div>
               <div className="form-group">
@@ -88,8 +102,9 @@ class Profile extends Component {
                 <input
                   type="email"
                   className="form-control"
-                  id="InputEmail1"
+                  id="email"
                   placeholder="Email"
+                  onChange={this.handleChangeInput}
                 />
               </div>
               <div className="form-group">
@@ -97,8 +112,9 @@ class Profile extends Component {
                 <input
                   type="text"
                   className="form-control"
-                  id="InputTelepon"
+                  id="telepon"
                   placeholder="Nomor Telepon"
+                  onChange={this.handleChangeInput}
                 />
               </div>
               <div className="form-group">
@@ -108,7 +124,8 @@ class Profile extends Component {
                   rows={3}
                   placeholder="Alamat"
                   defaultValue={""}
-                  id="InputAlamat"
+                  id="alamat"
+                  onChange={this.handleChangeInput}
                 />
               </div>
 
@@ -119,7 +136,8 @@ class Profile extends Component {
                     <input
                       type="file"
                       className="custom-file-input"
-                      id="exampleInputFile"
+                      id="foto"
+                      onChange={this.handleChangeInput}
                     />
                     <label
                       className="custom-file-label"
