@@ -8,7 +8,7 @@ class Profile extends Component {
     email: "",
     telepon: "",
     alamat: "",
-    foto: "romadebrian.jpg",
+    foto: null,
   };
 
   componentDidMount() {
@@ -32,6 +32,19 @@ class Profile extends Component {
         });
       });
   }
+
+  handleChangeInput = (e) => {
+    this.setState({
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  fileSelectHandler = (event) => {
+    // console.log(event.target.files[0].name);
+    this.setState({
+      foto: event.target.files[0],
+    });
+  };
 
   handleSaveProfile = () => {
     firebase
@@ -62,12 +75,6 @@ class Profile extends Component {
           }
         }
       );
-  };
-
-  handleChangeInput = (e) => {
-    this.setState({
-      [e.target.id]: e.target.value,
-    });
   };
 
   render() {
@@ -164,7 +171,7 @@ class Profile extends Component {
                       type="file"
                       className="custom-file-input"
                       id="foto"
-                      onChange={this.handleChangeInput}
+                      onChange={this.fileSelectHandler}
                     />
                     <label
                       className="custom-file-label"
