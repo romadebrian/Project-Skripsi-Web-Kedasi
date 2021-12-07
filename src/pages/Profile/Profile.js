@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import firebase from "../../config/firebase";
+import { storage } from "../../config/firebase";
 
 class Profile extends Component {
   state = {
@@ -9,7 +10,16 @@ class Profile extends Component {
     telepon: "",
     alamat: "",
     foto: null,
+    setimage: null,
+    url: "",
+    setUrl: "",
+    progress: "0",
+    setProgress: "0",
   };
+
+  // const [image, setimage] = useState(null);
+  // const [url, setUrl] = useState("");
+  // const [progress, setProgress] = useState(0);
 
   componentDidMount() {
     return firebase
@@ -42,8 +52,11 @@ class Profile extends Component {
   fileSelectHandler = (event) => {
     // console.log(event.target.files[0].name);
     this.setState({
-      foto: event.target.files[0],
+      setimage: event.target.files[0],
     });
+    // if (e.target.files[0]) {
+    //   setimage(e.target.files[0]);
+    // }
   };
 
   handleSaveProfile = () => {
@@ -75,6 +88,51 @@ class Profile extends Component {
           }
         }
       );
+  };
+
+  handleUploadImage = () => {
+    // console.log(this.state.setimage);
+    const uploadTask = storage
+      .ref(`images/${this.state.setimage.name}`)
+      .put(this.state.setimage);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        // setProgress(progress);
+        this.setState({
+          setProgress: progress,
+        });
+        // console.log(this.state.setProgress);
+        document.title = this.state.setProgress;
+        // if (this.state.setProgress === "100") {
+        //   alert("Update Foto Berhasil");
+        // }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("images")
+          .child(this.state.setimage.name)
+          .getDownloadURL()
+          .then((url) => {
+            // console.log(url);
+            // setUrl(url);
+            this.setState({
+              setUrl: url,
+            });
+          });
+      }
+    );
+  };
+
+  testhandle = () => {
+    console.log(this.state.setimage);
   };
 
   render() {
@@ -181,7 +239,12 @@ class Profile extends Component {
                     </label>
                   </div>
                   <div className="input-group-append">
-                    <span className="input-group-text">Upload</span>
+                    <span
+                      className="input-group-text"
+                      onClick={this.handleUploadImage}
+                    >
+                      Upload
+                    </span>
                   </div>
                 </div>
               </div>
