@@ -10,13 +10,13 @@ class Profile extends Component {
     email: "",
     telepon: "",
     alamat: "",
-    foto: null,
     setimage: null,
     url: "",
     setUrl: "",
     progress: "0",
     setProgress: "0",
-    statusUpload: "Pilih Foto",
+    foto: "Pilih Foto",
+    statusUpload: false,
   };
 
   // const [image, setimage] = useState(null);
@@ -34,15 +34,16 @@ class Profile extends Component {
         const getEmail = snapshot.val() && snapshot.val().Email;
         const getTelepon = snapshot.val() && snapshot.val().Telepon;
         const getAlamat = snapshot.val() && snapshot.val().Alamat;
-        // const getFoto = snapshot.val() && snapshot.val().Profile_Picture;
+        const getFoto = snapshot.val() && snapshot.val().Profile_Picture;
         // console.log(username);
         this.setState({
           nama: getNama,
           email: getEmail,
           telepon: getTelepon,
           alamat: getAlamat,
-          // foto: getFoto,
+          setUrl: getFoto,
         });
+        console.log(this.state.setUrl);
       });
   }
 
@@ -58,6 +59,7 @@ class Profile extends Component {
     // console.log(event.target.files[0].name);
     this.setState({
       setimage: event.target.files[0],
+      foto: event.target.files[0].name,
     });
     // if (e.target.files[0]) {
     //   setimage(e.target.files[0]);
@@ -109,6 +111,7 @@ class Profile extends Component {
         );
         // setProgress(progress);
         this.setState({
+          statusUpload: true,
           setProgress: progress,
         });
         console.log(this.state.setProgress + " %");
@@ -131,22 +134,30 @@ class Profile extends Component {
             this.setState({
               setUrl: url,
             });
-            alert("Update Foto Berhasil");
+            // alert("Update Foto Berhasil");
             firebase
               .database()
               .ref("users/" + this.state.userId)
               .set(
                 {
-                  Profile_Picture: this.state.foto,
+                  Nama: this.state.nama,
+                  Email: this.state.email,
+                  Telepon: this.state.telepon,
+                  Alamat: this.state.alamat,
+                  Profile_Picture: this.state.setUrl,
                 },
                 (error) => {
                   if (error) {
                     // The write failed...
-                    alert("Gagal Simpan");
+                    alert("Gagal Simpan Ke Database");
                   } else {
                     // Data saved successfully!
-                    alert("Profile Berhasil Di Simpan");
-                    console.log(this.state.foto);
+                    alert("Update Foto Berhasil");
+                    console.log(this.state.setUrl);
+                    this.setState({
+                      statusUpload: false,
+                      foto: "Pilih Foto",
+                    });
                   }
                 }
               );
@@ -248,36 +259,41 @@ class Profile extends Component {
               <div className="form-group">
                 <label htmlFor="exampleInputFile">Upload Foto</label>
                 <div className="input-group">
-                  {/* <div className="custom-file">
-                    <input
-                      type="file"
-                      className="custom-file-input"
-                      id="foto"
-                      onChange={this.fileSelectHandler}
-                    />
-                    <label
-                      className="custom-file-label"
-                      htmlFor="exampleInputFile"
-                    >
-                      {this.state.statusUpload}
-                    </label>
-                  </div> */}
-                  <div className="progress box-progressbar">
-                    <div
-                      className="progress-bar"
-                      role="progressbar"
-                      aria-valuenow={0}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
-                  </div>
+                  {/* Mode Upload */}
+                  {this.state.statusUpload ? (
+                    <div className="progress-bar">
+                      <span
+                        className="progress-bar-inner"
+                        style={{
+                          width: `${this.state.setProgress}%`,
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="custom-file">
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="foto"
+                        onChange={this.fileSelectHandler}
+                      />
+                      <label
+                        className="custom-file-label"
+                        htmlFor="exampleInputFile"
+                      >
+                        {this.state.foto}
+                      </label>
+                    </div>
+                  )}
 
                   <div className="input-group-append">
                     <span
                       className="input-group-text"
                       onClick={this.handleUploadImage}
                     >
-                      Upload
+                      {this.state.statusUpload
+                        ? this.state.setProgress + "%"
+                        : "Upload"}
                     </span>
                   </div>
                 </div>
