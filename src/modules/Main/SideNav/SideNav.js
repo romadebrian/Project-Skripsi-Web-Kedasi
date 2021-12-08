@@ -64,7 +64,7 @@ class SideNav extends Component {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/" className="nav-link">
+                  <Link to="/login" className="nav-link">
                     <i className="nav-icon fas fa-sign-out-alt" />
                     <p>Logout</p>
                   </Link>

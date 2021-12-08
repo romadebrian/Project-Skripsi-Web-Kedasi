@@ -26,6 +26,9 @@ function App() {
           {/* Konten */}
           <div className="content-wrapper">
             <Switch>
+              <Route path="/profile">
+                <Profile />
+              </Route>
               <Route path="/ruangan">
                 <Ruangan />
               </Route>
@@ -35,9 +38,9 @@ function App() {
               <Route path="/pesan">
                 <Pesan />
               </Route>
-              <Route path="/profile">
-                <Profile />
-              </Route>
+              {/* <Route path="/logout">
+                <Pesan />
+              </Route> */}
               <Route path="/detailorder">
                 <DetailOrder />
               </Route>
