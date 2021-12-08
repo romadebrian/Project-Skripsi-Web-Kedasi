@@ -186,14 +186,14 @@ class Profile extends Component {
             <h3 className="widget-user-username text-right">
               {this.state.nama}
             </h3>
-            <h5 className="widget-user-desc text-right">Web Designer</h5>
+            {/* <h5 className="widget-user-desc text-right">Web Designer</h5> */}
           </div>
           <div className="widget-user-image">
             <img
               className="img-circle"
-              src="dist/img/romadebrian.png"
+              src={this.state.setUrl}
               alt="User Avatar"
-              style={{ width: 150 }}
+              style={{ width: 150, height: 150 }}
             />
           </div>
           <div className="card-footer">
@@ -288,7 +288,7 @@ class Profile extends Component {
 
                   <div className="input-group-append">
                     <span
-                      className="input-group-text"
+                      className="input-group-text bg-danger"
                       onClick={this.handleUploadImage}
                     >
                       {this.state.statusUpload
