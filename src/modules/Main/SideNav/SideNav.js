@@ -45,7 +45,8 @@ class SideNav extends Component {
               >
                 {/* Add icons to the links using the .nav-icon class with font-awesome or any other icon font library */}
                 <li className="nav-item">
-                  <Link to="/ruangan" className="nav-link">
+                  {/*className="nav-link active"> */}
+                  <Link to="/ruangan" className="nav-link active">
                     <i className="nav-icon fas fa-book" />
                     <p>Reservasi Ruangan</p>
                   </Link>
