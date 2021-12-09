@@ -82,11 +82,6 @@ class Login extends Component {
               Forgot Password?
             </a>
           </div>
-          <div className="text-center">
-            <a className="small" href="{{ url('/register')}}">
-              Create an Account!
-            </a>
-          </div>
           <p className="mt-5 mb-3 text-muted Copyright">© 2020–2025</p>
         </div>
       </div>

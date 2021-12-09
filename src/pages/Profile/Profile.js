@@ -231,6 +231,7 @@ class Profile extends Component {
                   placeholder="Email"
                   value={this.state.email}
                   onChange={this.handleChangeInput}
+                  disabled
                 />
               </div>
               <div className="form-group">
