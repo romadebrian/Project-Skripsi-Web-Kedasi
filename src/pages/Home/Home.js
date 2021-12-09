@@ -26,8 +26,8 @@ function Home() {
       {/* /.content-header */}
 
       {/* Main content */}
-      <section class="content">
-        <div class="container-fluid">
+      <section className="content">
+        <div className="container-fluid">
           <div className="row">
             <div className="col-lg-3 col-6">
               {/* small box */}
