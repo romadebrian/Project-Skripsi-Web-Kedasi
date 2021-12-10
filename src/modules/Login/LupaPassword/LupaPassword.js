@@ -1,6 +1,32 @@
 import React, { Component } from "react";
 
+import { sendPasswordResetEmail, getAuth } from "firebase/auth";
+import { withRouter } from "react-router-dom";
+
 class LupaPassword extends Component {
+  state = {
+    email: "",
+  };
+
+  handleChangeInput = (e) => {
+    this.setState({
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  handleSendEmail = () => {
+    sendPasswordResetEmail(getAuth(), this.state.email)
+      .then(() => {
+        console.log(this.state.email);
+        alert("Email Reset Password Telah Dikirim");
+        this.props.history.push("/login");
+      })
+      .catch((err) => {
+        console.log(err.code);
+        alert("Email Tidak Terdaftar");
+      });
+  };
+
   render() {
     return (
       <div className="badan text-center">
@@ -18,7 +44,7 @@ class LupaPassword extends Component {
           </div>
           <button
             className="w-100 btn btn-lg btn-primary btn-login"
-            onClick={this.handleLogin}
+            onClick={this.handleSendEmail}
           >
             Submit
           </button>
@@ -28,4 +54,4 @@ class LupaPassword extends Component {
   }
 }
 
-export default LupaPassword;
+export default withRouter(LupaPassword);
