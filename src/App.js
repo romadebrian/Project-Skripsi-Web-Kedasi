@@ -23,6 +23,9 @@ function App() {
         <Route path="/login">
           <Login />
         </Route>
+        <Route path="/lupa_password">
+          <Login />
+        </Route>
         <Route path="/">
           <Main />
         </Route>
