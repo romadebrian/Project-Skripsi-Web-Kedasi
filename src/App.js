@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import Footer from "./modules/Main/Footer/Footer";
 import Main from "./modules/Main/main";
 import Login from "./modules/Login/Login";
+import LupaPassword from "./modules/Login/LupaPassword/LupaPassword";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
           <Login />
         </Route>
         <Route path="/lupa_password">
-          <Login />
+          <LupaPassword />
         </Route>
         <Route path="/">
           <Main />
