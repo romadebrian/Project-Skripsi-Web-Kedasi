@@ -13,6 +13,7 @@ class LupaPassword extends Component {
               id="email"
               placeholder="Email"
               onChange={this.handleChangeInput}
+              style={{ marginBottom: 20 }}
             />
           </div>
           <button

@@ -2,7 +2,7 @@ import React, { Component } from "react"; //rfce
 import "./Login.css";
 // import appFirebase from "../../config/firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 class Login extends Component {
   state = {
@@ -78,9 +78,9 @@ class Login extends Component {
           </button>
           <hr />
           <div className="text-center">
-            <a className="small" href="/">
+            <Link to="/lupa_password" className="small">
               Forgot Password?
-            </a>
+            </Link>
           </div>
           <p className="mt-5 mb-3 text-muted Copyright">© 2020–2025</p>
         </div>
