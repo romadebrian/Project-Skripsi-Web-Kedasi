@@ -19,3 +19,7 @@
   position: relative;
   animation: 10s infinite linear;
 }
+
+.change-password {
+  margin-left: 10px;
+}

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import firebase from "../../config/firebase";
 import { storage } from "../../config/firebase";
+import { sendPasswordResetEmail, getAuth } from "firebase/auth";
 import "./Profile.css";
 
 class Profile extends Component {
@@ -166,6 +167,18 @@ class Profile extends Component {
     );
   };
 
+  handleChangePassword = () => {
+    sendPasswordResetEmail(getAuth(), this.state.email)
+      .then(() => {
+        console.log(this.state.email);
+        alert("Email Reset Password Telah Dikirim");
+      })
+      .catch((err) => {
+        console.log(err.code);
+        // alert("Email Tidak Terdaftar");
+      });
+  };
+
   testhandle = () => {
     console.log(this.state.setimage);
   };
@@ -308,9 +321,16 @@ class Profile extends Component {
               >
                 Simpan
               </button>
+
+              <button
+                className="btn btn-primary change-password"
+                onClick={this.handleChangePassword}
+              >
+                Ganti Password
+              </button>
             </div>
           </div>
-          <div className="card-header">
+          {/* <div className="card-header">
             <h3 className="card-title">Ganti Password</h3>
           </div>
           <form>
@@ -341,7 +361,7 @@ class Profile extends Component {
                 Ganti Password
               </button>
             </div>
-          </form>
+          </form> */}
         </div>
         {/* /.card */}
       </div>
