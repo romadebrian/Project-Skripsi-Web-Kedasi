@@ -32,14 +32,15 @@ class Profile extends Component {
       .once("value")
       .then((snapshot) => {
         const getNama = snapshot.val() && snapshot.val().Nama;
-        const getEmail = snapshot.val() && snapshot.val().Email;
+        // const getEmail = snapshot.val() && snapshot.val().Email;
         const getTelepon = snapshot.val() && snapshot.val().Telepon;
         const getAlamat = snapshot.val() && snapshot.val().Alamat;
         const getFoto = snapshot.val() && snapshot.val().Profile_Picture;
         // console.log(username);
         this.setState({
           nama: getNama,
-          email: getEmail,
+          // email: getEmail,
+          email: JSON.parse(localStorage.getItem("EmailUser")),
           telepon: getTelepon,
           alamat: getAlamat,
           setUrl: getFoto,
@@ -77,7 +78,7 @@ class Profile extends Component {
           Email: this.state.email,
           Telepon: this.state.telepon,
           Alamat: this.state.alamat,
-          Profile_Picture: this.state.foto,
+          Profile_Picture: this.state.setUrl,
         },
         (error) => {
           if (error) {
@@ -91,7 +92,7 @@ class Profile extends Component {
               this.state.email,
               this.state.telepon,
               this.state.alamat,
-              this.state.foto
+              this.state.setUrl
             );
           }
         }
@@ -198,7 +199,7 @@ class Profile extends Component {
           >
             <h3 className="widget-user-username text-right">
               {/* {this.state.nama} */}
-              {JSON.parse(localStorage.getItem("userData"))}
+              {JSON.parse(localStorage.getItem("EmailUser"))}
             </h3>
             {/* <h5 className="widget-user-desc text-right">Web Designer</h5> */}
           </div>
