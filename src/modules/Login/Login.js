@@ -27,6 +27,7 @@ class Login extends Component {
         console.log("UserId: ", user.uid);
         console.log("Email: ", user.email);
         localStorage.setItem("UserId", JSON.stringify(user.uid));
+        localStorage.setItem("UserEmail", JSON.stringify(user.email));
         this.props.history.push("/");
       })
       .catch((error) => {
@@ -36,6 +37,12 @@ class Login extends Component {
         console.log("error messege: ", errorMessage);
         alert("Email atau Password salah");
       });
+  };
+
+  hangleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      this.handleLogin();
+    }
   };
 
   render() {
@@ -66,6 +73,7 @@ class Login extends Component {
               id="password"
               placeholder="Password"
               onChange={this.handleChangeInput}
+              onKeyPress={this.hangleKeyPress}
             />
           </div>
           <div className="checkbox mb-3">
