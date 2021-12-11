@@ -33,16 +33,16 @@ class Profile extends Component {
       .then(
         (snapshot) => {
           this.setState({
-            nama: snapshot.val().Nama,
-            email: snapshot.val().Email,
-            // email: JSON.parse(localStorage.getItem("EmailUser")),
-            telepon: snapshot.val().Telepon,
-            alamat: snapshot.val().Alamat,
-            setUrl: snapshot.val().Profile_Picture,
+            nama: snapshot.val() && snapshot.val().Nama,
+            // email: snapshot.val() && snapshot.val().Email,
+            email: JSON.parse(localStorage.getItem("UserEmail")),
+            telepon: snapshot.val() && snapshot.val().Telepon,
+            alamat: snapshot.val() && snapshot.val().Alamat,
+            setUrl: snapshot.val() && snapshot.val().Profile_Picture,
           });
           // console.log(username);
           console.log("Photo Profile Link ", this.state.setUrl);
-          console.log(this.state.email);
+          // console.log(this.state.email);
         },
         (error) => {
           if (error) {
