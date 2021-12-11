@@ -30,32 +30,29 @@ class Profile extends Component {
       .database()
       .ref("/users/" + this.state.userId)
       .once("value")
-      .then((snapshot) => {
-        const getNama = snapshot.val() && snapshot.val().Nama;
-        const getEmail = snapshot.val() && snapshot.val().Email;
-        const getTelepon = snapshot.val() && snapshot.val().Telepon;
-        const getAlamat = snapshot.val() && snapshot.val().Alamat;
-        const getFoto = snapshot.val() && snapshot.val().Profile_Picture;
-        // console.log(username);
-        this.setState({
-          nama: getNama,
-          email: getEmail,
-          // email: JSON.parse(localStorage.getItem("EmailUser")),
-          telepon: getTelepon,
-          alamat: getAlamat,
-          setUrl: getFoto,
-        });
-        console.log("Photo Profile Link ", this.state.setUrl);
-      })
-      .catch((error) => {
-        if (error) {
-          console.log(error);
-          // The write failed...
-        } else {
-          console.log(error);
-          // Data saved successfully!
+      .then(
+        (snapshot) => {
+          this.setState({
+            nama: snapshot.val().Nama,
+            email: snapshot.val().Email,
+            // email: JSON.parse(localStorage.getItem("EmailUser")),
+            telepon: snapshot.val().Telepon,
+            alamat: snapshot.val().Alamat,
+            setUrl: snapshot.val().Profile_Picture,
+          });
+          // console.log(username);
+          console.log("Photo Profile Link ", this.state.setUrl);
+          console.log(this.state.email);
+        },
+        (error) => {
+          if (error) {
+            console.log("read failed", error);
+            // The write failed...
+          } else {
+            // Data saved successfully!
+          }
         }
-      });
+      );
   }
 
   componentWillUnmount() {}
