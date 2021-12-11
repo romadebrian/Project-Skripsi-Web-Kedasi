@@ -31,6 +31,7 @@ class Login extends Component {
         const errorMessage = error.message;
         console.log("error code: ", errorCode);
         console.log("error messege: ", errorMessage);
+        alert("Email atau Password salah");
       });
   };
 
@@ -45,7 +46,7 @@ class Login extends Component {
             width={72}
             height={57}
           />
-          <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
+          <h1 className="h3 mb-3 fw-normal">KEDASI</h1>
           <div className="form-floating">
             <input
               type="email"
@@ -67,19 +68,19 @@ class Login extends Component {
           <div className="checkbox mb-3">
             <label>
               <input type="checkbox" defaultValue="remember-me" />
-              <span> Remember me </span>
+              <span> ingat saya </span>
             </label>
           </div>
           <button
             className="w-100 btn btn-lg btn-primary btn-login"
             onClick={this.handleLogin}
           >
-            Sign in
+            Masuk
           </button>
           <hr />
           <div className="text-center">
             <Link to="/lupa_password" className="small">
-              Forgot Password?
+              Lupa Password
             </Link>
           </div>
           <p className="mt-5 mb-3 text-muted Copyright">© 2020–2025</p>
