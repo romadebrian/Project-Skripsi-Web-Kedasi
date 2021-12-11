@@ -44,7 +44,7 @@ class Profile extends Component {
           alamat: getAlamat,
           setUrl: getFoto,
         });
-        console.log(this.state.setUrl);
+        console.log("Profile Link ", this.state.setUrl);
       });
   }
 
@@ -197,7 +197,8 @@ class Profile extends Component {
             }}
           >
             <h3 className="widget-user-username text-right">
-              {this.state.nama}
+              {/* {this.state.nama} */}
+              {JSON.parse(localStorage.getItem("userData"))}
             </h3>
             {/* <h5 className="widget-user-desc text-right">Web Designer</h5> */}
           </div>

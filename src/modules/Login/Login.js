@@ -23,7 +23,7 @@ class Login extends Component {
         // Signed in
         const user = userCredential.user;
         console.log(user);
-        // ...
+        localStorage.setItem("EmailUser", JSON.stringify(this.state.email));
         this.props.history.push("/");
       })
       .catch((error) => {
