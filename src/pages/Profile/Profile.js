@@ -6,7 +6,7 @@ import "./Profile.css";
 
 class Profile extends Component {
   state = {
-    userId: "zAhbiHR06ZQbwSdTiT6ftB91BH62",
+    userId: JSON.parse(localStorage.getItem("UserId")),
     nama: "",
     email: "",
     telepon: "",
@@ -32,20 +32,29 @@ class Profile extends Component {
       .once("value")
       .then((snapshot) => {
         const getNama = snapshot.val() && snapshot.val().Nama;
-        // const getEmail = snapshot.val() && snapshot.val().Email;
+        const getEmail = snapshot.val() && snapshot.val().Email;
         const getTelepon = snapshot.val() && snapshot.val().Telepon;
         const getAlamat = snapshot.val() && snapshot.val().Alamat;
         const getFoto = snapshot.val() && snapshot.val().Profile_Picture;
         // console.log(username);
         this.setState({
           nama: getNama,
-          // email: getEmail,
-          email: JSON.parse(localStorage.getItem("EmailUser")),
+          email: getEmail,
+          // email: JSON.parse(localStorage.getItem("EmailUser")),
           telepon: getTelepon,
           alamat: getAlamat,
           setUrl: getFoto,
         });
-        console.log("Profile Link ", this.state.setUrl);
+        console.log("Photo Profile Link ", this.state.setUrl);
+      })
+      .catch((error) => {
+        if (error) {
+          console.log(error);
+          // The write failed...
+        } else {
+          console.log(error);
+          // Data saved successfully!
+        }
       });
   }
 
