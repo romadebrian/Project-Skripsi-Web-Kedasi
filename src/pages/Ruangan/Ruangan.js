@@ -50,7 +50,7 @@ class Ruangan extends Component {
         {/* /.card-body */}
         <div className="card-footer clearfix">
           <a href="/" className="btn btn-sm btn-info float-left">
-            Place New Order
+            Buat Pesanan Baru
           </a>
           <a
             href="/printlaporan"
