@@ -108,11 +108,37 @@ function PesanRuangan(props) {
             </div>
             <div className="form-group">
               <label>Status</label>
-              <input
-                type="text"
-                className="form-control"
-                id="exampleInputPassword1"
-              />
+              <br />
+              <div
+                className="icheck-success d-inline"
+                style={{ marginRight: 10 }}
+              >
+                <input
+                  type="radio"
+                  id="radioPrimary1"
+                  name="r1"
+                  defaultChecked
+                />
+                <label htmlFor="radioPrimary1">Active</label>
+              </div>
+              <div
+                className="icheck-sunflower d-inline"
+                style={{ marginRight: 10 }}
+              >
+                <input type="radio" id="radioPrimary2" name="r1" />
+                <label htmlFor="radioPrimary2">Menunggu Pembayaran</label>
+              </div>
+              <div
+                className="icheck-concrete d-inline"
+                style={{ marginRight: 10 }}
+              >
+                <input type="radio" id="radioPrimary3" name="r1" />
+                <label htmlFor="radioPrimary3">Selesai</label>
+              </div>
+              <div className="icheck-danger d-inline">
+                <input type="radio" id="radioPrimary4" name="r1" />
+                <label htmlFor="radioPrimary4">Batal</label>
+              </div>
             </div>
           </div>
           {/* /.card-body */}

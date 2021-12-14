@@ -121,7 +121,7 @@ function PesanRuanganV2(props) {
               <label>Status</label>
               <br />
               <div
-                className="icheck-primary d-inline"
+                className="icheck-success d-inline"
                 style={{ marginRight: 10 }}
               >
                 <input
@@ -133,20 +133,20 @@ function PesanRuanganV2(props) {
                 <label htmlFor="radioPrimary1">Active</label>
               </div>
               <div
-                className="icheck-primary d-inline"
+                className="icheck-sunflower d-inline"
                 style={{ marginRight: 10 }}
               >
                 <input type="radio" id="radioPrimary2" name="r1" />
                 <label htmlFor="radioPrimary2">Menunggu Pembayaran</label>
               </div>
               <div
-                className="icheck-primary d-inline"
+                className="icheck-concrete d-inline"
                 style={{ marginRight: 10 }}
               >
                 <input type="radio" id="radioPrimary3" name="r1" />
                 <label htmlFor="radioPrimary3">Selesai</label>
               </div>
-              <div className="icheck-primary d-inline">
+              <div className="icheck-danger d-inline">
                 <input type="radio" id="radioPrimary4" name="r1" />
                 <label htmlFor="radioPrimary4">Batal</label>
               </div>
