@@ -2,24 +2,28 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 function PesanRuanganV2(props) {
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState("");
 
   useEffect(() => {
     window.$("#reservationdate").datetimepicker({
       format: "L",
     });
 
-    let hariini = new Date();
+    function convertTanggalSekarang() {
+      let hariini = new Date();
 
-    let tgl =
-      hariini.getDate() +
-      "-" +
-      parseInt(hariini.getMonth() + 1) +
-      "-" +
-      hariini.getFullYear();
+      let tgl =
+        hariini.getDate() +
+        "-" +
+        parseInt(hariini.getMonth() + 1) +
+        "-" +
+        hariini.getFullYear();
 
-    setDate(tgl);
-    console.log(new Date());
+      setDate(tgl);
+      console.log(new Date());
+    }
+
+    convertTanggalSekarang();
   });
 
   const formatDate = (e) => {
@@ -33,7 +37,7 @@ function PesanRuanganV2(props) {
     console.log(dateMDY);
   };
 
-  const handleSubmit = () => {};
+  // const handleSubmit = () => {};
 
   return (
     <div className="container">

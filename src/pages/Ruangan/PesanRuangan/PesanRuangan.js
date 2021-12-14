@@ -2,38 +2,57 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 function PesanRuangan(props) {
-  const [date, setDate] = useState(new Date());
+  const [tanggalSekarang, setTanggalSekarang] = useState("");
+  const [tanggalSewa, setTanggalSewa] = useState("");
 
   useEffect(() => {
     window.$("#reservationdate").datetimepicker({
       format: "L",
     });
 
-    let hariini = new Date();
+    function ConvertTanggalSekarang() {
+      let hariini = new Date();
+      let tgl =
+        hariini.getDate() +
+        "-" +
+        parseInt(hariini.getMonth() + 1) +
+        "-" +
+        hariini.getFullYear();
+      setTanggalSekarang(tgl);
+      // console.log(new Date());
+    }
 
-    let tgl =
-      hariini.getDate() +
-      "-" +
-      parseInt(hariini.getMonth() + 1) +
-      "-" +
-      hariini.getFullYear();
-
-    setDate(tgl);
-    console.log(new Date());
+    ConvertTanggalSekarang();
   });
 
   const formatDate = (e) => {
-    let tanggal = new Date(e.target[3].value);
-    let dateMDY = `${tanggal.getDate()}-${
-      tanggal.getMonth() + 1
-    }-${tanggal.getFullYear()}`;
-    // setDate("31-12-2021");
+    let tanggalMulai = new Date(e.target[3].value);
+    let TanggalSew = `${tanggalMulai.getDate()}-${
+      tanggalMulai.getMonth() + 1
+    }-${tanggalMulai.getFullYear()}`;
 
-    e.preventDefault();
-    console.log(dateMDY);
+    setTanggalSewa(TanggalSew);
+
+    // console.log(dateMDY);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    formatDate(e);
+
+    setTimeout(function () {
+      console.log(e.target[0].value);
+      console.log(e.target[1].value);
+      console.log(e.target[2].value);
+      console.log(tanggalSewa);
+      // console.log(e.target[3].value);
+      // console.log(e.target[4].value);
+      console.log(e.target[5].checked);
+      console.log(e.target[6].checked);
+      console.log(e.target[7].checked);
+      console.log(e.target[8].checked);
+    }, 3000);
+  };
 
   return (
     <div className="container">
@@ -43,7 +62,7 @@ function PesanRuangan(props) {
         </div>
         {/* /.card-header */}
         {/* form start */}
-        <form onSubmit={formatDate}>
+        <form onSubmit={handleSubmit}>
           <div className="card-body">
             <div className="form-group">
               <label>Order ID</label>
@@ -78,12 +97,11 @@ function PesanRuangan(props) {
               >
                 <input
                   type="text"
-                  className="form-control"
                   className="form-control datetimepicker-input"
                   data-target="#reservationdate"
                   // onChange={(e) => setDate(e.target.value)}
                   // onClick={(e) => console.log(e.target.value)}
-                  value={date}
+                  value={tanggalSekarang}
                   onChange={(e) => console.log(e.target.value)}
                 />
                 <div
@@ -106,6 +124,7 @@ function PesanRuangan(props) {
                 id="exampleInputPassword1"
               />
             </div>
+
             <div className="form-group">
               <label>Status</label>
               <br />
