@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-function PesanRuangan(props) {
+function PesanRuanganV2(props) {
   const [date, setDate] = useState(new Date());
 
   useEffect(() => {
@@ -78,7 +78,7 @@ function PesanRuangan(props) {
               >
                 <input
                   type="text"
-                  className="form-control"
+                  // className="form-control"
                   className="form-control datetimepicker-input"
                   data-target="#reservationdate"
                   // onChange={(e) => setDate(e.target.value)}
@@ -99,13 +99,57 @@ function PesanRuangan(props) {
             </div>
 
             <div className="form-group">
-              <label>Tanggal Selesai</label>
-              <input
-                type="text"
-                className="form-control"
-                id="exampleInputPassword1"
-              />
+              <label>Tipe Paket</label>
+              <select className="form-control">
+                <option>Casual </option>
+                <option>Monthly</option>
+              </select>
             </div>
+            <div className="form-group">
+              <label>Lama Sewa</label>
+              <select className="form-control">
+                <option>Per Jam</option>
+                <option>1 Hari</option>
+                <option>1 Bulan 25 Jam</option>
+                <option>1 Bulan 50 Jam</option>
+                <option>1 Bulan 100 Jam</option>
+                <option>1 Bulan Tanpa Batas</option>
+              </select>
+            </div>
+
+            <div className="form-group clearfix">
+              <div
+                className="icheck-primary d-inline"
+                style={{ marginRight: 10 }}
+              >
+                <input
+                  type="radio"
+                  id="radioPrimary1"
+                  name="r1"
+                  defaultChecked
+                />
+                <label htmlFor="radioPrimary1">Active</label>
+              </div>
+              <div
+                className="icheck-primary d-inline"
+                style={{ marginRight: 10 }}
+              >
+                <input type="radio" id="radioPrimary2" name="r1" />
+                <label htmlFor="radioPrimary2">Menunggu Pembayaran</label>
+              </div>
+              <div
+                className="icheck-primary d-inline"
+                style={{ marginRight: 10 }}
+              >
+                <input type="radio" id="radioPrimary3" name="r1" />
+                <label htmlFor="radioPrimary3">Selesai</label>
+              </div>
+              <div className="icheck-primary d-inline">
+                <input type="radio" id="radioPrimary4" name="r1" />
+                <label htmlFor="radioPrimary4">Batal</label>
+              </div>
+            </div>
+
             <div className="form-group">
               <label>Status</label>
               <input
@@ -127,4 +171,4 @@ function PesanRuangan(props) {
   );
 }
 
-export default PesanRuangan;
+export default PesanRuanganV2;
