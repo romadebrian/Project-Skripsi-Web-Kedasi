@@ -118,6 +118,8 @@ function PesanRuanganV2(props) {
             </div>
 
             <div className="form-group clearfix">
+              <label>Status</label>
+              <br />
               <div
                 className="icheck-primary d-inline"
                 style={{ marginRight: 10 }}
@@ -148,15 +150,6 @@ function PesanRuanganV2(props) {
                 <input type="radio" id="radioPrimary4" name="r1" />
                 <label htmlFor="radioPrimary4">Batal</label>
               </div>
-            </div>
-
-            <div className="form-group">
-              <label>Status</label>
-              <input
-                type="text"
-                className="form-control"
-                id="exampleInputPassword1"
-              />
             </div>
           </div>
           {/* /.card-body */}
