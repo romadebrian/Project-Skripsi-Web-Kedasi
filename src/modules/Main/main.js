@@ -13,6 +13,7 @@ import Profile from "../../pages/Profile/Profile";
 
 import DetailOrder from "../../pages/Ruangan/DetailOrder/DetailOrder";
 import PrintLaporan from "../../pages/Ruangan/props/Ruangan/PrintLaporan";
+import PesanRuangan from "../../pages/Ruangan/PesanRuangan/PesanRuangan";
 
 // Fungsi untuk yang di tampilkan ke index.html
 function App() {
@@ -30,7 +31,8 @@ function App() {
                 <Profile />
               </Route>
               <Route path="/ruangan">
-                <Ruangan />
+                {/* <Ruangan /> */}
+                <PesanRuangan />
               </Route>
               <Route path="/notifikasi">
                 <Notifikasi />
