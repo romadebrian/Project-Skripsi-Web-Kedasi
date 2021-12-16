@@ -6,7 +6,7 @@ function PesanRuanganV2(props) {
 
   useEffect(() => {
     window.$("#reservationdate").datetimepicker({
-      format: "L",
+      format: "DD-MM-YYYY",
     });
 
     function convertTanggalSekarang() {
@@ -26,18 +26,28 @@ function PesanRuanganV2(props) {
     convertTanggalSekarang();
   });
 
-  const formatDate = (e) => {
-    let tanggal = new Date(e.target[3].value);
-    let dateMDY = `${tanggal.getDate()}-${
-      tanggal.getMonth() + 1
-    }-${tanggal.getFullYear()}`;
-    // setDate("31-12-2021");
-
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(dateMDY);
-  };
 
-  // const handleSubmit = () => {};
+    console.log("Order Id: ", e.target[0].value);
+    console.log("Nama Pemesan: ", e.target[1].value);
+    console.log("Ruangan: ", e.target[2].value);
+    console.log("Tanggal Sewa: ", e.target[3].value);
+    console.log("Tipe Paket : ", e.target[4].value);
+    console.log("Lama Sewa : ", e.target[5].value);
+
+    if (e.target[6].checked === true) {
+      console.log("Active");
+    } else if (e.target[7].checked === true) {
+      console.log("Menunggu Pembayaran");
+    } else if (e.target[8].checked === true) {
+      console.log("Selesai");
+    } else if (e.target[9].checked === true) {
+      console.log("Batal");
+    } else {
+      console.log("error");
+    }
+  };
 
   return (
     <div className="container">
@@ -47,7 +57,7 @@ function PesanRuanganV2(props) {
         </div>
         {/* /.card-header */}
         {/* form start */}
-        <form onSubmit={formatDate}>
+        <form onSubmit={handleSubmit}>
           <div className="card-body">
             <div className="form-group">
               <label>Order ID</label>
@@ -82,11 +92,8 @@ function PesanRuanganV2(props) {
               >
                 <input
                   type="text"
-                  // className="form-control"
                   className="form-control datetimepicker-input"
                   data-target="#reservationdate"
-                  // onChange={(e) => setDate(e.target.value)}
-                  // onClick={(e) => console.log(e.target.value)}
                   value={date}
                   onChange={(e) => console.log(e.target.value)}
                 />
