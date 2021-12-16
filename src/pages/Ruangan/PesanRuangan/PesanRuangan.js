@@ -48,18 +48,28 @@ class PesanRuangan extends Component {
 
     // this.formatDate(e);
 
-    console.log(e.target[0].value);
-    console.log(e.target[1].value);
-    console.log(e.target[2].value);
-    console.log(e.target[3].value);
+    console.log("Order Id: ", e.target[0].value);
+    console.log("Nama Pemesan: ", e.target[1].value);
+    console.log("Ruangan: ", e.target[2].value);
+    console.log("Tanggal Sewa: ", e.target[3].value);
+    console.log("Tanggal Selesai: ", e.target[4].value);
 
-    // console.log(e.target[3].value);
-    // console.log(e.target[4].value);
+    if (e.target[5].checked === true) {
+      console.log("Active");
+    } else if (e.target[6].checked === true) {
+      console.log("Menunggu Pembayaran");
+    } else if (e.target[7].checked === true) {
+      console.log("Selesai");
+    } else if (e.target[8].checked === true) {
+      console.log("Batal");
+    } else {
+      console.log("error");
+    }
 
-    console.log(e.target[5].checked);
-    console.log(e.target[6].checked);
-    console.log(e.target[7].checked);
-    console.log(e.target[8].checked);
+    // console.log(e.target[5].checked);
+    // console.log(e.target[6].checked);
+    // console.log(e.target[7].checked);
+    // console.log(e.target[8].checked);
   };
 
   render() {
