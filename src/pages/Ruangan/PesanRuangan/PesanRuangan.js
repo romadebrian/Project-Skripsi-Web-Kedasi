@@ -28,25 +28,8 @@ class PesanRuangan extends Component {
     console.log(new Date());
   }
 
-  // formatDate = (e) => {
-  //   let tanggalMulai = new Date(e.target[3].value);
-  //   let TanggalSew = `${tanggalMulai.getDate()}-${
-  //     tanggalMulai.getMonth() + 1
-  //   }-${tanggalMulai.getFullYear()}`;
-
-  //   this.setState({
-  //     tanggalSewa: TanggalSew,
-  //   });
-
-  //   console.log(this.state.tanggalSewa);
-  // };
-
   handleSubmit = (e) => {
     e.preventDefault();
-
-    // console.log(e.target[3].value);
-
-    // this.formatDate(e);
 
     console.log("Order Id: ", e.target[0].value);
     console.log("Nama Pemesan: ", e.target[1].value);
@@ -65,11 +48,6 @@ class PesanRuangan extends Component {
     } else {
       console.log("error");
     }
-
-    // console.log(e.target[5].checked);
-    // console.log(e.target[6].checked);
-    // console.log(e.target[7].checked);
-    // console.log(e.target[8].checked);
   };
 
   render() {
@@ -118,18 +96,8 @@ class PesanRuangan extends Component {
                     type="text"
                     className="form-control datetimepicker-input"
                     data-target="#TanggalSewa"
-                    // onChange={(e) => setDate(e.target.value)}
-                    // onClick={(e) => console.log(e.target.value)}
-
-                    // value={new Intl.DateTimeFormat("en-GB", {
-                    //   year: "numeric",
-                    //   month: "2-digit",
-                    //   day: "2-digit",
-                    // }).format(this.state.tanggalSewa)}
-
                     value={this.state.tanggalSekarang}
                     onChange={(e) => {
-                      // this.setState({ tanggalSewa: e.target[3].value });
                       console.log(e.target.value);
                     }}
                   />
