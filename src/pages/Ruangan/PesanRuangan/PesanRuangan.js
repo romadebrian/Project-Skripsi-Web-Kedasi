@@ -3,12 +3,14 @@ import React, { Component } from "react";
 class PesanRuangan extends Component {
   state = {
     tanggalSekarang: "",
-    tanggalSewa: "",
   };
 
   componentDidMount() {
-    window.$("#reservationdate").datetimepicker({
-      format: "L",
+    window.$("#TanggalSewa").datetimepicker({
+      format: "DD-MM-YYYY",
+    });
+    window.$("#TanggalSelesai").datetimepicker({
+      format: "DD-MM-YYYY",
     });
 
     let hariini = new Date();
@@ -20,43 +22,44 @@ class PesanRuangan extends Component {
       hariini.getFullYear();
 
     this.setState({
-      tanggalSewa: tgl,
+      tanggalSekarang: tgl,
     });
 
     console.log(new Date());
   }
 
-  formatDate = (e) => {
-    let tanggalMulai = new Date(e.target[3].value);
-    let TanggalSew = `${tanggalMulai.getDate()}-${
-      tanggalMulai.getMonth() + 1
-    }-${tanggalMulai.getFullYear()}`;
+  // formatDate = (e) => {
+  //   let tanggalMulai = new Date(e.target[3].value);
+  //   let TanggalSew = `${tanggalMulai.getDate()}-${
+  //     tanggalMulai.getMonth() + 1
+  //   }-${tanggalMulai.getFullYear()}`;
 
-    this.setState({
-      tanggalSewa: TanggalSew,
-    });
+  //   this.setState({
+  //     tanggalSewa: TanggalSew,
+  //   });
 
-    console.log(this.state.tanggalSewa);
-  };
+  //   console.log(this.state.tanggalSewa);
+  // };
 
   handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(e.target[3].value);
+    // console.log(e.target[3].value);
 
-    this.formatDate(e);
-    // console.log(e.target[0].value);
-    // console.log(e.target[1].value);
-    // console.log(e.target[2].value);
-    // console.log(tanggalSewa);
+    // this.formatDate(e);
+
+    console.log(e.target[0].value);
+    console.log(e.target[1].value);
+    console.log(e.target[2].value);
+    console.log(e.target[3].value);
 
     // console.log(e.target[3].value);
     // console.log(e.target[4].value);
 
-    // console.log(e.target[5].checked);
-    // console.log(e.target[6].checked);
-    // console.log(e.target[7].checked);
-    // console.log(e.target[8].checked);
+    console.log(e.target[5].checked);
+    console.log(e.target[6].checked);
+    console.log(e.target[7].checked);
+    console.log(e.target[8].checked);
   };
 
   render() {
@@ -98,24 +101,31 @@ class PesanRuangan extends Component {
                 <label>Tanggal Sewa:</label>
                 <div
                   className="input-group date"
-                  id="reservationdate"
+                  id="TanggalSewa"
                   data-target-input="nearest"
                 >
                   <input
                     type="text"
                     className="form-control datetimepicker-input"
-                    data-target="#reservationdate"
+                    data-target="#TanggalSewa"
                     // onChange={(e) => setDate(e.target.value)}
                     // onClick={(e) => console.log(e.target.value)}
-                    value={new Intl.DateTimeFormat("en-GB", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                    }).format(this.state.tanggalSekarang)}
-                  ></input>
+
+                    // value={new Intl.DateTimeFormat("en-GB", {
+                    //   year: "numeric",
+                    //   month: "2-digit",
+                    //   day: "2-digit",
+                    // }).format(this.state.tanggalSewa)}
+
+                    value={this.state.tanggalSekarang}
+                    onChange={(e) => {
+                      // this.setState({ tanggalSewa: e.target[3].value });
+                      console.log(e.target.value);
+                    }}
+                  />
                   <div
                     className="input-group-append"
-                    data-target="#reservationdate"
+                    data-target="#TanggalSewa"
                     data-toggle="datetimepicker"
                   >
                     <div className="input-group-text">
@@ -126,12 +136,29 @@ class PesanRuangan extends Component {
               </div>
 
               <div className="form-group">
-                <label>Tanggal Selesai</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="exampleInputPassword1"
-                />
+                <label>Tanggal Selesai:</label>
+                <div
+                  className="input-group date"
+                  id="TanggalSelesai"
+                  data-target-input="nearest"
+                >
+                  <input
+                    type="text"
+                    className="form-control datetimepicker-input"
+                    data-target="#TanggalSelesai"
+                    value={this.state.tanggalSekarang}
+                    onChange={(e) => console.log(e.target.value)}
+                  />
+                  <div
+                    className="input-group-append"
+                    data-target="#TanggalSelesai"
+                    data-toggle="datetimepicker"
+                  >
+                    <div className="input-group-text">
+                      <i className="fa fa-calendar" />
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="form-group">
