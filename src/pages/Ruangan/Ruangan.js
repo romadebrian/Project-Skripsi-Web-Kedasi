@@ -72,12 +72,14 @@ class Ruangan extends Component {
           <button
             className="btn btn-sm btn-info float-left"
             // onClick={this.toestSucces}
+            data-toggle="modal"
+            data-target="#modal-lg"
           >
             Buat Pesanan Baru
           </button>
           <a
             href="/printlaporan"
-            className="btn btn-sm btn-secondary float-right"
+            className="btn btn-sm btn-secondary float-right "
           >
             Print Laporan
           </a>
