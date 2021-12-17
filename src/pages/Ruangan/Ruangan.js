@@ -1,7 +1,27 @@
 import React, { Component } from "react"; //rce
+import PesanRuangan from "./PesanRuangan/PesanRuangan";
 import ItemRuangan from "./props/Ruangan/ItemRuangan";
 
 class Ruangan extends Component {
+  state = {
+    showFrom: false,
+  };
+
+  componentDidMount() {}
+
+  metodeFromMode = (params) => {
+    this.setState({
+      showFrom: params,
+    });
+    console.log(params);
+  };
+
+  ButtonShowForm = () => {
+    this.setState({
+      showFrom: true,
+    });
+  };
+
   render() {
     return (
       <div className="card">
@@ -49,9 +69,12 @@ class Ruangan extends Component {
         </div>
         {/* /.card-body */}
         <div className="card-footer clearfix">
-          <a href="/" className="btn btn-sm btn-info float-left">
+          <button
+            className="btn btn-sm btn-info float-left"
+            // onClick={this.toestSucces}
+          >
             Buat Pesanan Baru
-          </a>
+          </button>
           <a
             href="/printlaporan"
             className="btn btn-sm btn-secondary float-right"
@@ -67,6 +90,10 @@ class Ruangan extends Component {
           />
         </div>
         {/* /.card-footer */}
+        <PesanRuangan
+          trigger={(value) => this.metodeFromMode(value)}
+          modeFrom={this.state.showFrom}
+        />
       </div>
     );
   }

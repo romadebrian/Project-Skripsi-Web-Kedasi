@@ -1,7 +1,7 @@
-// import React from "react";
+import React from "react"; //rfce
 import { useState, useEffect } from "react";
 
-function PesanRuangan() {
+function PesanRuangan(props) {
   const [tanggalSekarang, setTanggalSekarang] = useState("");
 
   useEffect(() => {
@@ -27,6 +27,8 @@ function PesanRuangan() {
     }
 
     convertTanggalSekarang();
+
+    console.log(props);
   });
 
   const handleSubmit = (e) => {
@@ -51,7 +53,11 @@ function PesanRuangan() {
     }
   };
 
-  return (
+  const metodCancleForm = () => {
+    props.trigger(false);
+  };
+
+  return props.modeFrom ? (
     <div className="container">
       <div className="card card-primary">
         <div className="card-header">
@@ -179,11 +185,19 @@ function PesanRuangan() {
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={metodCancleForm}
+              style={{ marginLeft: 10 }}
+            >
+              Cancel
+            </button>
           </div>
         </form>
       </div>
     </div>
-  );
+  ) : null;
 }
 
 export default PesanRuangan;
