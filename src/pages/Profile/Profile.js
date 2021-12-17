@@ -3,6 +3,7 @@ import firebase from "../../config/firebase";
 import { storage } from "../../config/firebase";
 import { sendPasswordResetEmail, getAuth } from "firebase/auth";
 import "./Profile.css";
+import Swal from "sweetalert2";
 
 class Profile extends Component {
   state = {
@@ -184,6 +185,20 @@ class Profile extends Component {
         console.log(err.code);
         // alert("Email Tidak Terdaftar");
       });
+  };
+
+  toestSucces = () => {
+    var Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+    });
+
+    Toast.fire({
+      icon: "success",
+      title: "Profile Berhasil di perbarui.",
+    });
   };
 
   testhandle = () => {
