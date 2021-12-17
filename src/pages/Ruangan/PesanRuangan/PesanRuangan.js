@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 function PesanRuangan(props) {
   const [tanggalSekarang, setTanggalSekarang] = useState("");
+  const [isloaded, setLoaded] = useState(false);
 
   useEffect(() => {
     window.$("#TanggalSewa").datetimepicker({
@@ -23,13 +24,16 @@ function PesanRuangan(props) {
         hariini.getFullYear();
 
       setTanggalSekarang(tgl);
-      console.log(new Date());
     }
 
-    convertTanggalSekarang();
+    if (isloaded === false) {
+      convertTanggalSekarang();
 
-    console.log(props);
-  });
+      console.log(new Date());
+
+      setLoaded(true);
+    }
+  }, [isloaded]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

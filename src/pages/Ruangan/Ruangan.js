@@ -4,23 +4,12 @@ import ItemRuangan from "./props/Ruangan/ItemRuangan";
 
 class Ruangan extends Component {
   state = {
-    showFrom: false,
+    tanggalJarak: "01/01/2018 - 01/15/2018",
   };
 
   componentDidMount() {}
 
-  metodeFromMode = (params) => {
-    this.setState({
-      showFrom: params,
-    });
-    console.log(params);
-  };
-
-  ButtonShowForm = () => {
-    this.setState({
-      showFrom: true,
-    });
-  };
+  handleTanggalJarak = (params) => {};
 
   render() {
     return (
@@ -87,7 +76,8 @@ class Ruangan extends Component {
             type="text"
             className="float-right"
             name="daterange"
-            value="01/01/2018 - 01/15/2018"
+            value={this.state.tanggalJarak}
+            onChange={this.handleTanggalJarak}
             style={{ marginRight: "20px" }}
           />
         </div>
