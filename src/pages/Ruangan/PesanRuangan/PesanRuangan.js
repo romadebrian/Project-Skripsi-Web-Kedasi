@@ -1,9 +1,11 @@
 import React from "react"; //rfce
 import { useState, useEffect } from "react";
+import firebase from "../../../config/firebase";
 
 function PesanRuangan(props) {
   const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [isloaded, setLoaded] = useState(false);
+  const [statusPembayaran, setStatusPembayaran] = useState("");
 
   useEffect(() => {
     window.$("#TanggalSewa").datetimepicker({
@@ -35,7 +37,7 @@ function PesanRuangan(props) {
     }
   }, [isloaded]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log("Order Id: ", e.target[0].value);
@@ -45,16 +47,55 @@ function PesanRuangan(props) {
     console.log("Tanggal Selesai: ", e.target[4].value);
 
     if (e.target[5].checked === true) {
+      setStatusPembayaran("Active");
       console.log("Active");
     } else if (e.target[6].checked === true) {
+      setStatusPembayaran("Menunggu Pembayaran");
       console.log("Menunggu Pembayaran");
     } else if (e.target[7].checked === true) {
+      setStatusPembayaran("Selesai");
       console.log("Selesai");
     } else if (e.target[8].checked === true) {
+      setStatusPembayaran("Batal");
       console.log("Batal");
     } else {
       console.log("error");
     }
+
+    // const statPem = statusPembayaran;
+    // console.log("Value Stat Pembayaran", statPem);
+
+    firebase
+      .database()
+      .ref("order")
+      .push(
+        {
+          OrderId: e.target[0].value,
+          NamaPemesan: e.target[1].value,
+          Ruangan: e.target[2].value,
+          TanggalSewa: e.target[3].value,
+          TanmggalSelesai: e.target[4].value,
+          Status: statusPembayaran,
+        },
+        (error) => {
+          if (error) {
+            // The write failed...
+            alert("Gagal Simpan");
+          } else {
+            // Data saved successfully!
+            alert("Profile Berhasil Di Simpan");
+            console.log(
+              "send value: ",
+              e.target[0].value,
+              e.target[1].value,
+              e.target[2].value,
+              e.target[3].value,
+              e.target[4].value,
+              statusPembayaran
+            );
+          }
+        }
+      );
   };
 
   return (
@@ -63,7 +104,7 @@ function PesanRuangan(props) {
         <div className="modal-content">
           <div className="card card-primary">
             <div className="card-header">
-              <h3 className="card-title">Pesan Ruangan</h3>
+              <h3 className="card-title">Pesan Ruangan {statusPembayaran}</h3>
             </div>
             {/* /.card-header */}
             {/* form start */}
