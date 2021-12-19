@@ -5,7 +5,8 @@ import firebase from "../../../config/firebase";
 function PesanRuangan(props) {
   const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [isloaded, setLoaded] = useState(false);
-  const [statusPembayaran, setStatusPembayaran] = useState("");
+  // const [statusPembayaran, setStatusPembayaran] = useState("");
+  // const [tampilModal, setTampilModal] = useState(true);
 
   useEffect(() => {
     window.$("#TanggalSewa").datetimepicker({
@@ -38,6 +39,7 @@ function PesanRuangan(props) {
   }, [isloaded]);
 
   const handleSubmit = async (e) => {
+    var StatusPembayaran;
     e.preventDefault();
 
     console.log("Order Id: ", e.target[0].value);
@@ -47,23 +49,20 @@ function PesanRuangan(props) {
     console.log("Tanggal Selesai: ", e.target[4].value);
 
     if (e.target[5].checked === true) {
-      setStatusPembayaran("Active");
+      StatusPembayaran = "Active";
       console.log("Active");
     } else if (e.target[6].checked === true) {
-      setStatusPembayaran("Menunggu Pembayaran");
+      StatusPembayaran = "Menunggu Pembayaran";
       console.log("Menunggu Pembayaran");
     } else if (e.target[7].checked === true) {
-      setStatusPembayaran("Selesai");
+      StatusPembayaran = "Selesai";
       console.log("Selesai");
     } else if (e.target[8].checked === true) {
-      setStatusPembayaran("Batal");
+      StatusPembayaran = "Batal";
       console.log("Batal");
     } else {
       console.log("error");
     }
-
-    // const statPem = statusPembayaran;
-    // console.log("Value Stat Pembayaran", statPem);
 
     firebase
       .database()
@@ -75,7 +74,7 @@ function PesanRuangan(props) {
           Ruangan: e.target[2].value,
           TanggalSewa: e.target[3].value,
           TanmggalSelesai: e.target[4].value,
-          Status: statusPembayaran,
+          Status: StatusPembayaran,
         },
         (error) => {
           if (error) {
@@ -91,8 +90,14 @@ function PesanRuangan(props) {
               e.target[2].value,
               e.target[3].value,
               e.target[4].value,
-              statusPembayaran
+              StatusPembayaran
             );
+            window.location.reload();
+
+            // window.$(this.modal).modal("hide");
+            // window.$(this.modal).on("hidden.bs.modal");
+
+            // e.target[10].dismiss = "modal";
           }
         }
       );
@@ -104,7 +109,7 @@ function PesanRuangan(props) {
         <div className="modal-content">
           <div className="card card-primary">
             <div className="card-header">
-              <h3 className="card-title">Pesan Ruangan {statusPembayaran}</h3>
+              <h3 className="card-title">Pesan Ruangan </h3>
             </div>
             {/* /.card-header */}
             {/* form start */}
@@ -231,6 +236,7 @@ function PesanRuangan(props) {
                 <button
                   type="button"
                   className="btn btn-primary"
+                  data-target="#ModalClose"
                   data-dismiss="modal"
                   style={{ marginLeft: 10 }}
                 >
