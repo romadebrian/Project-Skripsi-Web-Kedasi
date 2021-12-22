@@ -4,6 +4,8 @@ import PesanRuangan from "./PesanRuangan/PesanRuangan";
 import firebase from "../../config/firebase";
 import DetailOrder from "./DetailOrder/DetailOrder";
 
+import "./Ruangan.css";
+
 class Ruangan extends Component {
   state = {
     tanggalJarak: "01/01/2018 - 01/15/2018",
@@ -106,6 +108,7 @@ class Ruangan extends Component {
                     }
                     return (
                       <tr
+                        className="row-pesanan"
                         key={pesanan.id}
                         data-toggle="modal"
                         data-target="#modal-lg"
