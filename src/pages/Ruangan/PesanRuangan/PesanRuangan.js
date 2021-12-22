@@ -32,7 +32,7 @@ function PesanRuangan(props) {
     if (isloaded === false) {
       convertTanggalSekarang();
 
-      console.log(new Date());
+      // console.log(new Date());
 
       setLoaded(true);
     }
