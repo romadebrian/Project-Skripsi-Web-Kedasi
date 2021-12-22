@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react"; //rce
 import PesanRuangan from "./PesanRuangan/PesanRuangan";
 // import ItemRuangan from "./props/Ruangan/ItemRuangan";
 import firebase from "../../config/firebase";
+import DetailOrder from "./DetailOrder/DetailOrder";
 
 class Ruangan extends Component {
   state = {
@@ -158,6 +159,7 @@ class Ruangan extends Component {
         {/* /.card-footer */}
 
         <PesanRuangan />
+        <DetailOrder />
 
         {/* {this.state.order.length > 0 ? (
           <Fragment>
