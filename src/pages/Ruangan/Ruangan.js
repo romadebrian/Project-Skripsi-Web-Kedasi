@@ -96,7 +96,9 @@ class Ruangan extends Component {
                   if (pesanan.data.Status === "Active") {
                     badge = "badge badge-success";
                   } else if (pesanan.data.Status === "Menunggu Pembayaran") {
-                    badge = "";
+                    badge = "badge badge-warning";
+                  } else if (pesanan.data.Status === "Selesai") {
+                    badge = "badge badge-secondary";
                   } else {
                     badge = "badge badge-danger";
                   }
