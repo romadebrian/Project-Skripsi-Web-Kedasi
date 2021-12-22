@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import firebase from "../../../config/firebase";
 
-function DetailOrder() {
+function DetailOrder(props) {
   const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [isloaded, setLoaded] = useState(false);
-  // const [statusPembayaran, setStatusPembayaran] = useState("");
-  // const [tampilModal, setTampilModal] = useState(true);
+
+  const [valDetailOrder, setValDetailOrder] = useState({
+    idOrder: "",
+    pemesan: "roma Debrian",
+    ruangannya: "Ruangan 001",
+    tglSewa: "tanggal sewanya",
+    tglSelesai: "tanggal kelar",
+    statPembayaran: "bayar woe",
+  });
 
   useEffect(() => {
     window.$("#TanggalSewa").datetimepicker({
@@ -31,7 +38,7 @@ function DetailOrder() {
     if (isloaded === false) {
       convertTanggalSekarang();
 
-      console.log(new Date());
+      // console.log(new Date());
 
       setLoaded(true);
     }
@@ -92,11 +99,6 @@ function DetailOrder() {
               StatusPembayaran
             );
             window.location.reload();
-
-            // window.$(this.modal).modal("hide");
-            // window.$(this.modal).on("hidden.bs.modal");
-
-            // e.target[10].dismiss = "modal";
           }
         }
       );
@@ -108,7 +110,7 @@ function DetailOrder() {
         <div className="modal-content">
           <div className="card card-primary">
             <div className="card-header">
-              <h3 className="card-title">Pesan Ruangan </h3>
+              <h3 className="card-title">Detail Pesan Ruangan</h3>
             </div>
             {/* /.card-header */}
             {/* form start */}
@@ -116,7 +118,12 @@ function DetailOrder() {
               <div className="card-body">
                 <div className="form-group">
                   <label>Order ID</label>
-                  <input type="text" className="form-control" id="orderID" />
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="orderID"
+                    defaultValue={props.primaryKey}
+                  />
                 </div>
                 <div className="form-group">
                   <label>Nama Pemesan</label>
@@ -125,6 +132,7 @@ function DetailOrder() {
                     className="form-control"
                     id="NamaPemesan"
                     placeholder="Nama Panjang"
+                    defaultValue={valDetailOrder.pemesan}
                   />
                 </div>
                 <div className="form-group">
