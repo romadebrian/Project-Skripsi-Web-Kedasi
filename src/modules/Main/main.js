@@ -11,7 +11,7 @@ import Notifikasi from "../../pages/Notifikasi/Notifikasi";
 import Pesan from "../../pages/Pesan/Pesan";
 import Profile from "../../pages/Profile/Profile";
 
-import DetailOrder from "../../pages/Ruangan/DetailOrder/DetailOrder";
+// import DetailOrder from "../../pages/Ruangan/DetailOrder/DetailOrder";
 import PrintLaporan from "../../pages/Ruangan/props/Ruangan/PrintLaporan";
 import PesanRuangan from "../../pages/Ruangan/PesanRuangan/PesanRuangan";
 import PesanRuanganV2 from "../../pages/Ruangan/PesanRuangan/PesanRuanganV2";
@@ -43,9 +43,9 @@ function App() {
               {/* <Route path="/logout">
                 <Pesan />
               </Route> */}
-              <Route path="/detailorder">
+              {/* <Route path="/detailorder">
                 <DetailOrder />
-              </Route>
+              </Route> */}
               <Route path="/printlaporan">
                 <PrintLaporan />
               </Route>

@@ -32,7 +32,7 @@ function PesanRuangan(props) {
     if (isloaded === false) {
       convertTanggalSekarang();
 
-      console.log(new Date());
+      // console.log(new Date());
 
       setLoaded(true);
     }
@@ -224,7 +224,7 @@ function PesanRuangan(props) {
                   </div>
                   <div className="icheck-danger d-inline">
                     <input type="radio" id="radioPrimary4" name="r1" />
-                    <label htmlFor="radioPrimary4">Batal</label>
+                    <label htmlFor="radioPrimary4">Cancel</label>
                   </div>
                 </div>
               </div>
