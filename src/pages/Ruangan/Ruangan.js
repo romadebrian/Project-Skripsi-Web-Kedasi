@@ -20,16 +20,16 @@ class Ruangan extends Component {
       .on("value", (snapshot) => {
         // const data = snapshot.val();
         // updateStarCount(postElement, data);
-        console.log("get data: ", snapshot.val());
+        console.log("get data firebase : ", snapshot.val());
 
         const data = [];
-
         if (snapshot.exists()) {
           Object.keys(snapshot.val()).map((key) => {
             data.push({
               id: key,
               data: snapshot.val()[key],
             });
+            return data;
           });
         } else {
           console.log("Data tidak ditemukan");
@@ -37,7 +37,7 @@ class Ruangan extends Component {
 
         this.setState({ order: data });
 
-        console.log(this.state.order);
+        console.log("val Order: ", this.state.order);
         // dispatch({ type: "SET_NOTES", value: data });
         // resolve(snapshot.val());
       });
@@ -92,6 +92,16 @@ class Ruangan extends Component {
               <Fragment>
                 {this.state.order.map((pesanan) => {
                   // console.log("Data Pesanan ", pesanan.data.OrderId);
+                  var badge;
+                  if (pesanan.data.Status === "Active") {
+                    badge = "badge badge-success";
+                  }
+                  else if (pesanan.data.Status === "Menunggu Pembayaran") {
+                    badge = ""
+                  }
+                   else {
+                    badge = "badge badge-danger";
+                  }
                   return (
                     <tbody key={pesanan.id}>
                       <tr>
@@ -103,9 +113,7 @@ class Ruangan extends Component {
                         <td>{pesanan.data.TanggalSewa} </td>
                         <td>{pesanan.data.TanggalSelesai} </td>
                         <td>
-                          <span className="badge badge-success">
-                            {pesanan.data.Status}
-                          </span>
+                          <span className={badge}>{pesanan.data.Status}</span>
                         </td>
                       </tr>
                     </tbody>
