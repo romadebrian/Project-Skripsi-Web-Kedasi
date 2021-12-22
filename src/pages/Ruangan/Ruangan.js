@@ -1,15 +1,53 @@
-import React, { Component } from "react"; //rce
+import React, { Component, Fragment } from "react"; //rce
 import PesanRuangan from "./PesanRuangan/PesanRuangan";
-import ItemRuangan from "./props/Ruangan/ItemRuangan";
+// import ItemRuangan from "./props/Ruangan/ItemRuangan";
+import firebase from "../../config/firebase";
 
 class Ruangan extends Component {
   state = {
     tanggalJarak: "01/01/2018 - 01/15/2018",
+    order: "",
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.handleGetData();
+  }
+
+  handleGetData = () => {
+    return firebase
+      .database()
+      .ref("/order/")
+      .on("value", (snapshot) => {
+        // const data = snapshot.val();
+        // updateStarCount(postElement, data);
+        console.log("get data firebase : ", snapshot.val());
+
+        const data = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            data.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
+            return data;
+          });
+        } else {
+          console.log("Data tidak ditemukan");
+        }
+
+        this.setState({ order: data });
+
+        console.log("val Order: ", this.state.order);
+        // dispatch({ type: "SET_NOTES", value: data });
+        // resolve(snapshot.val());
+      });
+  };
 
   handleTanggalJarak = (params) => {};
+
+  handletes = () => {
+    console.log(this.state.order);
+  };
 
   render() {
     return (
@@ -49,10 +87,45 @@ class Ruangan extends Component {
                 {/* Pennding, Active, Contract has ended, dan cancelled */}
               </tr>
             </thead>
-            <ItemRuangan Status="Active" CSSClass="badge badge-success" />
+
+            {this.state.order.length > 0 ? (
+              <Fragment>
+                {this.state.order.map((pesanan) => {
+                  // console.log("Data Pesanan ", pesanan.data.OrderId);
+                  var badge;
+                  if (pesanan.data.Status === "Active") {
+                    badge = "badge badge-success";
+                  }
+                  else if (pesanan.data.Status === "Menunggu Pembayaran") {
+                    badge = ""
+                  }
+                   else {
+                    badge = "badge badge-danger";
+                  }
+                  return (
+                    <tbody key={pesanan.id}>
+                      <tr>
+                        <td>
+                          <a href="/detailorder">{pesanan.data.OrderId} </a>
+                        </td>
+                        <td>{pesanan.data.NamaPemesan} </td>
+                        <td>{pesanan.data.Ruangan} </td>
+                        <td>{pesanan.data.TanggalSewa} </td>
+                        <td>{pesanan.data.TanggalSelesai} </td>
+                        <td>
+                          <span className={badge}>{pesanan.data.Status}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  );
+                })}
+              </Fragment>
+            ) : null}
+
+            {/* <ItemRuangan Status="Active" CSSClass="badge badge-success" />
             <ItemRuangan Status="Pending" CSSClass="badge badge-warning" />
             <ItemRuangan Status="Ended" CSSClass="badge badge-secondary" />
-            <ItemRuangan Status="Cancelled" CSSClass="badge badge-danger" />
+            <ItemRuangan Status="Cancelled" CSSClass="badge badge-danger" /> */}
           </table>
           {/* /.table-responsive */}
         </div>
@@ -66,12 +139,13 @@ class Ruangan extends Component {
           >
             Buat Pesanan Baru
           </button>
-          <a
-            href="/printlaporan"
-            className="btn btn-sm btn-secondary float-right "
+          <button
+            // href="/printlaporan"
+            className="btn btn-sm btn-secondary float-right"
+            onClick={this.handletes}
           >
             Print Laporan
-          </a>
+          </button>
           <input
             type="text"
             className="float-right"
@@ -82,10 +156,36 @@ class Ruangan extends Component {
           />
         </div>
         {/* /.card-footer */}
-        <PesanRuangan
-          trigger={(value) => this.metodeFromMode(value)}
-          modeFrom={this.state.showFrom}
-        />
+
+        <PesanRuangan />
+
+        {/* {this.state.order.length > 0 ? (
+          <Fragment>
+            {this.state.order.map((pesanan) => {
+              // console.log("Data Pesanan ", pesanan.data.OrderId);
+              return (
+                <tbody key={pesanan.id}>
+                  <tr>
+                    <td>
+                      <a href="/detailorder">{pesanan.data.OrderId} </a>
+                    </td>
+                    <td>{pesanan.data.NamaPemesan} </td>
+                    <td>{pesanan.data.Ruangan} </td>
+                    <td>{pesanan.data.TanggalSewa} </td>
+                    <td>{pesanan.data.TanggalSelesai} </td>
+                    <td>
+                      <span className="badge badge-success">
+                        {pesanan.data.Status}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              );
+            })}
+          </Fragment>
+        ) : (
+          <p>Data Tidak ada</p>
+        )} */}
       </div>
     );
   }
