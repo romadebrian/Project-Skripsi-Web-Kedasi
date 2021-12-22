@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react"; //rce
 import PesanRuangan from "./PesanRuangan/PesanRuangan";
-import ItemRuangan from "./props/Ruangan/ItemRuangan";
+// import ItemRuangan from "./props/Ruangan/ItemRuangan";
 import firebase from "../../config/firebase";
 
 class Ruangan extends Component {
@@ -17,18 +17,24 @@ class Ruangan extends Component {
     return firebase
       .database()
       .ref("/order/")
-      .once("value", (snapshot) => {
+      .on("value", (snapshot) => {
         // const data = snapshot.val();
         // updateStarCount(postElement, data);
         console.log("get data: ", snapshot.val());
 
         const data = [];
-        Object.keys(snapshot.val()).map((key) => {
-          data.push({
-            id: key,
-            data: snapshot.val()[key],
+
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            data.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
           });
-        });
+        } else {
+          console.log("Data tidak ditemukan");
+        }
+
         this.setState({ order: data });
 
         console.log(this.state.order);
@@ -81,10 +87,37 @@ class Ruangan extends Component {
                 {/* Pennding, Active, Contract has ended, dan cancelled */}
               </tr>
             </thead>
-            <ItemRuangan Status="Active" CSSClass="badge badge-success" />
+
+            {this.state.order.length > 0 ? (
+              <Fragment>
+                {this.state.order.map((pesanan) => {
+                  // console.log("Data Pesanan ", pesanan.data.OrderId);
+                  return (
+                    <tbody key={pesanan.id}>
+                      <tr>
+                        <td>
+                          <a href="/detailorder">{pesanan.data.OrderId} </a>
+                        </td>
+                        <td>{pesanan.data.NamaPemesan} </td>
+                        <td>{pesanan.data.Ruangan} </td>
+                        <td>{pesanan.data.TanggalSewa} </td>
+                        <td>{pesanan.data.TanggalSelesai} </td>
+                        <td>
+                          <span className="badge badge-success">
+                            {pesanan.data.Status}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  );
+                })}
+              </Fragment>
+            ) : null}
+
+            {/* <ItemRuangan Status="Active" CSSClass="badge badge-success" />
             <ItemRuangan Status="Pending" CSSClass="badge badge-warning" />
             <ItemRuangan Status="Ended" CSSClass="badge badge-secondary" />
-            <ItemRuangan Status="Cancelled" CSSClass="badge badge-danger" />
+            <ItemRuangan Status="Cancelled" CSSClass="badge badge-danger" /> */}
           </table>
           {/* /.table-responsive */}
         </div>
@@ -116,12 +149,9 @@ class Ruangan extends Component {
         </div>
         {/* /.card-footer */}
 
-        {/* <PesanRuangan
-          trigger={(value) => this.metodeFromMode(value)}
-          modeFrom={this.state.showFrom}
-        /> */}
+        <PesanRuangan />
 
-        {this.state.order.length > 0 ? (
+        {/* {this.state.order.length > 0 ? (
           <Fragment>
             {this.state.order.map((pesanan) => {
               // console.log("Data Pesanan ", pesanan.data.OrderId);
@@ -129,12 +159,12 @@ class Ruangan extends Component {
                 <tbody key={pesanan.id}>
                   <tr>
                     <td>
-                      <a href="/detailorder">{pesanan.data.OrderId}</a>
+                      <a href="/detailorder">{pesanan.data.OrderId} </a>
                     </td>
-                    <td>{pesanan.data.NamaPemesan}</td>
-                    <td>{pesanan.data.Ruangan}</td>
-                    <td>{pesanan.data.TanggalSewa}</td>
-                    <td>{pesanan.data.TanggalSelesai}</td>
+                    <td>{pesanan.data.NamaPemesan} </td>
+                    <td>{pesanan.data.Ruangan} </td>
+                    <td>{pesanan.data.TanggalSewa} </td>
+                    <td>{pesanan.data.TanggalSelesai} </td>
                     <td>
                       <span className="badge badge-success">
                         {pesanan.data.Status}
@@ -147,7 +177,7 @@ class Ruangan extends Component {
           </Fragment>
         ) : (
           <p>Data Tidak ada</p>
-        )}
+        )} */}
       </div>
     );
   }

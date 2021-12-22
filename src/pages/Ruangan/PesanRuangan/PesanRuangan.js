@@ -73,7 +73,7 @@ function PesanRuangan(props) {
           NamaPemesan: e.target[1].value,
           Ruangan: e.target[2].value,
           TanggalSewa: e.target[3].value,
-          TanmggalSelesai: e.target[4].value,
+          TanggalSelesai: e.target[4].value,
           Status: StatusPembayaran,
         },
         (error) => {
