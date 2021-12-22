@@ -89,26 +89,28 @@ class Ruangan extends Component {
               </tr>
             </thead>
 
-            {this.state.order.length > 0 ? (
-              <Fragment>
-                {this.state.order.map((pesanan) => {
-                  // console.log("Data Pesanan ", pesanan.data.OrderId);
-                  var badge;
-                  if (pesanan.data.Status === "Active") {
-                    badge = "badge badge-success";
-                  } else if (pesanan.data.Status === "Menunggu Pembayaran") {
-                    badge = "badge badge-warning";
-                  } else if (pesanan.data.Status === "Selesai") {
-                    badge = "badge badge-secondary";
-                  } else {
-                    badge = "badge badge-danger";
-                  }
-                  return (
-                    <tbody key={pesanan.id}>
-                      <tr>
-                        <td>
-                          <a href="/detailorder">{pesanan.data.OrderId} </a>
-                        </td>
+            <tbody>
+              {this.state.order.length > 0 ? (
+                <Fragment>
+                  {this.state.order.map((pesanan) => {
+                    // console.log("Data Pesanan ", pesanan.data.OrderId);
+                    var badge;
+                    if (pesanan.data.Status === "Active") {
+                      badge = "badge badge-success";
+                    } else if (pesanan.data.Status === "Menunggu Pembayaran") {
+                      badge = "badge badge-warning";
+                    } else if (pesanan.data.Status === "Selesai") {
+                      badge = "badge badge-secondary";
+                    } else {
+                      badge = "badge badge-danger";
+                    }
+                    return (
+                      <tr
+                        key={pesanan.id}
+                        data-toggle="modal"
+                        data-target="#modal-lg"
+                      >
+                        <td>{pesanan.data.OrderId}</td>
                         <td>{pesanan.data.NamaPemesan} </td>
                         <td>{pesanan.data.Ruangan} </td>
                         <td>{pesanan.data.TanggalSewa} </td>
@@ -117,11 +119,11 @@ class Ruangan extends Component {
                           <span className={badge}>{pesanan.data.Status}</span>
                         </td>
                       </tr>
-                    </tbody>
-                  );
-                })}
-              </Fragment>
-            ) : null}
+                    );
+                  })}
+                </Fragment>
+              ) : null}
+            </tbody>
 
             {/* <ItemRuangan Status="Active" CSSClass="badge badge-success" />
             <ItemRuangan Status="Pending" CSSClass="badge badge-warning" />
