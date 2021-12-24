@@ -7,11 +7,11 @@ function DetailOrder(props) {
 
   const [valDetailOrder, setValDetailOrder] = useState({
     idOrder: "",
-    pemesan: "roma Debrian",
-    ruangannya: "Ruangan 001",
-    tglSewa: "tanggal sewanya",
-    tglSelesai: "tanggal kelar",
-    statPembayaran: "bayar woe",
+    pemesan: "",
+    ruangannya: "",
+    tglSewa: "",
+    tglSelesai: "",
+    statPembayaran: "",
   });
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function DetailOrder(props) {
       setLoaded(true);
     }
 
-    metodeGetData();
+    // metodeGetData();
   }, [isloaded]);
 
   const handleSubmit = async (e) => {
@@ -107,49 +107,22 @@ function DetailOrder(props) {
   };
 
   const metodeGetData = () => {
-    // return firebase
-    //   .database()
-    //   .ref("/order/" + this.state.userId)
-    //   .once("value")
-    //   .then(
-    //     (snapshot) => {
-    //       this.setState({
-    //         nama: snapshot.val() && snapshot.val().Nama,
-    //         // email: snapshot.val() && snapshot.val().Email,
-    //         email: JSON.parse(localStorage.getItem("UserEmail")),
-    //         telepon: snapshot.val() && snapshot.val().Telepon,
-    //         alamat: snapshot.val() && snapshot.val().Alamat,
-    //         setUrl: snapshot.val() && snapshot.val().Profile_Picture,
-    //       });
-    //       // console.log(username);
-    //       console.log("Photo Profile Link ", this.state.setUrl);
-    //       // console.log(this.state.email);
-    //     },
-    //     (error) => {
-    //       if (error) {
-    //         console.log("read failed", error);
-    //         // The write failed...
-    //       } else {
-    //         // Data saved successfully!
-    //       }
-    //     }
-    //   );
+    // props.editFunction();
+    const data = props.dataDetail;
+    console.log("Datanya", data.Ruangan);
 
-    return firebase
-      .database()
-      .ref("/order/-MrVxTiXFX_1Wwodgzkt/")
-
-      .once("value")
-      .then(
-        (value) => {
-          console.log(value.val() && value.val().OrderId);
-        },
-        (err) => console.log(err)
-      );
+    setValDetailOrder({
+      idOrder: data.OrderId,
+      pemesan: data.NamaPemesan,
+      ruangannya: data.Ruangan,
+      tglSewa: data.TanggalSewa,
+      tglSelesai: data.TanggalSelesai,
+      statPembayaran: data.Status,
+    });
   };
 
   return (
-    <div className="modal fade" id="form-edit">
+    <div className="modal fade" id="form-edit" onMouseEnter={metodeGetData}>
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="card card-primary">
@@ -166,7 +139,7 @@ function DetailOrder(props) {
                     type="text"
                     className="form-control"
                     id="orderID"
-                    defaultValue={props.primaryKey}
+                    defaultValue={valDetailOrder.idOrder}
                   />
                 </div>
                 <div className="form-group">

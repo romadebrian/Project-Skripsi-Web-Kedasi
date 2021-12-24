@@ -10,12 +10,14 @@ class Ruangan extends Component {
   state = {
     tanggalJarak: "01/01/2018 - 01/15/2018",
     orderList: "",
-    orderId: "",
+    orderDetail: "",
   };
 
   componentDidMount() {
     this.handleGetData();
   }
+
+  componentDidUpdate() {}
 
   handleGetData = () => {
     return firebase
@@ -51,7 +53,35 @@ class Ruangan extends Component {
 
   handleEdit = (params) => {
     // console.log(params.target.parentNode.children[0].innerText);
-    this.setState({ orderId: params.target.parentNode.children[0].innerText });
+    // this.setState({ orderId: params.target.parentNode.children[0].innerText });
+
+    const idPesanan = params.target.parentNode.children[0].innerText;
+
+    return firebase
+      .database()
+      .ref("/order/")
+      .orderByChild("OrderId")
+      .equalTo(idPesanan)
+      .on("value", (snapshot) => {
+        const dataHasil = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            dataHasil.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
+            return dataHasil;
+          });
+        } else {
+          console.log("Data tidak ditemukan");
+        }
+
+        // console.log(dataHasil[0].data.OrderId);
+        this.setState({ orderDetail: dataHasil[0].data });
+
+        // var datadetails = dataHasil[0];
+        // console.log(datadetails);
+      });
   };
 
   handleTanggalJarak = (params) => {};
@@ -169,7 +199,7 @@ class Ruangan extends Component {
         {/* /.card-footer */}
 
         <PesanRuangan />
-        <DetailOrder primaryKey={this.state.orderId} />
+        <DetailOrder dataDetail={this.state.orderDetail} ref={this.child} />
 
         {/* {this.state.order.length > 0 ? (
           <Fragment>
