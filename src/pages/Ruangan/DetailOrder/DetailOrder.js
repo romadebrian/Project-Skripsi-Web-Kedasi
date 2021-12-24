@@ -42,6 +42,8 @@ function DetailOrder(props) {
 
       setLoaded(true);
     }
+
+    metodeGetData();
   }, [isloaded]);
 
   const handleSubmit = async (e) => {
@@ -105,32 +107,44 @@ function DetailOrder(props) {
   };
 
   const metodeGetData = () => {
+    // return firebase
+    //   .database()
+    //   .ref("/order/" + this.state.userId)
+    //   .once("value")
+    //   .then(
+    //     (snapshot) => {
+    //       this.setState({
+    //         nama: snapshot.val() && snapshot.val().Nama,
+    //         // email: snapshot.val() && snapshot.val().Email,
+    //         email: JSON.parse(localStorage.getItem("UserEmail")),
+    //         telepon: snapshot.val() && snapshot.val().Telepon,
+    //         alamat: snapshot.val() && snapshot.val().Alamat,
+    //         setUrl: snapshot.val() && snapshot.val().Profile_Picture,
+    //       });
+    //       // console.log(username);
+    //       console.log("Photo Profile Link ", this.state.setUrl);
+    //       // console.log(this.state.email);
+    //     },
+    //     (error) => {
+    //       if (error) {
+    //         console.log("read failed", error);
+    //         // The write failed...
+    //       } else {
+    //         // Data saved successfully!
+    //       }
+    //     }
+    //   );
+
     return firebase
       .database()
-      .ref("/order/" + this.state.userId)
+      .ref("/order/-MrVxTiXFX_1Wwodgzkt/")
+
       .once("value")
       .then(
-        (snapshot) => {
-          this.setState({
-            nama: snapshot.val() && snapshot.val().Nama,
-            // email: snapshot.val() && snapshot.val().Email,
-            email: JSON.parse(localStorage.getItem("UserEmail")),
-            telepon: snapshot.val() && snapshot.val().Telepon,
-            alamat: snapshot.val() && snapshot.val().Alamat,
-            setUrl: snapshot.val() && snapshot.val().Profile_Picture,
-          });
-          // console.log(username);
-          console.log("Photo Profile Link ", this.state.setUrl);
-          // console.log(this.state.email);
+        (value) => {
+          console.log(value.val() && value.val().OrderId);
         },
-        (error) => {
-          if (error) {
-            console.log("read failed", error);
-            // The write failed...
-          } else {
-            // Data saved successfully!
-          }
-        }
+        (err) => console.log(err)
       );
   };
 
