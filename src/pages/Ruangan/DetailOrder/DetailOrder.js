@@ -121,6 +121,10 @@ function DetailOrder(props) {
     });
   };
 
+  const handeChange = () => {
+    return null;
+  };
+
   return (
     <div className="modal fade" id="form-edit" onMouseEnter={metodeGetData}>
       <div className="modal-dialog modal-lg">
@@ -140,6 +144,7 @@ function DetailOrder(props) {
                     className="form-control"
                     id="orderID"
                     defaultValue={valDetailOrder.idOrder}
+                    readOnly
                   />
                 </div>
                 <div className="form-group">
@@ -154,7 +159,11 @@ function DetailOrder(props) {
                 </div>
                 <div className="form-group">
                   <label>Ruangan</label>
-                  <select className="form-control">
+                  <select
+                    className="form-control"
+                    value={valDetailOrder.ruangannya}
+                    onChange={handeChange}
+                  >
                     <option>ROOM 001</option>
                     <option>ROOM 002</option>
                     <option>ROOM 003</option>
@@ -174,10 +183,7 @@ function DetailOrder(props) {
                       type="text"
                       className="form-control datetimepicker-input"
                       data-target="#TanggalSewa"
-                      value={tanggalSekarang}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                      }}
+                      defaultValue={valDetailOrder.tglSewa}
                     />
                     <div
                       className="input-group-append"
@@ -202,7 +208,7 @@ function DetailOrder(props) {
                       type="text"
                       className="form-control datetimepicker-input"
                       data-target="#TanggalSelesai"
-                      value={tanggalSekarang}
+                      defaultValue={valDetailOrder.tglSelesai}
                       onChange={(e) => console.log(e.target.value)}
                     />
                     <div
