@@ -7,18 +7,18 @@ function DetailOrder(props) {
 
   const [valDetailOrder, setValDetailOrder] = useState({
     idOrder: "",
-    pemesan: "roma Debrian",
-    ruangannya: "Ruangan 001",
-    tglSewa: "tanggal sewanya",
-    tglSelesai: "tanggal kelar",
-    statPembayaran: "bayar woe",
+    pemesan: "",
+    ruangannya: "",
+    tglSewa: "",
+    tglSelesai: "",
+    statPembayaran: "",
   });
 
   useEffect(() => {
-    window.$("#TanggalSewa").datetimepicker({
+    window.$("#EditTanggalSewa").datetimepicker({
       format: "DD-MM-YYYY",
     });
-    window.$("#TanggalSelesai").datetimepicker({
+    window.$("#EditTanggalSelesai").datetimepicker({
       format: "DD-MM-YYYY",
     });
 
@@ -43,7 +43,7 @@ function DetailOrder(props) {
       setLoaded(true);
     }
 
-    metodeGetData();
+    // metodeGetData();
   }, [isloaded]);
 
   const handleSubmit = async (e) => {
@@ -107,49 +107,51 @@ function DetailOrder(props) {
   };
 
   const metodeGetData = () => {
-    // return firebase
-    //   .database()
-    //   .ref("/order/" + this.state.userId)
-    //   .once("value")
-    //   .then(
-    //     (snapshot) => {
-    //       this.setState({
-    //         nama: snapshot.val() && snapshot.val().Nama,
-    //         // email: snapshot.val() && snapshot.val().Email,
-    //         email: JSON.parse(localStorage.getItem("UserEmail")),
-    //         telepon: snapshot.val() && snapshot.val().Telepon,
-    //         alamat: snapshot.val() && snapshot.val().Alamat,
-    //         setUrl: snapshot.val() && snapshot.val().Profile_Picture,
-    //       });
-    //       // console.log(username);
-    //       console.log("Photo Profile Link ", this.state.setUrl);
-    //       // console.log(this.state.email);
-    //     },
-    //     (error) => {
-    //       if (error) {
-    //         console.log("read failed", error);
-    //         // The write failed...
-    //       } else {
-    //         // Data saved successfully!
-    //       }
-    //     }
-    //   );
+    const data = props.dataDetail;
+    if (props.editStatus === true) {
+      // props.editFunction();
+      console.log("Datanya", data.Ruangan);
 
-    return firebase
-      .database()
-      .ref("/order/-MrVxTiXFX_1Wwodgzkt/")
+      setValDetailOrder({
+        idOrder: data.OrderId,
+        pemesan: data.NamaPemesan,
+        ruangannya: data.Ruangan,
+        tglSewa: data.TanggalSewa,
+        tglSelesai: data.TanggalSelesai,
+        statPembayaran: data.Status,
+      });
+    } else {
+      return null;
+    }
+  };
 
-      .once("value")
-      .then(
-        (value) => {
-          console.log(value.val() && value.val().OrderId);
-        },
-        (err) => console.log(err)
-      );
+  const handleChange = (e) => {
+    setValDetailOrder({
+      ...valDetailOrder,
+      ruangannya: e.target.value,
+    });
+    // console.log(valDetailOrder);
+  };
+
+  const selectStatus = () => {
+    // var status = valDetailOrder.statPembayaran;
+    // switch (status) {
+    //   case "Active":
+    //     console.log("Active");
+    //     break;
+    //   case "Menunggu Pembayaran":
+    //     console.log("Menunggu Pembayaran");
+    //     break;
+    //   case "Selesai":
+    //     console.log("Selesai");
+    //     break;
+    //   default:
+    //     console.log("error");
+    // }
   };
 
   return (
-    <div className="modal fade" id="form-edit">
+    <div className="modal fade" id="form-edit" onMouseEnter={metodeGetData}>
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="card card-primary">
@@ -166,7 +168,8 @@ function DetailOrder(props) {
                     type="text"
                     className="form-control"
                     id="orderID"
-                    defaultValue={props.primaryKey}
+                    defaultValue={valDetailOrder.idOrder}
+                    readOnly
                   />
                 </div>
                 <div className="form-group">
@@ -177,11 +180,16 @@ function DetailOrder(props) {
                     id="NamaPemesan"
                     placeholder="Nama Panjang"
                     defaultValue={valDetailOrder.pemesan}
+                    onChange={(e) => handleChange(e)}
                   />
                 </div>
                 <div className="form-group">
                   <label>Ruangan</label>
-                  <select className="form-control">
+                  <select
+                    className="form-control"
+                    value={valDetailOrder.ruangannya}
+                    onChange={(e) => handleChange(e)}
+                  >
                     <option>ROOM 001</option>
                     <option>ROOM 002</option>
                     <option>ROOM 003</option>
@@ -194,21 +202,18 @@ function DetailOrder(props) {
                   <label>Tanggal Sewa:</label>
                   <div
                     className="input-group date"
-                    id="TanggalSewa"
+                    id="EditTanggalSewa"
                     data-target-input="nearest"
                   >
                     <input
                       type="text"
                       className="form-control datetimepicker-input"
-                      data-target="#TanggalSewa"
-                      value={tanggalSekarang}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                      }}
+                      data-target="#EditTanggalSewa"
+                      defaultValue={valDetailOrder.tglSewa}
                     />
                     <div
                       className="input-group-append"
-                      data-target="#TanggalSewa"
+                      data-target="#EditTanggalSewa"
                       data-toggle="datetimepicker"
                     >
                       <div className="input-group-text">
@@ -222,19 +227,19 @@ function DetailOrder(props) {
                   <label>Tanggal Selesai:</label>
                   <div
                     className="input-group date"
-                    id="TanggalSelesai"
+                    id="EditTanggalSelesai"
                     data-target-input="nearest"
                   >
                     <input
                       type="text"
                       className="form-control datetimepicker-input"
-                      data-target="#TanggalSelesai"
-                      value={tanggalSekarang}
+                      data-target="#EditTanggalSelesai"
+                      defaultValue={valDetailOrder.tglSelesai}
                       onChange={(e) => console.log(e.target.value)}
                     />
                     <div
                       className="input-group-append"
-                      data-target="#TanggalSelesai"
+                      data-target="#EditTanggalSelesai"
                       data-toggle="datetimepicker"
                     >
                       <div className="input-group-text">
@@ -253,29 +258,47 @@ function DetailOrder(props) {
                   >
                     <input
                       type="radio"
-                      id="radioPrimary1"
+                      id="radioEdit1"
                       name="r1"
-                      defaultChecked
+                      // checked={valDetailOrder.statPembayaran === "Active"}
                     />
-                    <label htmlFor="radioPrimary1">Active</label>
+                    <label htmlFor="radioEdit1">Active</label>
                   </div>
                   <div
                     className="icheck-sunflower d-inline"
                     style={{ marginRight: 10 }}
                   >
-                    <input type="radio" id="radioPrimary2" name="r1" />
-                    <label htmlFor="radioPrimary2">Menunggu Pembayaran</label>
+                    <input
+                      type="radio"
+                      id="radioEdit2"
+                      name="r1"
+                      // checked={
+                      //   valDetailOrder.statPembayaran === "Menunggu Pembayaran"
+                      // }
+                    />
+                    <label htmlFor="radioEdit2">Menunggu Pembayaran</label>
                   </div>
                   <div
                     className="icheck-concrete d-inline"
                     style={{ marginRight: 10 }}
                   >
-                    <input type="radio" id="radioPrimary3" name="r1" />
-                    <label htmlFor="radioPrimary3">Selesai</label>
+                    <input
+                      type="radio"
+                      id="radioEdit3"
+                      name="r1"
+                      // checked={valDetailOrder.statPembayaran === "Selesai"}
+                    />
+                    <label htmlFor="radioEdit3">Selesai</label>
                   </div>
                   <div className="icheck-danger d-inline">
-                    <input type="radio" id="radioPrimary4" name="r1" />
-                    <label htmlFor="radioPrimary4">Batal</label>
+                    <input
+                      type="radio"
+                      id="radioEdit4"
+                      name="r1"
+                      // checked={valDetailOrder.statPembayaran === "Cancel"}
+                      // onClick={setValDetailOrder({ statPembayaran: "Cancel" })}
+                    />
+                    <label htmlFor="radioEdit4">Batal</label>
                   </div>
                 </div>
               </div>
