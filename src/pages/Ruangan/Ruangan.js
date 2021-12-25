@@ -78,6 +78,7 @@ class Ruangan extends Component {
 
         // console.log(dataHasil[0].data.OrderId);
         this.setState({ orderDetail: dataHasil[0].data });
+        // this.setState({ orderDetail: dataHasil });
 
         // var datadetails = dataHasil[0];
         // console.log(datadetails);
@@ -153,9 +154,10 @@ class Ruangan extends Component {
                         <td>{pesanan.data.Ruangan} </td>
                         <td>{pesanan.data.TanggalSewa} </td>
                         <td>{pesanan.data.TanggalSelesai} </td>
-                        <td>
+                        <td className={badge}>{pesanan.data.Status}</td>
+                        {/* <td>
                           <span className={badge}>{pesanan.data.Status}</span>
-                        </td>
+                        </td> */}
                       </tr>
                     );
                   })}

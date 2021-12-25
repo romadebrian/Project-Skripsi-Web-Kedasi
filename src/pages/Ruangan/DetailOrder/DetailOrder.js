@@ -125,6 +125,23 @@ function DetailOrder(props) {
     return null;
   };
 
+  const selectStatus = () => {
+    var status = valDetailOrder.statPembayaran;
+    switch (status) {
+      case "Active":
+        console.log("Active");
+        break;
+      case "Menunggu Pembayaran":
+        console.log("Menunggu Pembayaran");
+        break;
+      case "Selesai":
+        console.log("Selesai");
+        break;
+      default:
+        console.log("error");
+    }
+  };
+
   return (
     <div className="modal fade" id="form-edit" onMouseEnter={metodeGetData}>
       <div className="modal-dialog modal-lg">
@@ -232,29 +249,34 @@ function DetailOrder(props) {
                   >
                     <input
                       type="radio"
-                      id="radioPrimary1"
+                      id="radioEdit1"
                       name="r1"
-                      defaultChecked
+                      {...(valDetailOrder.statPembayaran === "Active"
+                        ? () => {
+                            return "checked";
+                          }
+                        : null)}
+                      // checked
                     />
-                    <label htmlFor="radioPrimary1">Active</label>
+                    <label htmlFor="radioEdit1">Active</label>
                   </div>
                   <div
                     className="icheck-sunflower d-inline"
                     style={{ marginRight: 10 }}
                   >
-                    <input type="radio" id="radioPrimary2" name="r1" />
-                    <label htmlFor="radioPrimary2">Menunggu Pembayaran</label>
+                    <input type="radio" id="radioEdit2" name="r1" />
+                    <label htmlFor="radioEdit2">Menunggu Pembayaran</label>
                   </div>
                   <div
                     className="icheck-concrete d-inline"
                     style={{ marginRight: 10 }}
                   >
-                    <input type="radio" id="radioPrimary3" name="r1" />
-                    <label htmlFor="radioPrimary3">Selesai</label>
+                    <input type="radio" id="radioEdit3" name="r1" />
+                    <label htmlFor="radioEdit3">Selesai</label>
                   </div>
                   <div className="icheck-danger d-inline">
-                    <input type="radio" id="radioPrimary4" name="r1" />
-                    <label htmlFor="radioPrimary4">Batal</label>
+                    <input type="radio" id="radioEdit4" name="r1" />
+                    <label htmlFor="radioEdit4">Batal</label>
                   </div>
                 </div>
               </div>
