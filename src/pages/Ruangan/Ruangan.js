@@ -11,6 +11,7 @@ class Ruangan extends Component {
     tanggalJarak: "01/01/2018 - 01/15/2018",
     orderList: "",
     orderDetail: "",
+    modeEdit: false,
   };
 
   componentDidMount() {
@@ -201,7 +202,11 @@ class Ruangan extends Component {
         {/* /.card-footer */}
 
         <PesanRuangan />
-        <DetailOrder dataDetail={this.state.orderDetail} ref={this.child} />
+        <DetailOrder
+          dataDetail={this.state.orderDetail}
+          ref={this.child}
+          editStatus={this.state.modeEdit}
+        />
 
         {/* {this.state.order.length > 0 ? (
           <Fragment>
