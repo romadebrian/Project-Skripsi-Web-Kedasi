@@ -107,8 +107,8 @@ function DetailOrder(props) {
   };
 
   const metodeGetData = () => {
-    const data = props.dataDetail;
     if (props.editStatus === true) {
+      const data = props.dataDetail;
       // props.editFunction();
       console.log("Datanya", data.Ruangan);
 
@@ -126,11 +126,15 @@ function DetailOrder(props) {
   };
 
   const handleChange = (e) => {
-    setValDetailOrder({
-      ...valDetailOrder,
-      ruangannya: e.target.value,
-    });
-    // console.log(valDetailOrder);
+    if (e.target.id === "Frm_Ruangan") {
+      setValDetailOrder({
+        ...valDetailOrder,
+        ruangannya: e.target.value,
+      });
+    } else {
+    }
+
+    // console.log(e);
   };
 
   const selectStatus = () => {
@@ -187,6 +191,7 @@ function DetailOrder(props) {
                   <label>Ruangan</label>
                   <select
                     className="form-control"
+                    id="Frm_Ruangan"
                     value={valDetailOrder.ruangannya}
                     onChange={(e) => handleChange(e)}
                   >
@@ -260,7 +265,8 @@ function DetailOrder(props) {
                       type="radio"
                       id="radioEdit1"
                       name="r1"
-                      // checked={valDetailOrder.statPembayaran === "Active"}
+                      checked={valDetailOrder.statPembayaran === "Active"}
+                      onChange={handleChange}
                     />
                     <label htmlFor="radioEdit1">Active</label>
                   </div>
