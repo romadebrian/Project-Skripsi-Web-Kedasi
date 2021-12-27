@@ -92,7 +92,10 @@ function PesanRuangan(props) {
               e.target[4].value,
               StatusPembayaran
             );
-            window.location.reload();
+
+            window.$("#modal-lg").modal("hide");
+
+            // window.location.reload();
 
             // window.$(this.modal).modal("hide");
             // window.$(this.modal).on("hidden.bs.modal");

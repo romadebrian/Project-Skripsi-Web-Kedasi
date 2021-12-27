@@ -76,38 +76,40 @@ function DetailOrder(props) {
       console.log("error");
     }
 
-    firebase
-      .database()
-      .ref("order")
-      .push(
-        {
-          OrderId: e.target[0].value,
-          NamaPemesan: e.target[1].value,
-          Ruangan: e.target[2].value,
-          TanggalSewa: e.target[3].value,
-          TanggalSelesai: e.target[4].value,
-          Status: StatusPembayaran,
-        },
-        (error) => {
-          if (error) {
-            // The write failed...
-            alert("Gagal Simpan");
-          } else {
-            // Data saved successfully!
-            alert("Profile Berhasil Di Simpan");
-            console.log(
-              "send value: ",
-              e.target[0].value,
-              e.target[1].value,
-              e.target[2].value,
-              e.target[3].value,
-              e.target[4].value,
-              StatusPembayaran
-            );
-            window.location.reload();
-          }
-        }
-      );
+    // firebase
+    //   .database()
+    //   .ref("order/" + PrimaryKey)
+    //   .set(
+    //     {
+    //       OrderId: e.target[0].value,
+    //       NamaPemesan: e.target[1].value,
+    //       Ruangan: e.target[2].value,
+    //       TanggalSewa: e.target[3].value,
+    //       TanggalSelesai: e.target[4].value,
+    //       Status: StatusPembayaran,
+    //     },
+    //     (error) => {
+    //       if (error) {
+    //         // The write failed...
+    //         alert("Gagal Simpan");
+    //       } else {
+    //         // Data saved successfully!
+    //         alert("Order Berhasil Di Simpan");
+    //         console.log(
+    //           "send value: ",
+    //           e.target[0].value,
+    //           e.target[1].value,
+    //           e.target[2].value,
+    //           e.target[3].value,
+    //           e.target[4].value,
+    //           StatusPembayaran
+    //         );
+    //         // window.location.reload();
+    //       }
+    //     }
+    //   );
+
+    window.$("#form-edit").modal("hide");
   };
 
   const getPrimaryKey = () => {
