@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import firebase from "../../../config/firebase";
 
 function DetailOrder(props) {
@@ -94,7 +95,8 @@ function DetailOrder(props) {
             alert("Gagal Simpan");
           } else {
             // Data saved successfully!
-            alert("Order Berhasil Di Simpan");
+            // alert("Order Berhasil Di Simpan");
+            toastSucces();
             console.log(
               "send value: ",
               e.target[0].value,
@@ -179,6 +181,20 @@ function DetailOrder(props) {
     }
 
     // console.log(e);
+  };
+
+  const toastSucces = () => {
+    var Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+    });
+
+    Toast.fire({
+      icon: "success",
+      title: "Perbaruan Pemesanan Ruangan Berhasil",
+    });
   };
 
   return (
