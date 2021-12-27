@@ -131,7 +131,28 @@ function DetailOrder(props) {
         ...valDetailOrder,
         ruangannya: e.target.value,
       });
+    } else if (e.target.id === "radioEdit1") {
+      setValDetailOrder({
+        ...valDetailOrder,
+        statPembayaran: "Active",
+      });
+    } else if (e.target.id === "radioEdit2") {
+      setValDetailOrder({
+        ...valDetailOrder,
+        statPembayaran: "Menunggu Pembayaran",
+      });
+    } else if (e.target.id === "radioEdit3") {
+      setValDetailOrder({
+        ...valDetailOrder,
+        statPembayaran: "Selesai",
+      });
+    } else if (e.target.id === "radioEdit4") {
+      setValDetailOrder({
+        ...valDetailOrder,
+        statPembayaran: "Batal",
+      });
     } else {
+      console.log("error");
     }
 
     // console.log(e);
@@ -278,9 +299,10 @@ function DetailOrder(props) {
                       type="radio"
                       id="radioEdit2"
                       name="r1"
-                      // checked={
-                      //   valDetailOrder.statPembayaran === "Menunggu Pembayaran"
-                      // }
+                      checked={
+                        valDetailOrder.statPembayaran === "Menunggu Pembayaran"
+                      }
+                      onChange={handleChange}
                     />
                     <label htmlFor="radioEdit2">Menunggu Pembayaran</label>
                   </div>
@@ -292,7 +314,8 @@ function DetailOrder(props) {
                       type="radio"
                       id="radioEdit3"
                       name="r1"
-                      // checked={valDetailOrder.statPembayaran === "Selesai"}
+                      checked={valDetailOrder.statPembayaran === "Selesai"}
+                      onChange={handleChange}
                     />
                     <label htmlFor="radioEdit3">Selesai</label>
                   </div>
@@ -301,8 +324,9 @@ function DetailOrder(props) {
                       type="radio"
                       id="radioEdit4"
                       name="r1"
-                      // checked={valDetailOrder.statPembayaran === "Cancel"}
-                      // onClick={setValDetailOrder({ statPembayaran: "Cancel" })}
+                      checked={valDetailOrder.statPembayaran === "Batal"}
+                      onClick={handleChange}
+                      onChange={handleChange}
                     />
                     <label htmlFor="radioEdit4">Batal</label>
                   </div>
