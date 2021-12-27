@@ -18,7 +18,9 @@ class Ruangan extends Component {
     this.handleGetData();
   }
 
-  componentDidUpdate() {}
+  componentDidUpdate() {
+    console.log(this.state.orderList.length);
+  }
 
   handleGetData = () => {
     return firebase
