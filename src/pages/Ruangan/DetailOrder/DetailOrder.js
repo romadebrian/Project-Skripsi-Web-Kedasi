@@ -134,6 +134,7 @@ function DetailOrder(props) {
   const metodeGetData = () => {
     if (props.editStatus === true) {
       const data = props.dataDetail;
+
       // props.editFunction();
       console.log("Datanya", data.Ruangan);
 

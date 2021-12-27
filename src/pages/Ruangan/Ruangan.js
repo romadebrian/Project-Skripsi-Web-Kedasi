@@ -12,6 +12,7 @@ class Ruangan extends Component {
     orderList: "",
     orderDetail: "",
     modeEdit: false,
+    nextOrderId: "",
   };
 
   componentDidMount() {
@@ -54,13 +55,24 @@ class Ruangan extends Component {
       });
   };
 
+  handleInputOrder = () => {
+    var totalOrderId = this.state.orderList.length;
+    var init = totalOrderId + 1;
+    var str = "" + init;
+    var pad = "0000";
+    var ans = pad.substring(0, pad.length - str.length) + str;
+    const valVNextOrderId = "ORD" + ans;
+
+    this.setState({ nextOrderId: valVNextOrderId });
+
+    console.log(valVNextOrderId);
+  };
+
   handleEdit = (params) => {
     // console.log(params.target.parentNode.children[0].innerText);
     // this.setState({ orderId: params.target.parentNode.children[0].innerText });
 
     this.setState({ modeEdit: true });
-
-    console.log(this.state.orderList.length);
 
     const idPesanan = params.target.parentNode.children[0].innerText;
 
@@ -190,6 +202,7 @@ class Ruangan extends Component {
             // onClick={this.toestSucces}
             data-toggle="modal"
             data-target="#modal-lg"
+            onClick={this.handleInputOrder}
           >
             Buat Pesanan Baru
           </button>
@@ -211,12 +224,12 @@ class Ruangan extends Component {
         </div>
         {/* /.card-footer */}
 
-        <PesanRuangan />
+        <PesanRuangan newOrderId={this.state.nextOrderId} />
         <DetailOrder
           dataDetail={this.state.orderDetail}
           ref={this.child}
           editStatus={this.state.modeEdit}
-          nextOrderid={this.state.orderList.length}
+          // totalOrderId={this.state.orderList.length}
           disableModeEdit={() => this.trunOffModeEdit()}
         />
 
