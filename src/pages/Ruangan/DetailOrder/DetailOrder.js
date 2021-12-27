@@ -107,8 +107,8 @@ function DetailOrder(props) {
   };
 
   const metodeGetData = () => {
-    const data = props.dataDetail;
     if (props.editStatus === true) {
+      const data = props.dataDetail;
       // props.editFunction();
       console.log("Datanya", data.Ruangan);
 
@@ -126,11 +126,36 @@ function DetailOrder(props) {
   };
 
   const handleChange = (e) => {
-    setValDetailOrder({
-      ...valDetailOrder,
-      ruangannya: e.target.value,
-    });
-    // console.log(valDetailOrder);
+    if (e.target.id === "Frm_Ruangan") {
+      setValDetailOrder({
+        ...valDetailOrder,
+        ruangannya: e.target.value,
+      });
+    } else if (e.target.id === "radioEdit1") {
+      setValDetailOrder({
+        ...valDetailOrder,
+        statPembayaran: "Active",
+      });
+    } else if (e.target.id === "radioEdit2") {
+      setValDetailOrder({
+        ...valDetailOrder,
+        statPembayaran: "Menunggu Pembayaran",
+      });
+    } else if (e.target.id === "radioEdit3") {
+      setValDetailOrder({
+        ...valDetailOrder,
+        statPembayaran: "Selesai",
+      });
+    } else if (e.target.id === "radioEdit4") {
+      setValDetailOrder({
+        ...valDetailOrder,
+        statPembayaran: "Batal",
+      });
+    } else {
+      console.log("error");
+    }
+
+    // console.log(e);
   };
 
   const selectStatus = () => {
@@ -187,6 +212,7 @@ function DetailOrder(props) {
                   <label>Ruangan</label>
                   <select
                     className="form-control"
+                    id="Frm_Ruangan"
                     value={valDetailOrder.ruangannya}
                     onChange={(e) => handleChange(e)}
                   >
@@ -260,7 +286,8 @@ function DetailOrder(props) {
                       type="radio"
                       id="radioEdit1"
                       name="r1"
-                      // checked={valDetailOrder.statPembayaran === "Active"}
+                      checked={valDetailOrder.statPembayaran === "Active"}
+                      onChange={handleChange}
                     />
                     <label htmlFor="radioEdit1">Active</label>
                   </div>
@@ -272,9 +299,10 @@ function DetailOrder(props) {
                       type="radio"
                       id="radioEdit2"
                       name="r1"
-                      // checked={
-                      //   valDetailOrder.statPembayaran === "Menunggu Pembayaran"
-                      // }
+                      checked={
+                        valDetailOrder.statPembayaran === "Menunggu Pembayaran"
+                      }
+                      onChange={handleChange}
                     />
                     <label htmlFor="radioEdit2">Menunggu Pembayaran</label>
                   </div>
@@ -286,7 +314,8 @@ function DetailOrder(props) {
                       type="radio"
                       id="radioEdit3"
                       name="r1"
-                      // checked={valDetailOrder.statPembayaran === "Selesai"}
+                      checked={valDetailOrder.statPembayaran === "Selesai"}
+                      onChange={handleChange}
                     />
                     <label htmlFor="radioEdit3">Selesai</label>
                   </div>
@@ -295,8 +324,9 @@ function DetailOrder(props) {
                       type="radio"
                       id="radioEdit4"
                       name="r1"
-                      // checked={valDetailOrder.statPembayaran === "Cancel"}
-                      // onClick={setValDetailOrder({ statPembayaran: "Cancel" })}
+                      checked={valDetailOrder.statPembayaran === "Batal"}
+                      onClick={handleChange}
+                      onChange={handleChange}
                     />
                     <label htmlFor="radioEdit4">Batal</label>
                   </div>
