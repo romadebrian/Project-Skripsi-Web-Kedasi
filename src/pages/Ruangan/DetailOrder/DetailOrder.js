@@ -50,6 +50,10 @@ function DetailOrder(props) {
     var StatusPembayaran;
     e.preventDefault();
 
+    const PrimaryKey = await getPrimaryKey();
+
+    console.log(PrimaryKey);
+
     console.log("Order Id: ", e.target[0].value);
     console.log("Nama Pemesan: ", e.target[1].value);
     console.log("Ruangan: ", e.target[2].value);
@@ -106,6 +110,23 @@ function DetailOrder(props) {
       );
   };
 
+  const getPrimaryKey = () => {
+    return new Promise((resolve) => {
+      const idPesanan = valDetailOrder.idOrder;
+      return firebase
+        .database()
+        .ref("/order/")
+        .orderByChild("OrderId")
+        .equalTo(idPesanan)
+        .once("value", (snapshot) => {
+          Object.keys(snapshot.val()).map((key) => {
+            // console.log(key);
+            resolve(key);
+          });
+        });
+    });
+  };
+
   const metodeGetData = () => {
     if (props.editStatus === true) {
       const data = props.dataDetail;
@@ -156,23 +177,6 @@ function DetailOrder(props) {
     }
 
     // console.log(e);
-  };
-
-  const selectStatus = () => {
-    // var status = valDetailOrder.statPembayaran;
-    // switch (status) {
-    //   case "Active":
-    //     console.log("Active");
-    //     break;
-    //   case "Menunggu Pembayaran":
-    //     console.log("Menunggu Pembayaran");
-    //     break;
-    //   case "Selesai":
-    //     console.log("Selesai");
-    //     break;
-    //   default:
-    //     console.log("error");
-    // }
   };
 
   return (
