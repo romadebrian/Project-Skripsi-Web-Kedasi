@@ -93,7 +93,8 @@ class Profile extends Component {
             alert("Gagal Simpan");
           } else {
             // Data saved successfully!
-            alert("Profile Berhasil Di Simpan");
+            // alert("Profile Berhasil Di Simpan");
+            this.toastSucces();
             console.log(
               this.state.nama,
               this.state.email,
@@ -161,7 +162,8 @@ class Profile extends Component {
                     alert("Gagal Simpan Ke Database");
                   } else {
                     // Data saved successfully!
-                    alert("Update Foto Berhasil");
+                    // alert("Update Foto Berhasil");
+                    this.toastSucces();
                     console.log(this.state.setUrl);
                     this.setState({
                       statusUpload: false,
@@ -187,7 +189,7 @@ class Profile extends Component {
       });
   };
 
-  toestSucces = () => {
+  toastSucces = () => {
     var Toast = Swal.mixin({
       toast: true,
       position: "top-end",
