@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import "./SideNav.css";
 
 class SideNav extends Component {
   render() {
@@ -7,16 +8,20 @@ class SideNav extends Component {
       <div>
         {/* Main Sidebar Container */}
         {/* ////////////////////// */}
-        <aside className="main-sidebar sidebar-dark-primary elevation-4">
+        <aside
+          className="main-sidebar sidebar-dark-primary elevation-4 menu-samping"
+          // style={{ backgroundColor: "#664130" }}
+        >
           {/* Brand Logo */}
           <Link to="/" className="brand-link">
             <img
-              src="dist/img/kedasi logo.jpg"
+              src="dist/img/logo-header.png"
               alt="AdminLTE-Logo"
-              className="brand-image img-circle elevation-3"
-              style={{ opacity: ".8" }}
+              className="brand-image "
+              // style={{ opacity: ".8"}}
             />
-            <span className="brand-text font-weight-light"> Kedasi </span>
+            <br />
+            {/* <span className="brand-text font-weight-light"> Kedasi </span> */}
           </Link>
           {/* Sidebar */}
           <div className="sidebar">

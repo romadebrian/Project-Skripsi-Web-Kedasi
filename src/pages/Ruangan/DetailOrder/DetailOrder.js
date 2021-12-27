@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import firebase from "../../../config/firebase";
 
 function DetailOrder(props) {
@@ -50,6 +51,10 @@ function DetailOrder(props) {
     var StatusPembayaran;
     e.preventDefault();
 
+    const PrimaryKey = await getPrimaryKey();
+
+    console.log(PrimaryKey);
+
     console.log("Order Id: ", e.target[0].value);
     console.log("Nama Pemesan: ", e.target[1].value);
     console.log("Ruangan: ", e.target[2].value);
@@ -74,8 +79,8 @@ function DetailOrder(props) {
 
     firebase
       .database()
-      .ref("order")
-      .push(
+      .ref("order/" + PrimaryKey)
+      .set(
         {
           OrderId: e.target[0].value,
           NamaPemesan: e.target[1].value,
@@ -90,7 +95,8 @@ function DetailOrder(props) {
             alert("Gagal Simpan");
           } else {
             // Data saved successfully!
-            alert("Profile Berhasil Di Simpan");
+            // alert("Order Berhasil Di Simpan");
+            toastSucces();
             console.log(
               "send value: ",
               e.target[0].value,
@@ -100,10 +106,29 @@ function DetailOrder(props) {
               e.target[4].value,
               StatusPembayaran
             );
-            window.location.reload();
+            // window.location.reload();
           }
         }
       );
+
+    window.$("#form-edit").modal("hide");
+  };
+
+  const getPrimaryKey = () => {
+    return new Promise((resolve) => {
+      const idPesanan = valDetailOrder.idOrder;
+      return firebase
+        .database()
+        .ref("/order/")
+        .orderByChild("OrderId")
+        .equalTo(idPesanan)
+        .once("value", (snapshot) => {
+          Object.keys(snapshot.val()).map((key) => {
+            // console.log(key);
+            resolve(key);
+          });
+        });
+    });
   };
 
   const metodeGetData = () => {
@@ -158,21 +183,18 @@ function DetailOrder(props) {
     // console.log(e);
   };
 
-  const selectStatus = () => {
-    // var status = valDetailOrder.statPembayaran;
-    // switch (status) {
-    //   case "Active":
-    //     console.log("Active");
-    //     break;
-    //   case "Menunggu Pembayaran":
-    //     console.log("Menunggu Pembayaran");
-    //     break;
-    //   case "Selesai":
-    //     console.log("Selesai");
-    //     break;
-    //   default:
-    //     console.log("error");
-    // }
+  const toastSucces = () => {
+    var Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+    });
+
+    Toast.fire({
+      icon: "success",
+      title: "Perbaruan Pemesanan Ruangan Berhasil",
+    });
   };
 
   return (

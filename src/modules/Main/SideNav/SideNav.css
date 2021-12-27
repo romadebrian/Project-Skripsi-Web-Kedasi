@@ -1,0 +1,26 @@
+.menu-samping {
+  background-color: #664130;
+}
+
+.menu-samping a {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.menu-samping .brand-image {
+  /* opacity: 0.8; */
+  background-color: transparent;
+  width: 200px;
+  height: auto;
+}
+
+.menu-samping .brand-link {
+  border-bottom: 1px solid #ffffff;
+  padding-bottom: 25px;
+  padding-top: 20px;
+}
+
+.menu-samping .user-panel {
+  border-bottom: 1px solid #ffffff;
+  margin-right: 0px;
+}

@@ -18,7 +18,9 @@ class Ruangan extends Component {
     this.handleGetData();
   }
 
-  componentDidUpdate() {}
+  componentDidUpdate() {
+    console.log(this.state.orderList.length);
+  }
 
   handleGetData = () => {
     return firebase
@@ -56,9 +58,7 @@ class Ruangan extends Component {
     // console.log(params.target.parentNode.children[0].innerText);
     // this.setState({ orderId: params.target.parentNode.children[0].innerText });
 
-    this.setState({
-      modeEdit: true,
-    });
+    this.setState({ modeEdit: true });
 
     const idPesanan = params.target.parentNode.children[0].innerText;
 
