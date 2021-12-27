@@ -145,6 +145,8 @@ function DetailOrder(props) {
         tglSelesai: data.TanggalSelesai,
         statPembayaran: data.Status,
       });
+
+      props.disableModeEdit();
     } else {
       return null;
     }

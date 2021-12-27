@@ -18,9 +18,7 @@ class Ruangan extends Component {
     this.handleGetData();
   }
 
-  componentDidUpdate() {
-    console.log(this.state.orderList.length);
-  }
+  componentDidUpdate() {}
 
   handleGetData = () => {
     return firebase
@@ -47,6 +45,8 @@ class Ruangan extends Component {
 
         this.setState({ orderList: data });
 
+        // console.log(this.state.orderList.length);
+
         // console.log("val Order: ", this.state.orderList);
 
         // dispatch({ type: "SET_NOTES", value: data });
@@ -59,6 +59,8 @@ class Ruangan extends Component {
     // this.setState({ orderId: params.target.parentNode.children[0].innerText });
 
     this.setState({ modeEdit: true });
+
+    console.log(this.state.orderList.length);
 
     const idPesanan = params.target.parentNode.children[0].innerText;
 
@@ -91,6 +93,10 @@ class Ruangan extends Component {
   };
 
   handleTanggalJarak = (params) => {};
+
+  trunOffModeEdit = () => {
+    this.setState({ modeEdit: false });
+  };
 
   render() {
     return (
@@ -210,6 +216,8 @@ class Ruangan extends Component {
           dataDetail={this.state.orderDetail}
           ref={this.child}
           editStatus={this.state.modeEdit}
+          nextOrderid={this.state.orderList.length}
+          disableModeEdit={() => this.trunOffModeEdit()}
         />
 
         {/* {this.state.order.length > 0 ? (
