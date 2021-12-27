@@ -1,5 +1,6 @@
 import React from "react"; //rfce
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import firebase from "../../../config/firebase";
 
 function PesanRuangan(props) {
@@ -82,7 +83,8 @@ function PesanRuangan(props) {
             alert("Gagal Simpan");
           } else {
             // Data saved successfully!
-            alert("Profile Berhasil Di Simpan");
+            // alert("Profile Berhasil Di Simpan");
+            toastSucces();
             console.log(
               "send value: ",
               e.target[0].value,
@@ -104,6 +106,20 @@ function PesanRuangan(props) {
           }
         }
       );
+  };
+
+  const toastSucces = () => {
+    var Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+    });
+
+    Toast.fire({
+      icon: "success",
+      title: "Pemesanan Ruangan Berhasil",
+    });
   };
 
   return (
