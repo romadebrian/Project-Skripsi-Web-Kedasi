@@ -48,7 +48,7 @@ class Ruangan extends Component {
 
         // console.log(this.state.orderList.length);
 
-        // console.log("val Order: ", this.state.orderList);
+        console.log("val Order: ", data);
 
         // dispatch({ type: "SET_NOTES", value: data });
         // resolve(snapshot.val());
@@ -178,20 +178,12 @@ class Ruangan extends Component {
                         <td>{pesanan.data.TanggalSewa} </td>
                         <td>{pesanan.data.TanggalSelesai} </td>
                         <td className={badge}>{pesanan.data.Status}</td>
-                        {/* <td>
-                          <span className={badge}>{pesanan.data.Status}</span>
-                        </td> */}
                       </tr>
                     );
                   })}
                 </Fragment>
               ) : null}
             </tbody>
-
-            {/* <ItemRuangan Status="Active" CSSClass="badge badge-success" />
-            <ItemRuangan Status="Pending" CSSClass="badge badge-warning" />
-            <ItemRuangan Status="Ended" CSSClass="badge badge-secondary" />
-            <ItemRuangan Status="Cancelled" CSSClass="badge badge-danger" /> */}
           </table>
           {/* /.table-responsive */}
         </div>
@@ -232,34 +224,6 @@ class Ruangan extends Component {
           // totalOrderId={this.state.orderList.length}
           disableModeEdit={() => this.trunOffModeEdit()}
         />
-
-        {/* {this.state.order.length > 0 ? (
-          <Fragment>
-            {this.state.order.map((pesanan) => {
-              // console.log("Data Pesanan ", pesanan.data.OrderId);
-              return (
-                <tbody key={pesanan.id}>
-                  <tr>
-                    <td>
-                      <a href="/detailorder">{pesanan.data.OrderId} </a>
-                    </td>
-                    <td>{pesanan.data.NamaPemesan} </td>
-                    <td>{pesanan.data.Ruangan} </td>
-                    <td>{pesanan.data.TanggalSewa} </td>
-                    <td>{pesanan.data.TanggalSelesai} </td>
-                    <td>
-                      <span className="badge badge-success">
-                        {pesanan.data.Status}
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              );
-            })}
-          </Fragment>
-        ) : (
-          <p>Data Tidak ada</p>
-        )} */}
       </div>
     );
   }
