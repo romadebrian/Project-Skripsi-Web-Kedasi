@@ -39,7 +39,7 @@ function PesanRuangan(props) {
     }
   }, [isloaded]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     var StatusPembayaran;
     e.preventDefault();
 
@@ -136,7 +136,13 @@ function PesanRuangan(props) {
               <div className="card-body">
                 <div className="form-group">
                   <label>Order ID</label>
-                  <input type="text" className="form-control" id="orderID" />
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="orderID"
+                    value={props.newOrderId}
+                    readOnly
+                  />
                 </div>
                 <div className="form-group">
                   <label>Nama Pemesan</label>

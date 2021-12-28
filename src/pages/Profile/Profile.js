@@ -4,6 +4,8 @@ import { storage } from "../../config/firebase";
 import { sendPasswordResetEmail, getAuth } from "firebase/auth";
 import "./Profile.css";
 import Swal from "sweetalert2";
+// import toastr from "toastr";
+// import "toastr/build/toastr.min.css";
 
 class Profile extends Component {
   state = {
@@ -94,7 +96,11 @@ class Profile extends Component {
           } else {
             // Data saved successfully!
             // alert("Profile Berhasil Di Simpan");
+
             this.toastSucces();
+
+            // toastr.success("Profile Berhasil Di Simpan");
+
             console.log(
               this.state.nama,
               this.state.email,
@@ -163,7 +169,9 @@ class Profile extends Component {
                   } else {
                     // Data saved successfully!
                     // alert("Update Foto Berhasil");
+
                     this.toastSucces();
+
                     console.log(this.state.setUrl);
                     this.setState({
                       statusUpload: false,
@@ -199,7 +207,7 @@ class Profile extends Component {
 
     Toast.fire({
       icon: "success",
-      title: "Profile Berhasil di perbarui.",
+      title: "Profile berhasil di perbarui.",
     });
   };
 

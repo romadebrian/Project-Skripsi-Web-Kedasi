@@ -12,15 +12,14 @@ class Ruangan extends Component {
     orderList: "",
     orderDetail: "",
     modeEdit: false,
+    nextOrderId: "",
   };
 
   componentDidMount() {
     this.handleGetData();
   }
 
-  componentDidUpdate() {
-    console.log(this.state.orderList.length);
-  }
+  componentDidUpdate() {}
 
   handleGetData = () => {
     return firebase
@@ -47,11 +46,26 @@ class Ruangan extends Component {
 
         this.setState({ orderList: data });
 
-        // console.log("val Order: ", this.state.orderList);
+        // console.log(this.state.orderList.length);
+
+        console.log("val Order: ", data);
 
         // dispatch({ type: "SET_NOTES", value: data });
         // resolve(snapshot.val());
       });
+  };
+
+  handleInputOrder = () => {
+    var totalOrderId = this.state.orderList.length;
+    var init = totalOrderId + 1;
+    var str = "" + init;
+    var pad = "0000";
+    var ans = pad.substring(0, pad.length - str.length) + str;
+    const valVNextOrderId = "ORD" + ans;
+
+    this.setState({ nextOrderId: valVNextOrderId });
+
+    console.log(valVNextOrderId);
   };
 
   handleEdit = (params) => {
@@ -91,6 +105,10 @@ class Ruangan extends Component {
   };
 
   handleTanggalJarak = (params) => {};
+
+  trunOffModeEdit = () => {
+    this.setState({ modeEdit: false });
+  };
 
   render() {
     return (
@@ -160,20 +178,12 @@ class Ruangan extends Component {
                         <td>{pesanan.data.TanggalSewa} </td>
                         <td>{pesanan.data.TanggalSelesai} </td>
                         <td className={badge}>{pesanan.data.Status}</td>
-                        {/* <td>
-                          <span className={badge}>{pesanan.data.Status}</span>
-                        </td> */}
                       </tr>
                     );
                   })}
                 </Fragment>
               ) : null}
             </tbody>
-
-            {/* <ItemRuangan Status="Active" CSSClass="badge badge-success" />
-            <ItemRuangan Status="Pending" CSSClass="badge badge-warning" />
-            <ItemRuangan Status="Ended" CSSClass="badge badge-secondary" />
-            <ItemRuangan Status="Cancelled" CSSClass="badge badge-danger" /> */}
           </table>
           {/* /.table-responsive */}
         </div>
@@ -184,6 +194,7 @@ class Ruangan extends Component {
             // onClick={this.toestSucces}
             data-toggle="modal"
             data-target="#modal-lg"
+            onClick={this.handleInputOrder}
           >
             Buat Pesanan Baru
           </button>
@@ -205,40 +216,14 @@ class Ruangan extends Component {
         </div>
         {/* /.card-footer */}
 
-        <PesanRuangan />
+        <PesanRuangan newOrderId={this.state.nextOrderId} />
         <DetailOrder
           dataDetail={this.state.orderDetail}
           ref={this.child}
           editStatus={this.state.modeEdit}
+          // totalOrderId={this.state.orderList.length}
+          disableModeEdit={() => this.trunOffModeEdit()}
         />
-
-        {/* {this.state.order.length > 0 ? (
-          <Fragment>
-            {this.state.order.map((pesanan) => {
-              // console.log("Data Pesanan ", pesanan.data.OrderId);
-              return (
-                <tbody key={pesanan.id}>
-                  <tr>
-                    <td>
-                      <a href="/detailorder">{pesanan.data.OrderId} </a>
-                    </td>
-                    <td>{pesanan.data.NamaPemesan} </td>
-                    <td>{pesanan.data.Ruangan} </td>
-                    <td>{pesanan.data.TanggalSewa} </td>
-                    <td>{pesanan.data.TanggalSelesai} </td>
-                    <td>
-                      <span className="badge badge-success">
-                        {pesanan.data.Status}
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              );
-            })}
-          </Fragment>
-        ) : (
-          <p>Data Tidak ada</p>
-        )} */}
       </div>
     );
   }

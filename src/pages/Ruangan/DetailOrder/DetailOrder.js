@@ -3,7 +3,6 @@ import Swal from "sweetalert2";
 import firebase from "../../../config/firebase";
 
 function DetailOrder(props) {
-  const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [isloaded, setLoaded] = useState(false);
 
   const [valDetailOrder, setValDetailOrder] = useState({
@@ -23,22 +22,7 @@ function DetailOrder(props) {
       format: "DD-MM-YYYY",
     });
 
-    function convertTanggalSekarang() {
-      let hariini = new Date();
-
-      let tgl =
-        hariini.getDate() +
-        "-" +
-        parseInt(hariini.getMonth() + 1) +
-        "-" +
-        hariini.getFullYear();
-
-      setTanggalSekarang(tgl);
-    }
-
     if (isloaded === false) {
-      convertTanggalSekarang();
-
       // console.log(new Date());
 
       setLoaded(true);
@@ -126,6 +110,7 @@ function DetailOrder(props) {
           Object.keys(snapshot.val()).map((key) => {
             // console.log(key);
             resolve(key);
+            return null;
           });
         });
     });
@@ -134,6 +119,7 @@ function DetailOrder(props) {
   const metodeGetData = () => {
     if (props.editStatus === true) {
       const data = props.dataDetail;
+
       // props.editFunction();
       console.log("Datanya", data.Ruangan);
 
@@ -145,6 +131,8 @@ function DetailOrder(props) {
         tglSelesai: data.TanggalSelesai,
         statPembayaran: data.Status,
       });
+
+      props.disableModeEdit();
     } else {
       return null;
     }
