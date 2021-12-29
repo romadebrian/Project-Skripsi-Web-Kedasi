@@ -1,5 +1,6 @@
 // rce
 import React, { Component } from "react";
+import CreateNotification from "./CreateNotification/CreateNotification";
 import ItemNotification from "./props/Notifikasi/ItemNotification";
 
 // menggunakan komponen
@@ -10,9 +11,13 @@ class Notifikasi extends Component {
     return (
       <div>
         <div className="card-header ">
-          <a href="/printlaporan" className="btn btn-primary">
+          <button
+            className="btn btn-primary"
+            data-toggle="modal"
+            data-target="#form-notifikasi"
+          >
             Buat Pemperitahuan
-          </a>
+          </button>
           <div className="card-tools">
             {/* Right navbar links */}
             <ul className="navbar-nav ml-auto">
@@ -66,6 +71,8 @@ class Notifikasi extends Component {
           ruangan="ROOM-001"
           OrderID="PRM-002"
         />
+
+        <CreateNotification />
       </div>
     );
   }
