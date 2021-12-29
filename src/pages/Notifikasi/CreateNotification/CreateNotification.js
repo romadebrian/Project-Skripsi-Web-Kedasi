@@ -49,7 +49,8 @@ function CreateNotification(props) {
           judul: e.target[0].value,
           Isi: e.target[1].value,
           Target: e.target[2].value,
-          Aaksi: aksinya,
+          Aksi: aksinya,
+          Status: "Unread",
         },
         (error) => {
           if (error) {
@@ -64,10 +65,11 @@ function CreateNotification(props) {
               e.target[0].value,
               e.target[1].value,
               e.target[2].value,
-              aksinya
+              aksinya,
+              "Unread"
             );
 
-            window.$("#modal-lg").modal("hide");
+            window.$("#form-notifikasi").modal("hide");
           }
         }
       );

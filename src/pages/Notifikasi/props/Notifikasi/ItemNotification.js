@@ -6,12 +6,10 @@ function ItemNotification(props) {
       <div className="p-5 bg-light border">
         <div className="row align-items-center">
           <div className="col">
-            <small> {props.tanggal} </small>
-            <p>
-              {" "}
-              {props.pelanggan} Inggin memesan ruangan {props.ruangan} dengan
-              ORDER ID {props.OrderID}{" "}
-            </p>
+            <small>
+              {props.tanggal} from {props.pelanggan}
+            </small>
+            <p>{props.isi}</p>
           </div>
           <span>
             <i className="fa fa-circle text-success"></i>
