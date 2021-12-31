@@ -1,12 +1,49 @@
 // rce
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import CreateNotification from "./CreateNotification/CreateNotification";
-import ItemNotification from "./props/Notifikasi/ItemNotification";
-
-// menggunakan komponen
-var tanggal = " 08 Sep 2021";
+import ItemNotification from "./props/ItemNotification";
+import firebase from "../../config/firebase";
+import DetailNotification from "./props/DetailNotification";
 
 class Notifikasi extends Component {
+  state = {
+    dataNotifikasi: "",
+    dataDetail: "",
+  };
+
+  componentDidMount() {
+    this.handleGetData();
+  }
+
+  handleGetData = () => {
+    return firebase
+      .database()
+      .ref("/notifikasi/")
+      .on("value", (snapshot) => {
+        const data = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            data.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
+            return data;
+          });
+        } else {
+          console.log("Data tidak ditemukan");
+        }
+
+        this.setState({ dataNotifikasi: data });
+
+        console.log("List Notification: ", this.state.dataNotifikasi);
+      });
+  };
+
+  setNewJudul = (params) => {
+    // console.log("params", params);
+    this.setState({ dataDetail: params });
+  };
+
   render() {
     return (
       <div>
@@ -59,20 +96,30 @@ class Notifikasi extends Component {
             </ul>
           </div>
         </div>
-        <ItemNotification
-          pelanggan="Roma D"
-          tanggal={tanggal}
-          ruangan="ROOM-003"
-          OrderID="PRM-001"
-        />
-        <ItemNotification
-          pelanggan="Debrian"
-          tanggal={tanggal}
-          ruangan="ROOM-001"
-          OrderID="PRM-002"
-        />
+
+        {this.state.dataNotifikasi.length > 0 ? (
+          <Fragment>
+            {this.state.dataNotifikasi.map((result) => {
+              // console.log(result.id);
+              return (
+                <ItemNotification
+                  key={result.id}
+                  primaryKey={result.id}
+                  tanggal="30-01-2021"
+                  judul={result.data.Judul}
+                  isi={result.data.Isi}
+                  pelanggan={result.data.Target}
+                  aksi={result.data.Aksi}
+                  status={result.data.Status}
+                  sendData={(e) => this.setNewJudul(e)}
+                />
+              );
+            })}
+          </Fragment>
+        ) : null}
 
         <CreateNotification />
+        <DetailNotification dataDetail={this.state.dataDetail} />
       </div>
     );
   }
