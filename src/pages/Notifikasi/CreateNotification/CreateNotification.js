@@ -46,7 +46,7 @@ function CreateNotification(props) {
       .ref("notifikasi")
       .push(
         {
-          judul: e.target[0].value,
+          Judul: e.target[0].value,
           Isi: e.target[1].value,
           Target: e.target[2].value,
           Aksi: aksinya,

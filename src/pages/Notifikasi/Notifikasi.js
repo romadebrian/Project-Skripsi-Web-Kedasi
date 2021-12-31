@@ -100,8 +100,9 @@ class Notifikasi extends Component {
                   key={result.id}
                   primaryKey={result.id}
                   tanggal="30-01-2021"
-                  pelanggan={result.data.Target}
+                  judul={result.data.Judul}
                   isi={result.data.Isi}
+                  pelanggan={result.data.Target}
                   aksi={result.data.Aksi}
                   status={result.data.Status}
                 />

@@ -1,11 +1,8 @@
-import React, { useState } from "react"; //frce
-
-import $ from "jquery";
-import { Link, withRouter } from "react-router-dom";
+import React from "react"; //frce
+import firebase from "../../../config/firebase";
+import { withRouter } from "react-router-dom";
 
 function ItemNotification(props) {
-  const [action, setAction] = useState("Default");
-
   console.log(props.primaryKey);
 
   const handleAksi = () => {
@@ -15,6 +12,33 @@ function ItemNotification(props) {
       props.history.push(props.aksi);
       console.log("Open Link");
     }
+
+    handleStatusRead();
+
+    console.log("read");
+  };
+
+  const handleStatusRead = () => {
+    firebase
+      .database()
+      .ref("notifikasi/" + props.primaryKey)
+      .set(
+        {
+          Judul: props.judul,
+          Isi: props.isi,
+          Target: props.pelanggan,
+          Aksi: props.aksi,
+          Status: "Read",
+        },
+        (error) => {
+          if (error) {
+            // The write failed...
+            alert("error: ", error);
+          } else {
+            // Data saved successfully!
+          }
+        }
+      );
   };
 
   return (
@@ -33,7 +57,9 @@ function ItemNotification(props) {
             </p>
           </div>
           <span>
-            <i className="fa fa-circle text-success"></i>
+            {props.status !== "Read" ? (
+              <i className="fa fa-circle text-success"></i>
+            ) : null}
           </span>
         </div>
       </div>
