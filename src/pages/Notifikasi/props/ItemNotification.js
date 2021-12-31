@@ -3,8 +3,6 @@ import firebase from "../../../config/firebase";
 import { withRouter } from "react-router-dom";
 
 function ItemNotification(props) {
-  console.log(props.primaryKey);
-
   const handleAksi = () => {
     if (props.aksi === "Default") {
       window.$("#detail-notifikasi").modal("show");
@@ -15,7 +13,16 @@ function ItemNotification(props) {
 
     handleStatusRead();
 
-    console.log("read");
+    const data = [
+      {
+        judul: props.judul,
+        isi: props.isi,
+      },
+    ];
+
+    props.sendData(data);
+
+    // console.log("judul: ", props);
   };
 
   const handleStatusRead = () => {

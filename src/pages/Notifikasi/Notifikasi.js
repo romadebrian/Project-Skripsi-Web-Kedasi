@@ -8,6 +8,7 @@ import DetailNotification from "./props/DetailNotification";
 class Notifikasi extends Component {
   state = {
     dataNotifikasi: "",
+    dataDetail: "",
   };
 
   componentDidMount() {
@@ -36,6 +37,11 @@ class Notifikasi extends Component {
 
         console.log("List Notification: ", this.state.dataNotifikasi);
       });
+  };
+
+  setNewJudul = (params) => {
+    // console.log("params", params);
+    this.setState({ dataDetail: params });
   };
 
   render() {
@@ -105,6 +111,7 @@ class Notifikasi extends Component {
                   pelanggan={result.data.Target}
                   aksi={result.data.Aksi}
                   status={result.data.Status}
+                  sendData={(e) => this.setNewJudul(e)}
                 />
               );
             })}
@@ -112,7 +119,7 @@ class Notifikasi extends Component {
         ) : null}
 
         <CreateNotification />
-        <DetailNotification />
+        <DetailNotification dataDetail={this.state.dataDetail} />
       </div>
     );
   }

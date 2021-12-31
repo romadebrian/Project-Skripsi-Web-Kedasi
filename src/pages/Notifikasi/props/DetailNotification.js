@@ -1,13 +1,19 @@
-import React from "react";
+function DetailNotification(props) {
+  const HandleJudul = () => {
+    console.log("handle", props.dataDetail[0].judul);
+  };
 
-function DetailNotification() {
   return (
-    <div className="modal fade" id="detail-notifikasi">
+    <div
+      className="modal fade"
+      id="detail-notifikasi"
+      onMouseEnter={() => HandleJudul()}
+    >
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="card card-primary">
             <div className="card-header">
-              <h3 className="card-title">Detail Notifikasi</h3>
+              <h3 className="card-title">{props.dataDetail[0].judul}</h3>
             </div>
             {/* /.card-header */}
             {/* form start */}
@@ -20,6 +26,7 @@ function DetailNotification() {
                   className="form-control"
                   id="Frm_Judul"
                   placeholder="judul notifikasi"
+                  defaultValue={props.dataDetail[0].judul}
                 />
               </div>
               <div className="form-group">
@@ -30,6 +37,7 @@ function DetailNotification() {
                   rows="3"
                   id="Frm_Isi"
                   placeholder="isi notifikasi"
+                  defaultValue={props.dataDetail[0].isi}
                 />
               </div>
             </div>
