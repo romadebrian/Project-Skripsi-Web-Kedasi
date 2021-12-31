@@ -1,22 +1,28 @@
-import React from "react"; //frce
-import { useState } from "react/cjs/react.development";
+import React, { useState } from "react"; //frce
+
+import $ from "jquery";
+import { Link, withRouter } from "react-router-dom";
 
 function ItemNotification(props) {
   const [action, setAction] = useState("Default");
+
+  console.log(props.primaryKey);
+
   const handleAksi = () => {
     if (props.aksi === "Default") {
+      window.$("#detail-notifikasi").modal("show");
     } else {
+      props.history.push(props.aksi);
+      console.log("Open Link");
     }
   };
 
   return (
     <div
       className="d-grid gap-3"
-      {...(action === "Default" ? (
-        <>data-toggle="modal" data-target="#detail-notifikasi"</>
-      ) : (
-        console.log("gg")
-      ))}
+      // data-toggle="modal"
+      // data-target="#detail-notifikasi"
+      onClick={(e) => handleAksi(e)}
     >
       <div className="p-5 bg-light border">
         <div className="row align-items-center">
@@ -35,4 +41,4 @@ function ItemNotification(props) {
   );
 }
 
-export default ItemNotification;
+export default withRouter(ItemNotification);

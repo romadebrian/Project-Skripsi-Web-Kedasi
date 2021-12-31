@@ -1,8 +1,9 @@
 // rce
 import React, { Component, Fragment } from "react";
 import CreateNotification from "./CreateNotification/CreateNotification";
-import ItemNotification from "./props/Notifikasi/ItemNotification";
+import ItemNotification from "./props/ItemNotification";
 import firebase from "../../config/firebase";
+import DetailNotification from "./props/DetailNotification";
 
 class Notifikasi extends Component {
   state = {
@@ -93,8 +94,11 @@ class Notifikasi extends Component {
         {this.state.dataNotifikasi.length > 0 ? (
           <Fragment>
             {this.state.dataNotifikasi.map((result) => {
+              // console.log(result.id);
               return (
                 <ItemNotification
+                  key={result.id}
+                  primaryKey={result.id}
                   tanggal="30-01-2021"
                   pelanggan={result.data.Target}
                   isi={result.data.Isi}
@@ -107,6 +111,7 @@ class Notifikasi extends Component {
         ) : null}
 
         <CreateNotification />
+        <DetailNotification />
       </div>
     );
   }
