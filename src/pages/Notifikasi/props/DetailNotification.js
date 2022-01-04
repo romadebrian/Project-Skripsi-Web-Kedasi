@@ -1,6 +1,13 @@
+import { useState } from "react";
+
 function DetailNotification(props) {
+  const [judulNotif, setjudulNotif] = useState("");
+  const [isiNotif, setisiNotif] = useState("");
+
   const HandleJudul = () => {
     console.log("handle", props.dataDetail[0].judul);
+    setjudulNotif(props.dataDetail[0].judul);
+    setisiNotif(props.dataDetail[0].isi);
   };
 
   return (
@@ -13,7 +20,7 @@ function DetailNotification(props) {
         <div className="modal-content">
           <div className="card card-primary">
             <div className="card-header">
-              <h3 className="card-title">{props.dataDetail[0].judul}</h3>
+              <h3 className="card-title">{judulNotif}</h3>
             </div>
             {/* /.card-header */}
             {/* form start */}
@@ -26,7 +33,7 @@ function DetailNotification(props) {
                   className="form-control"
                   id="Frm_Judul"
                   placeholder="judul notifikasi"
-                  defaultValue={props.dataDetail[0].judul}
+                  defaultValue={judulNotif}
                 />
               </div>
               <div className="form-group">
@@ -37,7 +44,7 @@ function DetailNotification(props) {
                   rows="3"
                   id="Frm_Isi"
                   placeholder="isi notifikasi"
-                  defaultValue={props.dataDetail[0].isi}
+                  defaultValue={isiNotif}
                 />
               </div>
             </div>
