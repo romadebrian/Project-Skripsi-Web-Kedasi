@@ -1,18 +1,28 @@
-body {
+/* body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
 }
 
 html {
   height: -webkit-fill-available;
-}
+} */
 
-main {
+/* main {
   display: flex;
   flex-wrap: nowrap;
   height: 100vh;
   height: -webkit-fill-available;
   max-height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+} */
+
+.chatbox {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100vh;
+  height: -webkit-fill-available;
+  max-height: 86vh;
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -93,4 +103,13 @@ main {
 }
 .lh-tight {
   line-height: 1.25;
+}
+
+/* .chatbox .direct-chat {
+  margin-right: 50px;
+} */
+
+.direct-chat-messages {
+  margin-right: 10px;
+  height: 595px;
 }

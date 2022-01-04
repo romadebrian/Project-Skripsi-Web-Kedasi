@@ -4,7 +4,7 @@ import "./ChatBox.css";
 export default class ChatBox extends Component {
   render() {
     return (
-      <div className=" card col-md-8 direct-chat direct-chat-primary">
+      <div className="card col-md-8 direct-chat direct-chat-primary">
         <div className="card-header">
           <h3 className="card-title">Direct Chat</h3>
         </div>
