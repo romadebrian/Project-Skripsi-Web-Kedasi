@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import "./ChatBox.css";
+import ChatFromAdmin from "./props/ChatFromAdmin";
+import ChatFromUser from "./props/ChatFromUser";
 
 export default class ChatBox extends Component {
   render() {
@@ -12,94 +14,31 @@ export default class ChatBox extends Component {
         <div className="card-body">
           {/* Conversations are loaded here */}
           <div className="direct-chat-messages">
-            {/* Message. Default to the left */}
-            <div className="direct-chat-msg">
-              <div className="direct-chat-infos clearfix">
-                <span className="direct-chat-name float-left">
-                  Alexander Pierce
-                </span>
-                <span className="direct-chat-timestamp float-right">
-                  23 Jan 2:00 pm
-                </span>
-              </div>
-              {/* /.direct-chat-infos */}
-              <img
-                className="direct-chat-img"
-                src="dist/img/user2-160x160.jpg"
-                alt="message_users_image"
-              />
-              {/* /.direct-chat-img */}
-              <div className="direct-chat-text">
-                Is this template really for free? That's unbelievable!
-              </div>
-              {/* /.direct-chat-text */}
-            </div>
-            {/* /.direct-chat-msg */}
-            {/* Message to the right */}
-            <div className="direct-chat-msg right">
-              <div className="direct-chat-infos clearfix">
-                <span className="direct-chat-name float-right">
-                  Roma Debrian
-                </span>
-                <span className="direct-chat-timestamp float-left">
-                  23 Jan 2:05 pm
-                </span>
-              </div>
-              {/* /.direct-chat-infos */}
-              <img
-                className="direct-chat-img"
-                src="dist/img/romadebrian.png"
-                alt="message-user-images"
-              />
-              {/* /.direct-chat-img */}
-              <div className="direct-chat-text">You better believe it!</div>
-              {/* /.direct-chat-text */}
-            </div>
-            {/* /.direct-chat-msg */}
-            {/* Message. Default to the left */}
-            <div className="direct-chat-msg">
-              <div className="direct-chat-infos clearfix">
-                <span className="direct-chat-name float-left">
-                  Alexander Pierce
-                </span>
-                <span className="direct-chat-timestamp float-right">
-                  23 Jan 5:37 pm
-                </span>
-              </div>
-              {/* /.direct-chat-infos */}
-              <img
-                className="direct-chat-img"
-                src="dist/img/user2-160x160.jpg"
-                alt="message-user_image"
-              />
-              {/* /.direct-chat-img */}
-              <div className="direct-chat-text">
-                Working with AdminLTE on a great new app! Wanna join?
-              </div>
-              {/* /.direct-chat-text */}
-            </div>
-            {/* /.direct-chat-msg */}
-            {/* Message to the right */}
-            <div className="direct-chat-msg right">
-              <div className="direct-chat-infos clearfix">
-                <span className="direct-chat-name float-right">
-                  Roma Debrian
-                </span>
-                <span className="direct-chat-timestamp float-left">
-                  23 Jan 6:10 pm
-                </span>
-              </div>
-              {/* /.direct-chat-infos */}
-              <img
-                className="direct-chat-img"
-                src="dist/img/romadebrian.png"
-                alt="message_user_image"
-              />
-              {/* /.direct-chat-img */}
-              <div className="direct-chat-text">I would love to.</div>
-              {/* /.direct-chat-text */}
-            </div>
-            {/* /.direct-chat-msg */}
+            {/* Chat */}
+            <ChatFromUser
+              nama="Alexander Pierce"
+              waktu="23 Jan 2:00 pm"
+              pesan="Is this template really for free? That's unbelievable!"
+            />
+
+            <ChatFromAdmin
+              nama="Roma Debrian"
+              waktu="23 Jan 2:05 pm"
+              pesan="You better believe it!"
+            />
+
+            <ChatFromUser
+              nama="Alexander Pierce"
+              waktu="23 Jan 5:37 pm"
+              pesan="Working with AdminLTE on a great new app! Wanna join?"
+            />
+
+            <ChatFromAdmin
+              nama="Roma Debrian"
+              waktu="23 Jan 6:10 pm"
+              pesan="I would love to."
+            />
+            {/* End of Chat */}
           </div>
           {/*/.direct-chat-messages*/}
           {/* Contacts are loaded here */}
