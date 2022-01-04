@@ -1,6 +1,6 @@
 import React from "react";
 import ChatBox from "./ChatBox/ChatBox";
-import "./ListChat/ListChat.css";
+import "./Pesan.css";
 function Pesan() {
   return (
     <main>
