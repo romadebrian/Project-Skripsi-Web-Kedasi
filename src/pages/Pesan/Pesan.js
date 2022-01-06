@@ -2,31 +2,33 @@ import React, { Component } from "react";
 import ChatBox from "./ChatBox/ChatBox";
 import "./Pesan.css";
 import ItemUserChat from "./props/ItemUserChat";
-import firebase from "../../config/firebase";
+import firebase, { getAuth } from "../../config/firebase";
 
 class Pesan extends Component {
   componentDidMount() {
     this.handleGetListUser();
   }
 
-  handleGetListUser = (nextPageToken) => {
-    // getAuth();
-
-    // List batch of users, 1000 at a time.
-    getAuth()
-      .listUsers(1000, nextPageToken)
-      .then((listUsersResult) => {
-        listUsersResult.users.forEach((userRecord) => {
-          console.log("user", userRecord.toJSON());
+  handleGetListUser = () => {
+    const listAllUsers = (nextPageToken) => {
+      // List batch of users, 1000 at a time.
+      getAuth()
+        .listUsers(1000, nextPageToken)
+        .then((listUsersResult) => {
+          listUsersResult.users.forEach((userRecord) => {
+            console.log("user", userRecord.toJSON());
+          });
+          if (listUsersResult.pageToken) {
+            // List next batch of users.
+            listAllUsers(listUsersResult.pageToken);
+          }
+        })
+        .catch((error) => {
+          console.log("Error listing users:", error);
         });
-        if (listUsersResult.pageToken) {
-          // List next batch of users.
-          listAllUsers(listUsersResult.pageToken);
-        }
-      })
-      .catch((error) => {
-        console.log("Error listing users:", error);
-      });
+    };
+    // Start listing users from the beginning, 1000 at a time.
+    listAllUsers();
   };
 
   render() {
