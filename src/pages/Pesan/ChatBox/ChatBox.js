@@ -6,31 +6,42 @@ import ChatFromUser from "./props/ChatFromUser";
 import firebase from "../../../config/firebase";
 
 export default class ChatBox extends Component {
-  state = {
+  datanya = {
     dataChat: "",
   };
 
-  handleShowToken = (params) => {
-    console.log(this.state.userID);
+  state = {
+    text: "",
   };
 
-  handleSendChat = (params) => {
-    // console.log(params);
+  handlechange = (params) => {
+    this.setState({ text: params.target.value });
+  };
+
+  handleSendChat = () => {
+    const ID = this.props.UID;
 
     firebase
       .database()
-      .ref("chat/" + params)
-      .set({}, (error) => {
-        if (error) {
-          // The write failed...
-          alert("Gagal Simpan");
-        } else {
-          // Data saved successfully!
+      .ref("chat/" + ID)
+      .push(
+        {
+          UserID: ID,
+          Pengirim: "Admin",
+          Text: this.state.text,
+        },
+        (error) => {
+          if (error) {
+            // The write failed...
+            alert("Gagal Simpan");
+          } else {
+            // Data saved successfully!
 
-          console.log("new chat telah di buat: ");
-          // window.location.reload();
+            console.log("new chat telah di buat: ");
+            // window.location.reload();
+          }
         }
-      });
+      );
   };
 
   render() {
@@ -219,6 +230,7 @@ export default class ChatBox extends Component {
                 name="message"
                 placeholder="Type Message ..."
                 className="form-control"
+                onChange={(e) => this.handlechange(e)}
               />
               <span className="input-group-append">
                 <button

@@ -7,6 +7,8 @@ import firebase from "../../config/firebase";
 class Pesan extends Component {
   state = {
     userName: "",
+    userID: "",
+    chatBoxMode: false,
   };
 
   componentDidMount() {}
@@ -16,7 +18,15 @@ class Pesan extends Component {
   handleSelectUser = (params) => {
     const ID = params.target.value;
     // console.log(params.target.value);
-    // this.setState({ userID: params.target.value });
+    this.setState({ userID: ID, chatBoxMode: true });
+
+    this.handleGetNameUser(ID);
+    this.handleChat(ID);
+  };
+
+  handleItemUserChat = (params) => {
+    const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
+    this.setState({ userID: ID, chatBoxMode: true });
 
     this.handleGetNameUser(ID);
     this.handleChat(ID);
@@ -92,24 +102,26 @@ class Pesan extends Component {
             </select>
           </div>
           <div className="list-group list-group-flush border-bottom scrollarea">
-            <ItemUserChat />
-            <ItemUserChat />
-            <ItemUserChat />
-            <ItemUserChat />
-            <ItemUserChat />
-            <ItemUserChat />
-            <ItemUserChat />
-            <ItemUserChat />
-            <ItemUserChat />
-            <ItemUserChat />
-            <ItemUserChat />
+            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
+            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
+            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
+            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
+            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
+            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
+            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
+            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
+            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
+            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
           </div>
         </div>
 
         {/* End Part List User Who Messege You */}
 
         {/* Chat Box */}
-        <ChatBox UID={this.state.userID} Nama={this.state.userName} />
+        {this.state.chatBoxMode ? (
+          <ChatBox UID={this.state.userID} Nama={this.state.userName} />
+        ) : null}
+
         {/* End of Chat Box */}
       </div>
     );
