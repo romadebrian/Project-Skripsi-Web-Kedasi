@@ -4,11 +4,19 @@ import ChatFromAdmin from "./props/ChatFromAdmin";
 import ChatFromUser from "./props/ChatFromUser";
 
 export default class ChatBox extends Component {
+  state = {
+    dataChat: "",
+  };
+
+  handleShowToken = (params) => {
+    console.log(this.state.userID);
+  };
+
   render() {
     return (
       <div className="card col-md-8 direct-chat direct-chat-primary">
         <div className="card-header">
-          <h3 className="card-title">Direct Chat</h3>
+          <h3 className="card-title">{this.props.UID}</h3>
         </div>
         {/* /.card-header */}
         <div className="card-body">
@@ -192,7 +200,11 @@ export default class ChatBox extends Component {
                 className="form-control"
               />
               <span className="input-group-append">
-                <button type="button" className="btn btn-primary">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={(e) => this.handleShowToken(e)}
+                >
                   Send
                 </button>
               </span>

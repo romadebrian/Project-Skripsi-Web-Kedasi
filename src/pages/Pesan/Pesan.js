@@ -5,11 +5,18 @@ import ItemUserChat from "./props/ItemUserChat";
 import firebase from "../../config/firebase";
 
 class Pesan extends Component {
+  state = {
+    userID: "",
+  };
+
   componentDidMount() {}
 
   handleGetListUser = () => {};
 
-  handleSelectUser = (params) => {};
+  handleSelectUser = (params) => {
+    // console.log(params.target.value);
+    this.setState({ userID: params.target.value });
+  };
 
   render() {
     return (
@@ -25,11 +32,11 @@ class Pesan extends Component {
             <select
               className="form-control"
               id="Frm_Chat_User"
-              onChange={this.handleSelectUser()}
+              onChange={(e) => this.handleSelectUser(e)}
             >
               <option></option>
               <option>Q6oONNZcYTawpMtsrv6CsTa2uz43</option>
-              <option>User 2</option>
+              <option>zAhbiHR06ZQbwSdTiT6ftB91BH62</option>
               <option>User 3</option>
               <option>User 5</option>
               <option>User 6</option>
@@ -53,7 +60,7 @@ class Pesan extends Component {
         {/* End Part List User Who Messege You */}
 
         {/* Chat Box */}
-        <ChatBox />
+        <ChatBox UID={this.state.userID} />
         {/* End of Chat Box */}
       </div>
     );
