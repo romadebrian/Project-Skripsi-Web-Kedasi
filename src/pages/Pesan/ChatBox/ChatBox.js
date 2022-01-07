@@ -3,6 +3,8 @@ import "./ChatBox.css";
 import ChatFromAdmin from "./props/ChatFromAdmin";
 import ChatFromUser from "./props/ChatFromUser";
 
+import firebase from "../../../config/firebase";
+
 export default class ChatBox extends Component {
   state = {
     dataChat: "",
@@ -10,6 +12,25 @@ export default class ChatBox extends Component {
 
   handleShowToken = (params) => {
     console.log(this.state.userID);
+  };
+
+  handleSendChat = (params) => {
+    // console.log(params);
+
+    firebase
+      .database()
+      .ref("chat/" + params)
+      .set({}, (error) => {
+        if (error) {
+          // The write failed...
+          alert("Gagal Simpan");
+        } else {
+          // Data saved successfully!
+
+          console.log("new chat telah di buat: ");
+          // window.location.reload();
+        }
+      });
   };
 
   render() {
@@ -203,7 +224,7 @@ export default class ChatBox extends Component {
                 <button
                   type="button"
                   className="btn btn-primary"
-                  onClick={(e) => this.handleShowToken(e)}
+                  onClick={(e) => this.handleSendChat(e)}
                 >
                   Send
                 </button>

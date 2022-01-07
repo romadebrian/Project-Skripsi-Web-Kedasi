@@ -19,29 +19,7 @@ class Pesan extends Component {
     // this.setState({ userID: params.target.value });
 
     this.handleGetNameUser(ID);
-
-    // return firebase
-    //   .database()
-    //   .ref("/chat/" + ID)
-    //   .on("value", (snapshot) => {
-    //     const data = [];
-    //     if (snapshot.exists()) {
-    //       Object.keys(snapshot.val()).map((key) => {
-    //         data.push({
-    //           id: key,
-    //           data: snapshot.val()[key],
-    //         });
-    //         return data;
-    //       });
-    //     } else {
-    //       console.log("Data tidak ditemukan");
-    //       this.hadleNewChat(ID);
-    //     }
-
-    //     // this.setState({ dataNotifikasi: data });
-
-    //     console.log("List user: ", data);
-    //   });
+    this.handleChat(ID);
   };
 
   handleGetNameUser = (params) => {
@@ -66,22 +44,26 @@ class Pesan extends Component {
       );
   };
 
-  hadleNewChat = (params) => {
-    // console.log(params);
-
-    firebase
+  handleChat = (ID) => {
+    return firebase
       .database()
-      .ref("chat/" + params)
-      .set({}, (error) => {
-        if (error) {
-          // The write failed...
-          alert("Gagal Simpan");
+      .ref("/chat/" + ID)
+      .on("value", (snapshot) => {
+        const data = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            data.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
+            return data;
+          });
         } else {
-          // Data saved successfully!
-
-          console.log("new chat telah di buat: ");
-          // window.location.reload();
+          console.log("tidak chat");
         }
+
+        // this.setState({ dataNotifikasi: data });
+        console.log("data chat: ", data);
       });
   };
 
