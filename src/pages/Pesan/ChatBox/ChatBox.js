@@ -16,7 +16,7 @@ export default class ChatBox extends Component {
     return (
       <div className="card col-md-8 direct-chat direct-chat-primary">
         <div className="card-header">
-          <h3 className="card-title">{this.props.UID}</h3>
+          <h3 className="card-title">{this.props.Nama}</h3>
         </div>
         {/* /.card-header */}
         <div className="card-body">

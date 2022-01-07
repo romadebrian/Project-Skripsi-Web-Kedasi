@@ -6,7 +6,7 @@ import firebase from "../../config/firebase";
 
 class Pesan extends Component {
   state = {
-    userID: "",
+    userName: "",
   };
 
   componentDidMount() {}
@@ -14,8 +14,75 @@ class Pesan extends Component {
   handleGetListUser = () => {};
 
   handleSelectUser = (params) => {
+    const ID = params.target.value;
     // console.log(params.target.value);
-    this.setState({ userID: params.target.value });
+    // this.setState({ userID: params.target.value });
+
+    this.handleGetNameUser(ID);
+
+    // return firebase
+    //   .database()
+    //   .ref("/chat/" + ID)
+    //   .on("value", (snapshot) => {
+    //     const data = [];
+    //     if (snapshot.exists()) {
+    //       Object.keys(snapshot.val()).map((key) => {
+    //         data.push({
+    //           id: key,
+    //           data: snapshot.val()[key],
+    //         });
+    //         return data;
+    //       });
+    //     } else {
+    //       console.log("Data tidak ditemukan");
+    //       this.hadleNewChat(ID);
+    //     }
+
+    //     // this.setState({ dataNotifikasi: data });
+
+    //     console.log("List user: ", data);
+    //   });
+  };
+
+  handleGetNameUser = (params) => {
+    const ID = params;
+    return firebase
+      .database()
+      .ref("/users/" + ID)
+      .once("value")
+      .then(
+        (snapshot) => {
+          this.setState({ userName: snapshot.val() && snapshot.val().Nama });
+          console.log(snapshot.val() && snapshot.val().Nama);
+        },
+        (error) => {
+          if (error) {
+            console.log("read failed", error);
+            // The write failed...
+          } else {
+            // Data saved successfully!
+          }
+        }
+      );
+  };
+
+  hadleNewChat = (params) => {
+    // console.log(params);
+
+    firebase
+      .database()
+      .ref("chat/" + params)
+      .set({}, (error) => {
+        if (error) {
+          // The write failed...
+          alert("Gagal Simpan");
+        } else {
+          // Data saved successfully!
+
+          console.log("new chat telah di buat: ");
+          // window.location.reload();
+        }
+      });
   };
 
   render() {
@@ -60,7 +127,7 @@ class Pesan extends Component {
         {/* End Part List User Who Messege You */}
 
         {/* Chat Box */}
-        <ChatBox UID={this.state.userID} />
+        <ChatBox UID={this.state.userID} Nama={this.state.userName} />
         {/* End of Chat Box */}
       </div>
     );
