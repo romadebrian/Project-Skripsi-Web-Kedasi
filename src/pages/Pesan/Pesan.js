@@ -3,34 +3,13 @@ import ChatBox from "./ChatBox/ChatBox";
 import "./Pesan.css";
 import ItemUserChat from "./props/ItemUserChat";
 import firebase from "../../config/firebase";
-import * as admin from "firebase-admin";
 
 class Pesan extends Component {
-  componentDidMount() {
-    this.listAllUsers();
-  }
+  componentDidMount() {}
 
   handleGetListUser = () => {};
 
-  listAllUsers = (nextPageToken) => {
-    // List batch of users, 1000 at a time.
-    // getAuth()
-    admin
-      .auth()
-      .listUsers(1000, nextPageToken)
-      .then((listUsersResult) => {
-        listUsersResult.users.forEach((userRecord) => {
-          console.log("user", userRecord.toJSON());
-        });
-        if (listUsersResult.pageToken) {
-          // List next batch of users.
-          this.listAllUsers(listUsersResult.pageToken);
-        }
-      })
-      .catch((error) => {
-        console.log("Error listing users:", error);
-      });
-  };
+  handleSelectUser = (params) => {};
 
   render() {
     return (
@@ -43,9 +22,13 @@ class Pesan extends Component {
           <div className="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
             <span className="fs-5 fw-semibold select-user">Pilih User</span>
 
-            <select className="form-control" id="Frm_Chat_User">
+            <select
+              className="form-control"
+              id="Frm_Chat_User"
+              onChange={this.handleSelectUser()}
+            >
               <option></option>
-              <option>User 1</option>
+              <option>Q6oONNZcYTawpMtsrv6CsTa2uz43</option>
               <option>User 2</option>
               <option>User 3</option>
               <option>User 5</option>
