@@ -38,7 +38,11 @@ class Pesan extends Component {
 
   handleClickItemUserChat = (params) => {
     const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
-    this.setState({ userID: ID, chatBoxMode: true });
+    this.setState({
+      userID: ID,
+      chatBoxMode: true,
+      userData: [{ nama: "", gambar: "" }],
+    });
 
     // this.handleGetNameUser(ID);
     this.handleGetDataUser(ID);
