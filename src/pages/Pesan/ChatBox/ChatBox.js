@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import "./ChatBox.css";
 import ChatFromAdmin from "./props/ChatFromAdmin";
 import ChatFromUser from "./props/ChatFromUser";
@@ -20,15 +20,17 @@ export default class ChatBox extends Component {
 
   handleSendChat = () => {
     const ID = this.props.UID;
+    var tanggal = new Date().toUTCString();
 
     firebase
       .database()
       .ref("chat/" + ID)
       .push(
         {
-          UserID: ID,
-          Pengirim: "Admin",
-          Text: this.state.text,
+          Nama: ID,
+          Waktu: tanggal,
+          Pesan: this.state.text,
+          Dari: "Admin",
         },
         (error) => {
           if (error) {
@@ -55,6 +57,23 @@ export default class ChatBox extends Component {
           {/* Conversations are loaded here */}
           <div className="direct-chat-messages">
             {/* Chat */}
+
+            {this.props.chatData.length > 0 ? (
+              <Fragment>
+                {this.props.chatData.map((result) => {
+                  // console.log(result.id);
+                  return (
+                    <ChatFromAdmin
+                      key={result.id}
+                      nama={result.data.Nama}
+                      waktu={result.data.Waktu}
+                      pesan={result.data.Pesan}
+                    />
+                  );
+                })}
+              </Fragment>
+            ) : null}
+
             <ChatFromUser
               nama="Alexander Pierce"
               waktu="23 Jan 2:00 pm"

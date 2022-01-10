@@ -9,6 +9,7 @@ class Pesan extends Component {
     userName: "",
     userID: "",
     chatBoxMode: false,
+    dataChat: "",
   };
 
   componentDidMount() {}
@@ -18,10 +19,10 @@ class Pesan extends Component {
   handleSelectUser = (params) => {
     const ID = params.target.value;
     // console.log(params.target.value);
-    this.setState({ userID: ID, chatBoxMode: true });
+    this.setState({ userID: ID, chatBoxMode: true, userName: "" });
 
     this.handleGetNameUser(ID);
-    this.handleChat(ID);
+    this.handleGetChat(ID);
   };
 
   handleItemUserChat = (params) => {
@@ -29,7 +30,7 @@ class Pesan extends Component {
     this.setState({ userID: ID, chatBoxMode: true });
 
     this.handleGetNameUser(ID);
-    this.handleChat(ID);
+    this.handleGetChat(ID);
   };
 
   handleGetNameUser = (params) => {
@@ -54,7 +55,7 @@ class Pesan extends Component {
       );
   };
 
-  handleChat = (ID) => {
+  handleGetChat = (ID) => {
     return firebase
       .database()
       .ref("/chat/" + ID)
@@ -72,7 +73,7 @@ class Pesan extends Component {
           console.log("tidak chat");
         }
 
-        // this.setState({ dataNotifikasi: data });
+        this.setState({ dataChat: data });
         console.log("data chat: ", data);
       });
   };
@@ -119,7 +120,11 @@ class Pesan extends Component {
 
         {/* Chat Box */}
         {this.state.chatBoxMode ? (
-          <ChatBox UID={this.state.userID} Nama={this.state.userName} />
+          <ChatBox
+            UID={this.state.userID}
+            Nama={this.state.userName}
+            chatData={this.state.dataChat}
+          />
         ) : null}
 
         {/* End of Chat Box */}
