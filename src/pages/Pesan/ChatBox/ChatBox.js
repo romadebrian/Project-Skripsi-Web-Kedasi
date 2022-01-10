@@ -62,41 +62,28 @@ export default class ChatBox extends Component {
               <Fragment>
                 {this.props.chatData.map((result) => {
                   // console.log(result.id);
-                  return (
-                    <ChatFromAdmin
-                      key={result.id}
-                      nama={result.data.Nama}
-                      waktu={result.data.Waktu}
-                      pesan={result.data.Pesan}
-                    />
-                  );
+                  if (result.data.Dari === "Admin") {
+                    return (
+                      <ChatFromAdmin
+                        key={result.id}
+                        nama={result.data.Nama}
+                        waktu={result.data.Waktu}
+                        pesan={result.data.Pesan}
+                      />
+                    );
+                  } else {
+                    return (
+                      <ChatFromUser
+                        key={result.id}
+                        nama={result.data.Nama}
+                        waktu={result.data.Waktu}
+                        pesan={result.data.Pesan}
+                      />
+                    );
+                  }
                 })}
               </Fragment>
             ) : null}
-
-            <ChatFromUser
-              nama="Alexander Pierce"
-              waktu="23 Jan 2:00 pm"
-              pesan="Is this template really for free? That's unbelievable!"
-            />
-
-            <ChatFromAdmin
-              nama="Roma Debrian"
-              waktu="23 Jan 2:05 pm"
-              pesan="You better believe it!"
-            />
-
-            <ChatFromUser
-              nama="Alexander Pierce"
-              waktu="23 Jan 5:37 pm"
-              pesan="Working with AdminLTE on a great new app! Wanna join?"
-            />
-
-            <ChatFromAdmin
-              nama="Roma Debrian"
-              waktu="23 Jan 6:10 pm"
-              pesan="I would love to."
-            />
             {/* End of Chat */}
           </div>
           {/*/.direct-chat-messages*/}
