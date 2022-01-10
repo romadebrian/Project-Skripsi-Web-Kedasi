@@ -10,7 +10,7 @@ function ChatFromAdmin(props) {
       {/* /.direct-chat-infos */}
       <img
         className="direct-chat-img"
-        src="dist/img/romadebrian.png"
+        src={props.photo}
         alt="MessageUserImages"
       />
       {/* /.direct-chat-img */}

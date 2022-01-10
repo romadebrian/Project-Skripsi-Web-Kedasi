@@ -8,11 +8,14 @@ class Pesan extends Component {
   state = {
     userID: "",
     userData: [{ nama: "", gambar: "" }],
+    adminData: [{ nama: "", gambar: "" }],
     chatBoxMode: false,
     dataChat: "",
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.handleGetDataAdmin();
+  }
   componentDidUpdate() {
     // console.log("Data usernya", this.state.userData[0].nama);
   }
@@ -49,13 +52,6 @@ class Pesan extends Component {
       .once("value")
       .then(
         (snapshot) => {
-          // const dataUser = [];
-          // dataUser.push({
-          //   nama: snapshot.val() && snapshot.val().Nama,
-          //   photo: snapshot.val() && snapshot.val().Profile_Picture,
-          // });
-          // return dataUser;
-          // console.log(dataUser);
           this.setState({
             userData: [
               {
@@ -76,27 +72,33 @@ class Pesan extends Component {
       );
   };
 
-  // handleGetNameUser = (params) => {
-  //   const ID = params;
-  //   return firebase
-  //     .database()
-  //     .ref("/users/" + ID)
-  //     .once("value")
-  //     .then(
-  //       (snapshot) => {
-  //         this.setState({ userName: snapshot.val() && snapshot.val().Nama });
-  //         console.log(snapshot.val() && snapshot.val().Nama);
-  //       },
-  //       (error) => {
-  //         if (error) {
-  //           console.log("read failed", error);
-  //           // The write failed...
-  //         } else {
-  //           // Data saved successfully!
-  //         }
-  //       }
-  //     );
-  // };
+  handleGetDataAdmin = () => {
+    const ID = "zAhbiHR06ZQbwSdTiT6ftB91BH62";
+    return firebase
+      .database()
+      .ref("/users/" + ID)
+      .once("value")
+      .then(
+        (snapshot) => {
+          this.setState({
+            adminData: [
+              {
+                nama: snapshot.val() && snapshot.val().Nama,
+                photo: snapshot.val() && snapshot.val().Profile_Picture,
+              },
+            ],
+          });
+        },
+        (error) => {
+          if (error) {
+            console.log("read failed", error);
+            // The write failed...
+          } else {
+            // Data saved successfully!
+          }
+        }
+      );
+  };
 
   handleGetChat = (ID) => {
     return firebase
@@ -180,6 +182,7 @@ class Pesan extends Component {
           <ChatBox
             UID={this.state.userID}
             dataUser={this.state.userData}
+            dataAdmin={this.state.adminData}
             chatData={this.state.dataChat}
           />
         ) : null}

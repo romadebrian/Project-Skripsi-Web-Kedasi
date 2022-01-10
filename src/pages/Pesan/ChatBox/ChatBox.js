@@ -68,9 +68,10 @@ export default class ChatBox extends Component {
                     return (
                       <ChatFromAdmin
                         key={result.id}
-                        nama={result.data.Nama}
+                        nama={this.props.dataAdmin[0].nama}
                         waktu={result.data.Waktu}
                         pesan={result.data.Pesan}
+                        photo={this.props.dataAdmin[0].photo}
                       />
                     );
                   } else {
