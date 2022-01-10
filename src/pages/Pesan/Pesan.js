@@ -6,43 +6,64 @@ import firebase from "../../config/firebase";
 
 class Pesan extends Component {
   state = {
-    userName: "",
     userID: "",
+    userData: [{ nama: "", gambar: "" }],
     chatBoxMode: false,
     dataChat: "",
   };
 
   componentDidMount() {}
+  componentDidUpdate() {
+    // console.log("Data usernya", this.state.userData[0].nama);
+  }
 
   handleGetListUser = () => {};
 
   handleSelectUser = (params) => {
     const ID = params.target.value;
     // console.log(params.target.value);
-    this.setState({ userID: ID, chatBoxMode: true, userName: "" });
+    this.setState({
+      userID: ID,
+      chatBoxMode: true,
+      userData: [{ nama: "", gambar: "" }],
+    });
 
-    this.handleGetNameUser(ID);
+    // this.handleGetNameUser(ID);
+    this.handleGetDataUser(ID);
     this.handleGetChat(ID);
   };
 
-  handleItemUserChat = (params) => {
+  handleClickItemUserChat = (params) => {
     const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
     this.setState({ userID: ID, chatBoxMode: true });
 
-    this.handleGetNameUser(ID);
+    // this.handleGetNameUser(ID);
+    this.handleGetDataUser(ID);
     this.handleGetChat(ID);
   };
 
-  handleGetNameUser = (params) => {
-    const ID = params;
+  handleGetDataUser = (ID) => {
     return firebase
       .database()
       .ref("/users/" + ID)
       .once("value")
       .then(
         (snapshot) => {
-          this.setState({ userName: snapshot.val() && snapshot.val().Nama });
-          console.log(snapshot.val() && snapshot.val().Nama);
+          // const dataUser = [];
+          // dataUser.push({
+          //   nama: snapshot.val() && snapshot.val().Nama,
+          //   photo: snapshot.val() && snapshot.val().Profile_Picture,
+          // });
+          // return dataUser;
+          // console.log(dataUser);
+          this.setState({
+            userData: [
+              {
+                nama: snapshot.val() && snapshot.val().Nama,
+                photo: snapshot.val() && snapshot.val().Profile_Picture,
+              },
+            ],
+          });
         },
         (error) => {
           if (error) {
@@ -54,6 +75,28 @@ class Pesan extends Component {
         }
       );
   };
+
+  // handleGetNameUser = (params) => {
+  //   const ID = params;
+  //   return firebase
+  //     .database()
+  //     .ref("/users/" + ID)
+  //     .once("value")
+  //     .then(
+  //       (snapshot) => {
+  //         this.setState({ userName: snapshot.val() && snapshot.val().Nama });
+  //         console.log(snapshot.val() && snapshot.val().Nama);
+  //       },
+  //       (error) => {
+  //         if (error) {
+  //           console.log("read failed", error);
+  //           // The write failed...
+  //         } else {
+  //           // Data saved successfully!
+  //         }
+  //       }
+  //     );
+  // };
 
   handleGetChat = (ID) => {
     return firebase
@@ -103,16 +146,30 @@ class Pesan extends Component {
             </select>
           </div>
           <div className="list-group list-group-flush border-bottom scrollarea">
-            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
-            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
-            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
-            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
-            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
-            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
-            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
-            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
-            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
-            <ItemUserChat ActionClick={(e) => this.handleItemUserChat(e)} />
+            <ItemUserChat
+              ActionClick={(e) => this.handleClickItemUserChat(e)}
+            />
+            <ItemUserChat
+              ActionClick={(e) => this.handleClickItemUserChat(e)}
+            />
+            <ItemUserChat
+              ActionClick={(e) => this.handleClickItemUserChat(e)}
+            />
+            <ItemUserChat
+              ActionClick={(e) => this.handleClickItemUserChat(e)}
+            />
+            <ItemUserChat
+              ActionClick={(e) => this.handleClickItemUserChat(e)}
+            />
+            <ItemUserChat
+              ActionClick={(e) => this.handleClickItemUserChat(e)}
+            />
+            <ItemUserChat
+              ActionClick={(e) => this.handleClickItemUserChat(e)}
+            />
+            <ItemUserChat
+              ActionClick={(e) => this.handleClickItemUserChat(e)}
+            />
           </div>
         </div>
 
@@ -122,7 +179,7 @@ class Pesan extends Component {
         {this.state.chatBoxMode ? (
           <ChatBox
             UID={this.state.userID}
-            Nama={this.state.userName}
+            dataUser={this.state.userData}
             chatData={this.state.dataChat}
           />
         ) : null}

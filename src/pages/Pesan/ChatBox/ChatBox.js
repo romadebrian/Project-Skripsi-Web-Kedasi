@@ -19,38 +19,40 @@ export default class ChatBox extends Component {
   };
 
   handleSendChat = () => {
-    const ID = this.props.UID;
-    var tanggal = new Date().toUTCString();
+    // const ID = this.props.UID;
+    // var tanggal = new Date().toUTCString();
 
-    firebase
-      .database()
-      .ref("chat/" + ID)
-      .push(
-        {
-          Nama: ID,
-          Waktu: tanggal,
-          Pesan: this.state.text,
-          Dari: "Admin",
-        },
-        (error) => {
-          if (error) {
-            // The write failed...
-            alert("Gagal Simpan");
-          } else {
-            // Data saved successfully!
+    // firebase
+    //   .database()
+    //   .ref("chat/" + ID)
+    //   .push(
+    //     {
+    //       Nama: ID,
+    //       Waktu: tanggal,
+    //       Pesan: this.state.text,
+    //       Dari: "Admin",
+    //     },
+    //     (error) => {
+    //       if (error) {
+    //         // The write failed...
+    //         alert("Gagal Simpan");
+    //       } else {
+    //         // Data saved successfully!
 
-            console.log("new chat telah di buat: ");
-            // window.location.reload();
-          }
-        }
-      );
+    //         console.log("new chat telah di buat: ");
+    //         // window.location.reload();
+    //       }
+    //     }
+    //   );
+
+    console.log("Data Usernya", this.props.dataUser[0].nama);
   };
 
   render() {
     return (
       <div className="card col-md-8 direct-chat direct-chat-primary">
         <div className="card-header">
-          <h3 className="card-title">{this.props.Nama}</h3>
+          <h3 className="card-title">{this.props.dataUser[0].nama}</h3>
         </div>
         {/* /.card-header */}
         <div className="card-body">
@@ -75,9 +77,10 @@ export default class ChatBox extends Component {
                     return (
                       <ChatFromUser
                         key={result.id}
-                        nama={result.data.Nama}
+                        nama={this.props.dataUser[0].nama}
                         waktu={result.data.Waktu}
                         pesan={result.data.Pesan}
+                        photo={this.props.dataUser[0].photo}
                       />
                     );
                   }
