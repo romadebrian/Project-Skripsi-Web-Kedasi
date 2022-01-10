@@ -1,12 +1,16 @@
 import React from "react";
 
-function ItemUserChat() {
+function ItemUserChat(props) {
+  const handleItemClick = (params) => {
+    props.ActionClick();
+  };
+
   return (
-    <a
-      href="/"
+    <div
       className="list-group-item list-group-item-action py-3 lh-tight" //active
       aria-current="true"
       style={{ paddingLeft: "10px" }}
+      onClick={(e) => handleItemClick(e)}
     >
       <div className="row align-items-center">
         <div className="col-2">
@@ -26,7 +30,7 @@ function ItemUserChat() {
           </div>
         </div>
       </div>
-    </a>
+    </div>
   );
 }
 

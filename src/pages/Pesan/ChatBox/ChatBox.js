@@ -1,43 +1,93 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import "./ChatBox.css";
 import ChatFromAdmin from "./props/ChatFromAdmin";
 import ChatFromUser from "./props/ChatFromUser";
 
+import firebase from "../../../config/firebase";
+
 export default class ChatBox extends Component {
+  datanya = {
+    dataChat: "",
+  };
+
+  state = {
+    text: "",
+  };
+
+  handlechange = (params) => {
+    this.setState({ text: params.target.value });
+  };
+
+  handleSendChat = () => {
+    // const ID = this.props.UID;
+    // var tanggal = new Date().toUTCString();
+
+    // firebase
+    //   .database()
+    //   .ref("chat/" + ID)
+    //   .push(
+    //     {
+    //       Nama: ID,
+    //       Waktu: tanggal,
+    //       Pesan: this.state.text,
+    //       Dari: "Admin",
+    //     },
+    //     (error) => {
+    //       if (error) {
+    //         // The write failed...
+    //         alert("Gagal Simpan");
+    //       } else {
+    //         // Data saved successfully!
+
+    //         console.log("new chat telah di buat: ");
+    //         // window.location.reload();
+    //       }
+    //     }
+    //   );
+
+    console.log("Data Usernya", this.props.dataUser[0].nama);
+  };
+
   render() {
     return (
       <div className="card col-md-8 direct-chat direct-chat-primary">
         <div className="card-header">
-          <h3 className="card-title">Direct Chat</h3>
+          <h3 className="card-title">{this.props.dataUser[0].nama}</h3>
         </div>
         {/* /.card-header */}
         <div className="card-body">
           {/* Conversations are loaded here */}
           <div className="direct-chat-messages">
             {/* Chat */}
-            <ChatFromUser
-              nama="Alexander Pierce"
-              waktu="23 Jan 2:00 pm"
-              pesan="Is this template really for free? That's unbelievable!"
-            />
 
-            <ChatFromAdmin
-              nama="Roma Debrian"
-              waktu="23 Jan 2:05 pm"
-              pesan="You better believe it!"
-            />
-
-            <ChatFromUser
-              nama="Alexander Pierce"
-              waktu="23 Jan 5:37 pm"
-              pesan="Working with AdminLTE on a great new app! Wanna join?"
-            />
-
-            <ChatFromAdmin
-              nama="Roma Debrian"
-              waktu="23 Jan 6:10 pm"
-              pesan="I would love to."
-            />
+            {this.props.chatData.length > 0 ? (
+              <Fragment>
+                {this.props.chatData.map((result) => {
+                  // console.log(result.id);
+                  if (result.data.Dari === "Admin") {
+                    return (
+                      <ChatFromAdmin
+                        key={result.id}
+                        nama={this.props.dataAdmin[0].nama}
+                        waktu={result.data.Waktu}
+                        pesan={result.data.Pesan}
+                        photo={this.props.dataAdmin[0].photo}
+                      />
+                    );
+                  } else {
+                    return (
+                      <ChatFromUser
+                        key={result.id}
+                        nama={this.props.dataUser[0].nama}
+                        waktu={result.data.Waktu}
+                        pesan={result.data.Pesan}
+                        photo={this.props.dataUser[0].photo}
+                      />
+                    );
+                  }
+                })}
+              </Fragment>
+            ) : null}
             {/* End of Chat */}
           </div>
           {/*/.direct-chat-messages*/}
@@ -190,9 +240,14 @@ export default class ChatBox extends Component {
                 name="message"
                 placeholder="Type Message ..."
                 className="form-control"
+                onChange={(e) => this.handlechange(e)}
               />
               <span className="input-group-append">
-                <button type="button" className="btn btn-primary">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={(e) => this.handleSendChat(e)}
+                >
                   Send
                 </button>
               </span>
