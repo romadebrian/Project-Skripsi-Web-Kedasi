@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import ChatBox from "./ChatBox/ChatBox";
 import "./Pesan.css";
 import ItemUserChat from "./props/ItemUserChat";
@@ -11,10 +11,12 @@ class Pesan extends Component {
     adminData: [{ nama: "", gambar: "" }],
     chatBoxMode: false,
     dataChat: "",
+    dataHistoryChat: "",
   };
 
   componentDidMount() {
     this.handleGetDataAdmin();
+    this.handleHistoryChat();
   }
   componentDidUpdate() {
     // console.log("Data usernya", this.state.userData[0].nama);
@@ -127,6 +129,32 @@ class Pesan extends Component {
       });
   };
 
+  handleHistoryChat = (params) => {
+    return firebase
+      .database()
+      .ref("/chat/")
+      .on("value", (snapshot) => {
+        // console.log("get data firebase : ", snapshot.val());
+
+        const data = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            data.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
+            return data;
+          });
+        } else {
+          console.log("History chat kosong");
+        }
+
+        this.setState({ dataHistoryChat: data });
+
+        console.log("data history chat: ", data);
+      });
+  };
+
   render() {
     return (
       <div className="chatbox">
@@ -152,7 +180,20 @@ class Pesan extends Component {
             </select>
           </div>
           <div className="list-group list-group-flush border-bottom scrollarea">
-            <ItemUserChat
+            {this.state.dataHistoryChat.length > 0 ? (
+              <Fragment>
+                {this.state.dataHistoryChat.map((chat) => {
+                  // console.log("Data Pesanan ", pesanan.data.OrderId);
+                  return (
+                    <ItemUserChat
+                      ActionClick={(e) => this.handleClickItemUserChat(e)}
+                    />
+                  );
+                })}
+              </Fragment>
+            ) : null}
+
+            {/* <ItemUserChat
               ActionClick={(e) => this.handleClickItemUserChat(e)}
             />
             <ItemUserChat
@@ -172,10 +213,7 @@ class Pesan extends Component {
             />
             <ItemUserChat
               ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
+            /> */}
           </div>
         </div>
 
