@@ -129,30 +129,50 @@ class Pesan extends Component {
       });
   };
 
-  handleHistoryChat = (params) => {
+  handleHistoryChat = async (params) => {
     return firebase
       .database()
       .ref("/chat/")
       .on("value", (snapshot) => {
-        // console.log("get data firebase : ", snapshot.val());
-
         const data = [];
         if (snapshot.exists()) {
           Object.keys(snapshot.val()).map((key) => {
             data.push({
               id: key,
               data: snapshot.val()[key],
+              nama: await this.testDataUser(),
+              lastPesan: "snapshot.val() && snapshot.val()[1],",
+              tgl: "tanggal",
+              photo: "poto",
             });
+
+            console.log(
+              snapshot.val()["Q6oONNZcYTawpMtsrv6CsTa2uz43"][
+                "-Mt4jhrsapvSMaYPmGpt"
+              ].Pesan
+            );
             return data;
           });
         } else {
-          console.log("History chat kosong");
+          console.log("tidak chat");
         }
 
         this.setState({ dataHistoryChat: data });
-
-        console.log("data history chat: ", data);
+        console.log("history chat: ", data);
       });
+  };
+
+  testDataUser = (ID) => {
+    const arrayData = [
+      {
+        nama: "Roma Debrian",
+        gambar:
+          "https://firebasestorage.googleapis.com/v0/b/kedasi.appspot.com/o/profile%2FFBslBdIUcAUmb4u.jpg?alt=media&token=67a18d19-c5e7-4ca2-8338-d224eb2c25bd",
+      },
+    ];
+    return new Promise((resolve) => {
+      resolve(arrayData);
+    });
   };
 
   render() {
@@ -186,34 +206,13 @@ class Pesan extends Component {
                   // console.log("Data Pesanan ", pesanan.data.OrderId);
                   return (
                     <ItemUserChat
+                      key={chat.id}
                       ActionClick={(e) => this.handleClickItemUserChat(e)}
                     />
                   );
                 })}
               </Fragment>
             ) : null}
-
-            {/* <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            /> */}
           </div>
         </div>
 
