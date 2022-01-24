@@ -3,6 +3,7 @@ import ChatBox from "./ChatBox/ChatBox";
 import "./Pesan.css";
 import ItemUserChat from "./props/ItemUserChat";
 import firebase from "../../config/firebase";
+import { Callbacks } from "jquery";
 
 class Pesan extends Component {
   state = {
@@ -160,7 +161,7 @@ class Pesan extends Component {
       });
   };
 
-  dataUserHistoryChat = (ID) => {
+  dataUserHistoryChat = (ID, params) => {
     // console.log(ID);
     // const IdUser = ID;
 
@@ -174,7 +175,7 @@ class Pesan extends Component {
     // ];
     // return dataUserNya;
 
-    return new Promise((resolve) => {
+    params(() => {
       return firebase
         .database()
         .ref("/users/" + ID)
@@ -185,9 +186,9 @@ class Pesan extends Component {
             nama: snapshot.val() && snapshot.val().Nama,
             photo: snapshot.val() && snapshot.val().Profile_Picture,
           });
-          // console.log(dataUserNya);
+          console.log(dataUserNya);
 
-          resolve(dataUserNya);
+          return dataUserNya;
         });
     });
   };
@@ -219,10 +220,17 @@ class Pesan extends Component {
           <div className="list-group list-group-flush border-bottom scrollarea">
             {this.state.dataHistoryChat.length > 0 ? (
               <Fragment>
-                {this.state.dataHistoryChat.map(async (chat) => {
+                {this.state.dataHistoryChat.map((chat) => {
                   // console.log("Data Pesanan ", pesanan.data.OrderId);
-                  const dataUserNya = await this.dataUserHistoryChat(chat.id);
-                  console.log(dataUserNya);
+                  // const dataUserNya = this.dataUserHistoryChat(chat.id);
+
+                  // this.dataUserHistoryChat(chat.id, (result) => {
+                  //   const dataUserNya = result;
+                  //   // console.log(result);
+                  // });
+
+                  (res) => Callbacks(this.dataUserHistoryChat);
+
                   return (
                     <ItemUserChat
                       key={chat.id}
