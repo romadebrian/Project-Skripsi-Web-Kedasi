@@ -140,17 +140,18 @@ class Pesan extends Component {
             data.push({
               id: key,
               data: snapshot.val()[key],
-              nama: await this.testDataUser(),
               lastPesan: "snapshot.val() && snapshot.val()[1],",
               tgl: "tanggal",
-              photo: "poto",
             });
 
-            console.log(
-              snapshot.val()["Q6oONNZcYTawpMtsrv6CsTa2uz43"][
-                "-Mt4jhrsapvSMaYPmGpt"
-              ].Pesan
-            );
+            console.log(snapshot.val()[key]);
+
+            // console.log(
+            //   snapshot.val()["Q6oONNZcYTawpMtsrv6CsTa2uz43"][
+            //     "-Mt4jhrsapvSMaYPmGpt"
+            //   ].Pesan
+            // );
+
             return data;
           });
         } else {
@@ -160,19 +161,6 @@ class Pesan extends Component {
         this.setState({ dataHistoryChat: data });
         console.log("history chat: ", data);
       });
-  };
-
-  testDataUser = (ID) => {
-    const arrayData = [
-      {
-        nama: "Roma Debrian",
-        gambar:
-          "https://firebasestorage.googleapis.com/v0/b/kedasi.appspot.com/o/profile%2FFBslBdIUcAUmb4u.jpg?alt=media&token=67a18d19-c5e7-4ca2-8338-d224eb2c25bd",
-      },
-    ];
-    return new Promise((resolve) => {
-      resolve(arrayData);
-    });
   };
 
   render() {
