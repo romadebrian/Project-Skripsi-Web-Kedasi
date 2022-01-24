@@ -139,12 +139,9 @@ class Pesan extends Component {
           Object.keys(snapshot.val()).map((key) => {
             data.push({
               id: key,
-              data: snapshot.val()[key],
-              lastPesan: "snapshot.val() && snapshot.val()[1],",
-              tgl: "tanggal",
             });
 
-            console.log(snapshot.val()[key]);
+            // console.log(key);
 
             // console.log(
             //   snapshot.val()["Q6oONNZcYTawpMtsrv6CsTa2uz43"][
@@ -161,6 +158,38 @@ class Pesan extends Component {
         this.setState({ dataHistoryChat: data });
         console.log("history chat: ", data);
       });
+  };
+
+  dataUserHistoryChat = (ID) => {
+    // console.log(ID);
+    // const IdUser = ID;
+
+    // const dataUserNya = [
+    //   {
+    //     keyID: IdUser,
+    //     nama: "Roma Debrian",
+    //     photo:
+    //       "https://firebasestorage.googleapis.com/v0/b/kedasi.appspot.com/o/profile%2FFBslBdIUcAUmb4u.jpg?alt=media&token=67a18d19-c5e7-4ca2-8338-d224eb2c25bd",
+    //   },
+    // ];
+    // return dataUserNya;
+
+    return new Promise((resolve) => {
+      return firebase
+        .database()
+        .ref("/users/" + ID)
+        .on("value", (snapshot) => {
+          let dataUserNya = [];
+
+          dataUserNya.push({
+            nama: snapshot.val() && snapshot.val().Nama,
+            photo: snapshot.val() && snapshot.val().Profile_Picture,
+          });
+          // console.log(dataUserNya);
+
+          resolve(dataUserNya);
+        });
+    });
   };
 
   render() {
@@ -190,11 +219,17 @@ class Pesan extends Component {
           <div className="list-group list-group-flush border-bottom scrollarea">
             {this.state.dataHistoryChat.length > 0 ? (
               <Fragment>
-                {this.state.dataHistoryChat.map((chat) => {
+                {this.state.dataHistoryChat.map(async (chat) => {
                   // console.log("Data Pesanan ", pesanan.data.OrderId);
+                  const dataUserNya = await this.dataUserHistoryChat(chat.id);
+                  console.log(dataUserNya);
                   return (
                     <ItemUserChat
                       key={chat.id}
+                      nama={chat.id}
+                      // photo={dataUserNya[0].photo}
+                      // tanggal={dataUserNya}
+                      // PesanTerakhir={dataUserNya}
                       ActionClick={(e) => this.handleClickItemUserChat(e)}
                     />
                   );
