@@ -161,6 +161,8 @@ class Pesan extends Component {
   };
 
   dataUserHistoryChat = (ID) => {
+    const dataUserNya = [];
+
     // console.log(ID);
     // const IdUser = ID;
 
@@ -174,22 +176,25 @@ class Pesan extends Component {
     // ];
     // return dataUserNya;
 
-    return new Promise((resolve) => {
-      return firebase
-        .database()
-        .ref("/users/" + ID)
-        .on("value", (snapshot) => {
-          let dataUserNya = [];
+    // return new Promise((resolve) => {
+    firebase
+      .database()
+      .ref("/users/" + ID)
+      .on("value", (snapshot) => {
+        // const dataUserNya = [];
 
-          dataUserNya.push({
-            nama: snapshot.val() && snapshot.val().Nama,
-            photo: snapshot.val() && snapshot.val().Profile_Picture,
-          });
-          // console.log(dataUserNya);
-
-          resolve(dataUserNya);
+        dataUserNya.push({
+          nama: snapshot.val() && snapshot.val().Nama,
+          photo: snapshot.val() && snapshot.val().Profile_Picture,
         });
-    });
+        // console.log(dataUserNya);
+
+        // return dataUserNya;
+        // resolve(dataUserNya);
+      });
+    // });
+
+    return dataUserNya;
   };
 
   render() {
@@ -219,9 +224,10 @@ class Pesan extends Component {
           <div className="list-group list-group-flush border-bottom scrollarea">
             {this.state.dataHistoryChat.length > 0 ? (
               <Fragment>
-                {this.state.dataHistoryChat.map(async (chat) => {
+                {this.state.dataHistoryChat.map((chat) => {
                   // console.log("Data Pesanan ", pesanan.data.OrderId);
-                  const dataUserNya = await this.dataUserHistoryChat(chat.id);
+                  const dataUserNya = this.dataUserHistoryChat(chat.id);
+
                   console.log(dataUserNya);
                   return (
                     <ItemUserChat
