@@ -129,7 +129,7 @@ class Pesan extends Component {
       });
   };
 
-  handleHistoryChat = async (params) => {
+  handleHistoryChat = (params) => {
     return firebase
       .database()
       .ref("/chat/")
@@ -161,9 +161,13 @@ class Pesan extends Component {
   };
 
   dataUserHistoryChat = (ID) => {
+    // kirim(() => {
+    //   return "dataUserNya";
+    // });
+
     const dataUserNya = [];
 
-    // console.log(ID);
+    console.log(ID);
     // const IdUser = ID;
 
     // const dataUserNya = [
@@ -197,6 +201,12 @@ class Pesan extends Component {
     return dataUserNya;
   };
 
+  calltestback = (second) => {
+    second(() => {
+      return "dataUserNya";
+    });
+  };
+
   render() {
     return (
       <div className="chatbox">
@@ -226,9 +236,24 @@ class Pesan extends Component {
               <Fragment>
                 {this.state.dataHistoryChat.map((chat) => {
                   // console.log("Data Pesanan ", pesanan.data.OrderId);
-                  const dataUserNya = this.dataUserHistoryChat(chat.id);
 
-                  console.log(dataUserNya);
+                  this.dataUserHistoryChat(chat.id);
+
+                  const dataUserNya = this.dataUserHistoryChat(chat.id);
+                  console.log(dataUserNya[0].nama);
+
+                  // this.calltestback((result) => {
+                  //   const getdata = result();
+
+                  //   console.log(getdata);
+                  // });
+
+                  // this.dataUserHistoryChat((result) => {
+                  //   const getdata = result();
+
+                  //   console.log(getdata);
+                  // });
+
                   return (
                     <ItemUserChat
                       key={chat.id}
