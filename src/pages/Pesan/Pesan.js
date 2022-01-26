@@ -17,9 +17,7 @@ class Pesan extends Component {
   componentDidMount() {
     this.handleGetDataAdmin();
     this.handleHistoryChat();
-  }
-  componentDidUpdate() {
-    // console.log("Data usernya", this.state.userData[0].nama);
+    // this.susunDataHistoryChat();
   }
 
   handleGetListUser = () => {};
@@ -129,7 +127,7 @@ class Pesan extends Component {
       });
   };
 
-  handleHistoryChat = (params) => {
+  handleHistoryChat = () => {
     firebase
       .database()
       .ref("/chat/")
@@ -155,21 +153,55 @@ class Pesan extends Component {
           console.log("tidak chat");
         }
 
-        this.setState({ dataHistoryChat: data });
+        this.setState({ dataHistoryChat: data }, () => {
+          this.susunDataHistoryChat();
+        });
         console.log("history chat: ", this.state.dataHistoryChat);
 
-        this.susunDataHistoryChat();
+        // this.susunDataHistoryChat();
       });
   };
 
-  dataUserHistoryChat = (ID) => {
+  susunDataHistoryChat = async () => {
+    // deklarasi variable harus sama dengan di state
+    const dataHistoryChat = [];
+
+    if (this.state.dataHistoryChat.length > 0) {
+      this.state.dataHistoryChat.map(async (chat) => {
+        console.log("susun data id", chat.id);
+
+        const dataUser = await this.dataUserForHistoryChat(chat.id);
+        let namaUser = dataUser[0].nama;
+        let photoUser = dataUser[0].photo;
+
+        // console.log("ambil data user", dataUser[0].nama);
+
+        dataHistoryChat.push({
+          id: chat.id,
+          nama: namaUser,
+          photo: photoUser,
+        });
+
+        this.setState({ dataHistoryChat }, () => {
+          console.log("hasil susun data", this.state.dataHistoryChat);
+        });
+        // return dataHistoryChat;
+      });
+    } else {
+      console.log("data kosong");
+    }
+
+    // console.log("data history chat =", this.state.dataHistoryChat);
+  };
+
+  dataUserForHistoryChat = (ID) => {
     // kirim(() => {
     //   return "dataUserNya";
     // });
 
     const dataUserNya = [];
 
-    console.log(ID);
+    // console.log(ID);
     // const IdUser = ID;
 
     // const dataUserNya = [
@@ -182,48 +214,25 @@ class Pesan extends Component {
     // ];
     // return dataUserNya;
 
-    // return new Promise((resolve) => {
-    firebase
-      .database()
-      .ref("/users/" + ID)
-      .on("value", (snapshot) => {
-        // const dataUserNya = [];
+    return new Promise((resolve) => {
+      firebase
+        .database()
+        .ref("/users/" + ID)
+        .on("value", (snapshot) => {
+          // const dataUserNya = [];
 
-        dataUserNya.push({
-          nama: snapshot.val() && snapshot.val().Nama,
-          photo: snapshot.val() && snapshot.val().Profile_Picture,
+          dataUserNya.push({
+            nama: snapshot.val() && snapshot.val().Nama,
+            photo: snapshot.val() && snapshot.val().Profile_Picture,
+          });
+          // console.log(dataUserNya);
+
+          // return dataUserNya;
+          resolve(dataUserNya);
         });
-        // console.log(dataUserNya);
+    });
 
-        // return dataUserNya;
-        // resolve(dataUserNya);
-      });
-    // });
-
-    return dataUserNya;
-  };
-
-  susunDataHistoryChat = () => {
-    if (this.state.dataHistoryChat.length > 0) {
-      this.state.dataHistoryChat.map((chat) => {
-        console.log("susun data id", chat.id);
-
-        this.setState({
-          ...this.state,
-          dataHistoryChat: [
-            {
-              id: chat.id,
-              nama: "roma debrian SXR",
-              Gambar: "Di kosan",
-            },
-          ],
-        });
-
-        console.log("hasil susun data", this.state.dataHistoryChat);
-        return chat;
-      });
-    } else {
-    }
+    // return dataUserNya;
   };
 
   render() {
@@ -254,30 +263,13 @@ class Pesan extends Component {
             {this.state.dataHistoryChat.length > 0 ? (
               <Fragment>
                 {this.state.dataHistoryChat.map((chat) => {
-                  // console.log("Data Pesanan ", pesanan.data.OrderId);
-
-                  // const idUser = chat.id;
-                  console.log(chat.id);
-
-                  const dataUserNya = [];
-
-                  firebase
-                    .database()
-                    .ref("/users/" + chat.id)
-                    .on("value", (snapshot) => {
-                      // const dataUserNya = [];
-                      dataUserNya.push({
-                        nama: snapshot.val() && snapshot.val().Nama,
-                        photo: snapshot.val() && snapshot.val().Profile_Picture,
-                      });
-
-                      console.log(dataUserNya[0].nama);
-                    });
+                  console.log("data yang di render", chat);
+                  // console.log("data yang di render", chat.dataSusun);
 
                   return (
                     <ItemUserChat
                       key={chat.id}
-                      nama={chat.id}
+                      nama={chat.nama}
                       // photo={dataUserNya[0].photo}
                       // tanggal={dataUserNya}
                       // PesanTerakhir={dataUserNya}
