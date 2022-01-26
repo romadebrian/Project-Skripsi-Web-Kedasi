@@ -130,7 +130,7 @@ class Pesan extends Component {
   };
 
   handleHistoryChat = (params) => {
-    return firebase
+    firebase
       .database()
       .ref("/chat/")
       .on("value", (snapshot) => {
@@ -156,7 +156,9 @@ class Pesan extends Component {
         }
 
         this.setState({ dataHistoryChat: data });
-        console.log("history chat: ", data);
+        console.log("history chat: ", this.state.dataHistoryChat);
+
+        this.susunDataHistoryChat();
       });
   };
 
@@ -201,10 +203,27 @@ class Pesan extends Component {
     return dataUserNya;
   };
 
-  calltestback = (second) => {
-    second(() => {
-      return "dataUserNya";
-    });
+  susunDataHistoryChat = () => {
+    if (this.state.dataHistoryChat.length > 0) {
+      this.state.dataHistoryChat.map((chat) => {
+        console.log("susun data id", chat.id);
+
+        this.setState({
+          ...this.state,
+          dataHistoryChat: [
+            {
+              id: chat.id,
+              nama: "roma debrian SXR",
+              Gambar: "Di kosan",
+            },
+          ],
+        });
+
+        console.log("hasil susun data", this.state.dataHistoryChat);
+        return chat;
+      });
+    } else {
+    }
   };
 
   render() {
@@ -237,22 +256,23 @@ class Pesan extends Component {
                 {this.state.dataHistoryChat.map((chat) => {
                   // console.log("Data Pesanan ", pesanan.data.OrderId);
 
-                  this.dataUserHistoryChat(chat.id);
+                  // const idUser = chat.id;
+                  console.log(chat.id);
 
-                  const dataUserNya = this.dataUserHistoryChat(chat.id);
-                  console.log(dataUserNya[0].nama);
+                  const dataUserNya = [];
 
-                  // this.calltestback((result) => {
-                  //   const getdata = result();
+                  firebase
+                    .database()
+                    .ref("/users/" + chat.id)
+                    .on("value", (snapshot) => {
+                      // const dataUserNya = [];
+                      dataUserNya.push({
+                        nama: snapshot.val() && snapshot.val().Nama,
+                        photo: snapshot.val() && snapshot.val().Profile_Picture,
+                      });
 
-                  //   console.log(getdata);
-                  // });
-
-                  // this.dataUserHistoryChat((result) => {
-                  //   const getdata = result();
-
-                  //   console.log(getdata);
-                  // });
+                      console.log(dataUserNya[0].nama);
+                    });
 
                   return (
                     <ItemUserChat
