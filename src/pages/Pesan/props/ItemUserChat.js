@@ -22,7 +22,8 @@ function ItemUserChat(props) {
         </div>
         <div className="col-10">
           <div className="d-flex w-100 align-items-center justify-content-between">
-            <strong>List group item heading</strong>
+            {/* <strong>List group item heading</strong> */}
+            <strong>{props.nama}</strong>
             <small>Wed</small>
           </div>
           <div className="mb-1 small" style={{ marginRight: "20px" }}>

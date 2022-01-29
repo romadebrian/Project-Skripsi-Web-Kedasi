@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import ChatBox from "./ChatBox/ChatBox";
 import "./Pesan.css";
 import ItemUserChat from "./props/ItemUserChat";
@@ -11,13 +11,13 @@ class Pesan extends Component {
     adminData: [{ nama: "", gambar: "" }],
     chatBoxMode: false,
     dataChat: "",
+    dataHistoryChat: "",
   };
 
   componentDidMount() {
     this.handleGetDataAdmin();
-  }
-  componentDidUpdate() {
-    // console.log("Data usernya", this.state.userData[0].nama);
+    this.handleHistoryChat();
+    // this.susunDataHistoryChat();
   }
 
   handleGetListUser = () => {};
@@ -127,6 +127,114 @@ class Pesan extends Component {
       });
   };
 
+  handleHistoryChat = () => {
+    firebase
+      .database()
+      .ref("/chat/")
+      .on("value", (snapshot) => {
+        const data = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            data.push({
+              id: key,
+            });
+
+            // console.log(key);
+
+            // console.log(
+            //   snapshot.val()["Q6oONNZcYTawpMtsrv6CsTa2uz43"][
+            //     "-Mt4jhrsapvSMaYPmGpt"
+            //   ].Pesan
+            // );
+
+            return data;
+          });
+        } else {
+          console.log("tidak chat");
+        }
+
+        this.setState({ dataHistoryChat: data }, () => {
+          this.susunDataHistoryChat();
+        });
+        console.log("history chat: ", this.state.dataHistoryChat);
+
+        // this.susunDataHistoryChat();
+      });
+  };
+
+  susunDataHistoryChat = async () => {
+    // deklarasi variable harus sama dengan di state
+    const dataHistoryChat = [];
+
+    if (this.state.dataHistoryChat.length > 0) {
+      this.state.dataHistoryChat.map(async (chat) => {
+        console.log("susun data id", chat.id);
+
+        const dataUser = await this.dataUserForHistoryChat(chat.id);
+        let namaUser = dataUser[0].nama;
+        let photoUser = dataUser[0].photo;
+
+        // console.log("ambil data user", dataUser[0].nama);
+
+        dataHistoryChat.push({
+          id: chat.id,
+          nama: namaUser,
+          photo: photoUser,
+        });
+
+        this.setState({ dataHistoryChat }, () => {
+          console.log("hasil susun data", this.state.dataHistoryChat);
+        });
+        // return dataHistoryChat;
+      });
+    } else {
+      console.log("data kosong");
+    }
+
+    // console.log("data history chat =", this.state.dataHistoryChat);
+  };
+
+  dataUserForHistoryChat = (ID) => {
+    // kirim(() => {
+    //   return "dataUserNya";
+    // });
+
+    const dataUserNya = [];
+
+    // console.log(ID);
+    // const IdUser = ID;
+
+    // const dataUserNya = [
+    //   {
+    //     keyID: IdUser,
+    //     nama: "Roma Debrian",
+    //     photo:
+    //       "https://firebasestorage.googleapis.com/v0/b/kedasi.appspot.com/o/profile%2FFBslBdIUcAUmb4u.jpg?alt=media&token=67a18d19-c5e7-4ca2-8338-d224eb2c25bd",
+    //   },
+    // ];
+    // return dataUserNya;
+
+    return new Promise((resolve) => {
+      firebase
+        .database()
+        .ref("/users/" + ID)
+        .on("value", (snapshot) => {
+          // const dataUserNya = [];
+
+          dataUserNya.push({
+            nama: snapshot.val() && snapshot.val().Nama,
+            photo: snapshot.val() && snapshot.val().Profile_Picture,
+          });
+          // console.log(dataUserNya);
+
+          // return dataUserNya;
+          resolve(dataUserNya);
+        });
+    });
+
+    // return dataUserNya;
+  };
+
   render() {
     return (
       <div className="chatbox">
@@ -152,30 +260,25 @@ class Pesan extends Component {
             </select>
           </div>
           <div className="list-group list-group-flush border-bottom scrollarea">
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
-            <ItemUserChat
-              ActionClick={(e) => this.handleClickItemUserChat(e)}
-            />
+            {this.state.dataHistoryChat.length > 0 ? (
+              <Fragment>
+                {this.state.dataHistoryChat.map((chat) => {
+                  console.log("data yang di render", chat);
+                  // console.log("data yang di render", chat.dataSusun);
+
+                  return (
+                    <ItemUserChat
+                      key={chat.id}
+                      nama={chat.nama}
+                      // photo={dataUserNya[0].photo}
+                      // tanggal={dataUserNya}
+                      // PesanTerakhir={dataUserNya}
+                      ActionClick={(e) => this.handleClickItemUserChat(e)}
+                    />
+                  );
+                })}
+              </Fragment>
+            ) : null}
           </div>
         </div>
 

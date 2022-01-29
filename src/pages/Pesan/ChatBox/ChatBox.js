@@ -19,33 +19,31 @@ export default class ChatBox extends Component {
   };
 
   handleSendChat = () => {
-    // const ID = this.props.UID;
-    // var tanggal = new Date().toUTCString();
+    const ID = this.props.UID;
+    var tanggal = new Date().toUTCString();
 
-    // firebase
-    //   .database()
-    //   .ref("chat/" + ID)
-    //   .push(
-    //     {
-    //       Nama: ID,
-    //       Waktu: tanggal,
-    //       Pesan: this.state.text,
-    //       Dari: "Admin",
-    //     },
-    //     (error) => {
-    //       if (error) {
-    //         // The write failed...
-    //         alert("Gagal Simpan");
-    //       } else {
-    //         // Data saved successfully!
+    firebase
+      .database()
+      .ref("chat/" + ID)
+      .push(
+        {
+          Nama: ID,
+          Waktu: tanggal,
+          Pesan: this.state.text,
+          Dari: "Admin",
+        },
+        (error) => {
+          if (error) {
+            // The write failed...
+            alert("Gagal Simpan");
+          } else {
+            // Data saved successfully!
 
-    //         console.log("new chat telah di buat: ");
-    //         // window.location.reload();
-    //       }
-    //     }
-    //   );
-
-    console.log("Data Usernya", this.props.dataUser[0].nama);
+            console.log("new chat telah di buat: ");
+            // window.location.reload();
+          }
+        }
+      );
   };
 
   render() {
