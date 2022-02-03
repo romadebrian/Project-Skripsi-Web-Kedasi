@@ -12,28 +12,59 @@ class Pesan extends Component {
     chatBoxMode: false,
     dataChat: "",
     dataHistoryChat: "",
+    listUser: "",
   };
 
   componentDidMount() {
     this.handleGetDataAdmin();
     this.handleHistoryChat();
-    // this.susunDataHistoryChat();
+    this.handleGetListUser();
   }
 
-  handleGetListUser = () => {};
+  handleGetListUser = () => {
+    return firebase
+      .database()
+      .ref("/users/")
+      .on("value", (snapshot) => {
+        const listUser = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            listUser.push({
+              id: key,
+              nama: snapshot.val() && snapshot.val()[key].Nama,
+            });
+            return listUser;
+          });
+        } else {
+          console.log("tidak chat");
+        }
+
+        this.setState({ listUser: listUser });
+        console.log("list user: ", listUser);
+      });
+  };
 
   handleSelectUser = (params) => {
-    const ID = params.target.value;
-    // console.log(params.target.value);
-    this.setState({
-      userID: ID,
-      chatBoxMode: true,
-      userData: [{ nama: "", gambar: "" }],
-    });
+    const selectedIndex = params.target.options.selectedIndex;
+    if (selectedIndex === 0) {
+      // console.log("kosong");
+    } else {
+      console.log(
+        "id user yang di pilih",
+        params.target.options[selectedIndex].getAttribute("data-key")
+      );
+      const ID = params.target.options[selectedIndex].getAttribute("data-key");
 
-    // this.handleGetNameUser(ID);
-    this.handleGetDataUser(ID);
-    this.handleGetChat(ID);
+      this.setState({
+        userID: ID,
+        chatBoxMode: true,
+        userData: [{ nama: "", gambar: "" }],
+      });
+
+      // this.handleGetNameUser(ID);
+      this.handleGetDataUser(ID);
+      this.handleGetChat(ID);
+    }
   };
 
   handleClickItemUserChat = (ID) => {
@@ -119,7 +150,7 @@ class Pesan extends Component {
             return data;
           });
         } else {
-          console.log("tidak chat");
+          console.log("tidak ada chat");
         }
 
         this.setState({ dataChat: data });
@@ -295,11 +326,18 @@ class Pesan extends Component {
               onChange={(e) => this.handleSelectUser(e)}
             >
               <option></option>
-              <option>Q6oONNZcYTawpMtsrv6CsTa2uz43</option>
-              <option>zAhbiHR06ZQbwSdTiT6ftB91BH62</option>
-              <option>User 3</option>
-              <option>User 5</option>
-              <option>User 6</option>
+              {this.state.listUser.length > 0 ? (
+                <Fragment>
+                  {this.state.listUser.map((list) => {
+                    // console.log("render list", list);
+                    return (
+                      <option key={list.id} data-key={list.id}>
+                        {list.nama}
+                      </option>
+                    );
+                  })}
+                </Fragment>
+              ) : null}
             </select>
           </div>
           <div className="list-group list-group-flush border-bottom scrollarea">

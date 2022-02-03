@@ -36,7 +36,8 @@ function ItemUserChat(props) {
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              maxWidth: "360px",
+              width: "350px",
+              maxWidth: "350px",
             }}
           >
             {props.PesanTerakhir}
