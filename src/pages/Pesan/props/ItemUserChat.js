@@ -2,7 +2,8 @@ import React from "react";
 
 function ItemUserChat(props) {
   const handleItemClick = (params) => {
-    props.ActionClick();
+    // console.log("propsnya", props);
+    props.ActionClick(props.userID);
   };
 
   return (

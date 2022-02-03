@@ -36,15 +36,15 @@ class Pesan extends Component {
     this.handleGetChat(ID);
   };
 
-  handleClickItemUserChat = (params) => {
-    const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
+  handleClickItemUserChat = (ID) => {
+    // console.log("ID user chat", ID);
+    // const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
     this.setState({
       userID: ID,
       chatBoxMode: true,
       userData: [{ nama: "", gambar: "" }],
     });
 
-    // this.handleGetNameUser(ID);
     this.handleGetDataUser(ID);
     this.handleGetChat(ID);
   };
@@ -156,7 +156,7 @@ class Pesan extends Component {
         this.setState({ dataHistoryChat: data }, () => {
           this.susunDataHistoryChat();
         });
-        console.log("history chat: ", this.state.dataHistoryChat);
+        // console.log("history chat: ", this.state.dataHistoryChat);
 
         // this.susunDataHistoryChat();
       });
@@ -188,7 +188,7 @@ class Pesan extends Component {
         });
 
         this.setState({ dataHistoryChat }, () => {
-          console.log("hasil susun data last chat", this.state.dataHistoryChat);
+          // console.log("hasil susun data last chat", this.state.dataHistoryChat);
         });
         // return dataHistoryChat;
       });
@@ -306,12 +306,13 @@ class Pesan extends Component {
             {this.state.dataHistoryChat.length > 0 ? (
               <Fragment>
                 {this.state.dataHistoryChat.map((chat) => {
-                  console.log("data yang di render", chat);
+                  // console.log("data yang di render", chat);
                   // console.log("data yang di render", chat.dataSusun);
 
                   return (
                     <ItemUserChat
                       key={chat.id}
+                      userID={chat.id}
                       nama={chat.nama}
                       photo={chat.photo}
                       tanggal={chat.tanggalLastChat}
