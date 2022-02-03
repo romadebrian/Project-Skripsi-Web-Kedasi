@@ -168,22 +168,27 @@ class Pesan extends Component {
 
     if (this.state.dataHistoryChat.length > 0) {
       this.state.dataHistoryChat.map(async (chat) => {
-        console.log("susun data id", chat.id);
+        // console.log("susun data id", chat.id);
 
         const dataUser = await this.dataUserForHistoryChat(chat.id);
+        const dataLastChat = await this.dataChatForHistoryChat(chat.id);
         let namaUser = dataUser[0].nama;
         let photoUser = dataUser[0].photo;
+        let tanggal = dataLastChat[0].tanggal;
+        let lastChat = dataLastChat[0].lastChat;
 
-        // console.log("ambil data user", dataUser[0].nama);
+        // console.log("ambil data chat", dataLastChat);
 
         dataHistoryChat.push({
           id: chat.id,
           nama: namaUser,
           photo: photoUser,
+          tanggalLastChat: tanggal,
+          lastChat: lastChat,
         });
 
         this.setState({ dataHistoryChat }, () => {
-          console.log("hasil susun data", this.state.dataHistoryChat);
+          console.log("hasil susun data last chat", this.state.dataHistoryChat);
         });
         // return dataHistoryChat;
       });
@@ -225,7 +230,7 @@ class Pesan extends Component {
             nama: snapshot.val() && snapshot.val().Nama,
             photo: snapshot.val() && snapshot.val().Profile_Picture,
           });
-          // console.log(dataUserNya);
+          // console.log(snapshot.val());
 
           // return dataUserNya;
           resolve(dataUserNya);
@@ -235,7 +240,43 @@ class Pesan extends Component {
     // return dataUserNya;
   };
 
-  dataChatForHistoryChat = (second) => {};
+  dataChatForHistoryChat = (ID) => {
+    const dataChatNya = [];
+
+    // const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
+
+    return new Promise((resolve) => {
+      firebase
+        .database()
+        .ref("/chat/" + ID)
+        .orderByChild("Waktu")
+        .limitToLast(1)
+        .on("value", (snapshot) => {
+          // dataChatNya.push({
+          //   lastChat: snapshot.val() && snapshot.val().Pesan,
+          //   tanggal: snapshot.val() && snapshot.val().Waktu,
+          // });
+
+          // console.log("Data last chat", snapshot.val());
+
+          Object.keys(snapshot.val()).map((key) => {
+            dataChatNya.push({
+              // id: key,
+              // data: snapshot.val()[key],
+
+              lastChat: snapshot.val() && snapshot.val()[key].Pesan,
+              tanggal: snapshot.val() && snapshot.val()[key].Waktu,
+            });
+            // console.log(dataChatNya);
+
+            return dataChatNya;
+          });
+
+          // return dataUserNya;
+          resolve(dataChatNya);
+        });
+    });
+  };
 
   render() {
     return (
@@ -273,8 +314,8 @@ class Pesan extends Component {
                       key={chat.id}
                       nama={chat.nama}
                       photo={chat.photo}
-                      // tanggal={dataUserNya}
-                      // PesanTerakhir={dataUserNya}
+                      tanggal={chat.tanggalLastChat}
+                      PesanTerakhir={chat.lastChat}
                       ActionClick={(e) => this.handleClickItemUserChat(e)}
                     />
                   );

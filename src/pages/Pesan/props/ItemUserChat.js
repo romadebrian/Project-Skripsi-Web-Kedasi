@@ -25,10 +25,20 @@ function ItemUserChat(props) {
           <div className="d-flex w-100 align-items-center justify-content-between">
             {/* <strong>List group item heading</strong> */}
             <strong>{props.nama}</strong>
-            <small>Wed</small>
+            <small>{props.tanggal}</small>
           </div>
-          <div className="mb-1 small" style={{ marginRight: "20px" }}>
-            Some placeholder content in a paragraph below the heading and date.
+          <div
+            className="mb-1 small"
+            style={{
+              marginRight: "20px",
+              display: "inline-block",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxWidth: "360px",
+            }}
+          >
+            {props.PesanTerakhir}
           </div>
         </div>
       </div>

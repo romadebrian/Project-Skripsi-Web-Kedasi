@@ -61,7 +61,7 @@ export default class ChatBox extends Component {
             {this.props.chatData.length > 0 ? (
               <Fragment>
                 {this.props.chatData.map((result) => {
-                  // console.log(result.id);
+                  // console.log(result);
                   if (result.data.Dari === "Admin") {
                     return (
                       <ChatFromAdmin
