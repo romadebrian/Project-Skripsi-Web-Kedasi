@@ -235,6 +235,8 @@ class Pesan extends Component {
     // return dataUserNya;
   };
 
+  dataChatForHistoryChat = (second) => {};
+
   render() {
     return (
       <div className="chatbox">
@@ -270,7 +272,7 @@ class Pesan extends Component {
                     <ItemUserChat
                       key={chat.id}
                       nama={chat.nama}
-                      // photo={dataUserNya[0].photo}
+                      photo={chat.photo}
                       // tanggal={dataUserNya}
                       // PesanTerakhir={dataUserNya}
                       ActionClick={(e) => this.handleClickItemUserChat(e)}
