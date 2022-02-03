@@ -12,25 +12,31 @@ export default class ChatBox extends Component {
 
   state = {
     text: "",
+    IDYangLogin: JSON.parse(localStorage.getItem("UserId")),
   };
 
   handlechange = (params) => {
     this.setState({ text: params.target.value });
   };
 
+  handleEnter = (event) => {
+    event.preventDefault();
+    // console.log("Enter");
+    this.handleSendChat();
+  };
+
   handleSendChat = () => {
-    const ID = this.props.UID;
+    const IDchat = this.props.UID;
     var tanggal = new Date().toUTCString();
 
     firebase
       .database()
-      .ref("chat/" + ID)
+      .ref("chat/" + IDchat)
       .push(
         {
-          Nama: ID,
+          Nama: this.state.IDYangLogin,
           Waktu: tanggal,
           Pesan: this.state.text,
-          Dari: "Admin",
         },
         (error) => {
           if (error) {
@@ -62,7 +68,10 @@ export default class ChatBox extends Component {
               <Fragment>
                 {this.props.chatData.map((result) => {
                   // console.log(result);
-                  if (result.data.Dari === "Admin") {
+
+                  console.log(result.data.Nama);
+                  console.log(this.state.IDYangLogin);
+                  if (result.data.Nama === this.state.IDYangLogin) {
                     return (
                       <ChatFromAdmin
                         key={result.id}
@@ -89,6 +98,7 @@ export default class ChatBox extends Component {
             {/* End of Chat */}
           </div>
           {/*/.direct-chat-messages*/}
+
           {/* Contacts are loaded here */}
           <div className="direct-chat-contacts">
             <ul className="contacts-list">
@@ -229,9 +239,10 @@ export default class ChatBox extends Component {
           </div>
           {/* /.direct-chat-pane */}
         </div>
+
         {/* /.card-body */}
         <div className="card-footer">
-          <form action="#" method="post">
+          <form onSubmit={this.handleEnter}>
             <div className="input-group">
               <input
                 type="text"
@@ -239,6 +250,7 @@ export default class ChatBox extends Component {
                 placeholder="Type Message ..."
                 className="form-control"
                 onChange={(e) => this.handlechange(e)}
+                // onKeyPress={this.handleEnter}
               />
               <span className="input-group-append">
                 <button
