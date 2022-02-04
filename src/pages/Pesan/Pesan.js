@@ -13,6 +13,7 @@ class Pesan extends Component {
     dataChat: "",
     dataHistoryChat: "",
     listUser: "",
+    contact: [{ height: "0", mode: false }],
   };
 
   componentDidMount() {
@@ -309,14 +310,19 @@ class Pesan extends Component {
     });
   };
 
+  showContact = (e) => {
+    if (this.state.contact[0].mode === false) {
+      this.setState({ contact: [{ height: 200, mode: true }] });
+    } else {
+      this.setState({ contact: [{ height: 0, mode: false }] });
+    }
+  };
+
   render() {
     return (
       <div className="chatbox">
         {/* List User Who Messege You */}
-        <div
-          className="d-flex flex-column align-items-stretch flex-shrink-0 bg-white"
-          // style={{ width: 380, height: 640 }}
-        >
+        <div className="direct-chat d-flex flex-column align-items-stretch flex-shrink-0 bg-white">
           <div className="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
             <span className="fs-5 fw-semibold select-user">Pilih User</span>
 
@@ -339,8 +345,75 @@ class Pesan extends Component {
                 </Fragment>
               ) : null}
             </select>
+
+            <button
+              type="button"
+              className="btn btn-tool"
+              data-toggle="tooltip"
+              title="Contacts"
+              data-widget="chat-pane-toggle"
+              onClick={this.showContact}
+            >
+              <i className="fas fa-comments" />
+            </button>
           </div>
+
           <div className="list-group list-group-flush border-bottom scrollarea">
+            <div
+              className="card-body"
+              style={{ height: this.state.contact[0].height }}
+            >
+              <div className="direct-chat-contacts">
+                <ul className="contacts-list">
+                  <li>
+                    <a href="/#">
+                      <img
+                        className="contacts-list-img"
+                        src="dist/img/user2-160x160.jpg"
+                        alt="userkjahw.dh"
+                      />
+                      <div className="contacts-list-info">
+                        <span className="contacts-list-name">
+                          Count Dracula
+                          <small className="contacts-list-date float-right">
+                            2/28/2015
+                          </small>
+                        </span>
+                        <span className="contacts-list-msg">
+                          How have you been? I was...
+                        </span>
+                      </div>
+                      {/* /.contacts-list-info */}
+                    </a>
+                  </li>
+                  {/* End Contact Item */}
+                  <li>
+                    <a href="/#">
+                      <img
+                        className="contacts-list-img"
+                        src="dist/img/user2-160x160.jpg"
+                        alt="usekawkhdakw"
+                      />
+                      <div className="contacts-list-info">
+                        <span className="contacts-list-name">
+                          Sarah Doe
+                          <small className="contacts-list-date float-right">
+                            2/23/2015
+                          </small>
+                        </span>
+                        <span className="contacts-list-msg">
+                          I will be waiting for...
+                        </span>
+                      </div>
+                      {/* /.contacts-list-info */}
+                    </a>
+                  </li>
+                  {/* End Contact Item */}
+                </ul>
+                {/* /.contacts-list */}
+              </div>
+            </div>
+
             {this.state.dataHistoryChat.length > 0 ? (
               <Fragment>
                 {this.state.dataHistoryChat.map((chat) => {
