@@ -12,25 +12,31 @@ export default class ChatBox extends Component {
 
   state = {
     text: "",
+    IDYangLogin: JSON.parse(localStorage.getItem("UserId")),
   };
 
   handlechange = (params) => {
     this.setState({ text: params.target.value });
   };
 
+  handleEnter = (event) => {
+    event.preventDefault();
+    // console.log("Enter");
+    this.handleSendChat();
+  };
+
   handleSendChat = () => {
-    const ID = this.props.UID;
+    const IDchat = this.props.UID;
     var tanggal = new Date().toUTCString();
 
     firebase
       .database()
-      .ref("chat/" + ID)
+      .ref("chat/" + IDchat)
       .push(
         {
-          Nama: ID,
+          Nama: this.state.IDYangLogin,
           Waktu: tanggal,
           Pesan: this.state.text,
-          Dari: "Admin",
         },
         (error) => {
           if (error) {
@@ -61,8 +67,11 @@ export default class ChatBox extends Component {
             {this.props.chatData.length > 0 ? (
               <Fragment>
                 {this.props.chatData.map((result) => {
-                  // console.log(result.id);
-                  if (result.data.Dari === "Admin") {
+                  // console.log(result);
+
+                  console.log(result.data.Nama);
+                  console.log(this.state.IDYangLogin);
+                  if (result.data.Nama === this.state.IDYangLogin) {
                     return (
                       <ChatFromAdmin
                         key={result.id}
@@ -89,149 +98,11 @@ export default class ChatBox extends Component {
             {/* End of Chat */}
           </div>
           {/*/.direct-chat-messages*/}
-          {/* Contacts are loaded here */}
-          <div className="direct-chat-contacts">
-            <ul className="contacts-list">
-              <li>
-                <a href="/">
-                  <img
-                    className="contacts-list-img"
-                    src="dist/img/user1-128x128.jpg"
-                    alt="User Avatar"
-                  />
-                  <div className="contacts-list-info">
-                    <span className="contacts-list-name">
-                      Count Dracula
-                      <small className="contacts-list-date float-right">
-                        2/28/2015
-                      </small>
-                    </span>
-                    <span className="contacts-list-msg">
-                      How have you been? I was...
-                    </span>
-                  </div>
-                  {/* /.contacts-list-info */}
-                </a>
-              </li>
-              {/* End Contact Item */}
-              <li>
-                <a href="/">
-                  <img
-                    className="contacts-list-img"
-                    src="dist/img/user7-128x128.jpg"
-                    alt="User Avatar"
-                  />
-                  <div className="contacts-list-info">
-                    <span className="contacts-list-name">
-                      Sarah Doe
-                      <small className="contacts-list-date float-right">
-                        2/23/2015
-                      </small>
-                    </span>
-                    <span className="contacts-list-msg">
-                      I will be waiting for...
-                    </span>
-                  </div>
-                  {/* /.contacts-list-info */}
-                </a>
-              </li>
-              {/* End Contact Item */}
-              <li>
-                <a href="/">
-                  <img
-                    className="contacts-list-img"
-                    src="dist/img/user3-128x128.jpg"
-                    alt="User Avatar"
-                  />
-                  <div className="contacts-list-info">
-                    <span className="contacts-list-name">
-                      Nadia Jolie
-                      <small className="contacts-list-date float-right">
-                        2/20/2015
-                      </small>
-                    </span>
-                    <span className="contacts-list-msg">
-                      I'll call you back at...
-                    </span>
-                  </div>
-                  {/* /.contacts-list-info */}
-                </a>
-              </li>
-              {/* End Contact Item */}
-              <li>
-                <a href="/">
-                  <img
-                    className="contacts-list-img"
-                    src="dist/img/user5-128x128.jpg"
-                    alt="User Avatar"
-                  />
-                  <div className="contacts-list-info">
-                    <span className="contacts-list-name">
-                      Nora S. Vans
-                      <small className="contacts-list-date float-right">
-                        2/10/2015
-                      </small>
-                    </span>
-                    <span className="contacts-list-msg">
-                      Where is your new...
-                    </span>
-                  </div>
-                  {/* /.contacts-list-info */}
-                </a>
-              </li>
-              {/* End Contact Item */}
-              <li>
-                <a href="/">
-                  <img
-                    className="contacts-list-img"
-                    src="dist/img/user6-128x128.jpg"
-                    alt="User Avatar"
-                  />
-                  <div className="contacts-list-info">
-                    <span className="contacts-list-name">
-                      John K.
-                      <small className="contacts-list-date float-right">
-                        1/27/2015
-                      </small>
-                    </span>
-                    <span className="contacts-list-msg">
-                      Can I take a look at...
-                    </span>
-                  </div>
-                  {/* /.contacts-list-info */}
-                </a>
-              </li>
-              {/* End Contact Item */}
-              <li>
-                <a href="/">
-                  <img
-                    className="contacts-list-img"
-                    src="dist/img/user8-128x128.jpg"
-                    alt="User Avatar"
-                  />
-                  <div className="contacts-list-info">
-                    <span className="contacts-list-name">
-                      Kenneth M.
-                      <small className="contacts-list-date float-right">
-                        1/4/2015
-                      </small>
-                    </span>
-                    <span className="contacts-list-msg">
-                      Never mind I found...
-                    </span>
-                  </div>
-                  {/* /.contacts-list-info */}
-                </a>
-              </li>
-              {/* End Contact Item */}
-            </ul>
-            {/* /.contacts-list */}
-          </div>
-          {/* /.direct-chat-pane */}
         </div>
+
         {/* /.card-body */}
         <div className="card-footer">
-          <form action="#" method="post">
+          <form onSubmit={this.handleEnter}>
             <div className="input-group">
               <input
                 type="text"
@@ -239,6 +110,7 @@ export default class ChatBox extends Component {
                 placeholder="Type Message ..."
                 className="form-control"
                 onChange={(e) => this.handlechange(e)}
+                // onKeyPress={this.handleEnter}
               />
               <span className="input-group-append">
                 <button

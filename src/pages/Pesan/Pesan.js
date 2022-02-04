@@ -12,39 +12,71 @@ class Pesan extends Component {
     chatBoxMode: false,
     dataChat: "",
     dataHistoryChat: "",
+    listUser: "",
+    contact: [{ height: "0", mode: false }],
   };
 
   componentDidMount() {
     this.handleGetDataAdmin();
     this.handleHistoryChat();
-    // this.susunDataHistoryChat();
+    this.handleGetListUser();
   }
 
-  handleGetListUser = () => {};
+  handleGetListUser = () => {
+    return firebase
+      .database()
+      .ref("/users/")
+      .on("value", (snapshot) => {
+        const listUser = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            listUser.push({
+              id: key,
+              nama: snapshot.val() && snapshot.val()[key].Nama,
+            });
+            return listUser;
+          });
+        } else {
+          console.log("tidak chat");
+        }
 
-  handleSelectUser = (params) => {
-    const ID = params.target.value;
-    // console.log(params.target.value);
-    this.setState({
-      userID: ID,
-      chatBoxMode: true,
-      userData: [{ nama: "", gambar: "" }],
-    });
-
-    // this.handleGetNameUser(ID);
-    this.handleGetDataUser(ID);
-    this.handleGetChat(ID);
+        this.setState({ listUser: listUser });
+        console.log("list user: ", listUser);
+      });
   };
 
-  handleClickItemUserChat = (params) => {
-    const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
+  handleSelectUser = (params) => {
+    const selectedIndex = params.target.options.selectedIndex;
+    if (selectedIndex === 0) {
+      // console.log("kosong");
+    } else {
+      console.log(
+        "id user yang di pilih",
+        params.target.options[selectedIndex].getAttribute("data-key")
+      );
+      const ID = params.target.options[selectedIndex].getAttribute("data-key");
+
+      this.setState({
+        userID: ID,
+        chatBoxMode: true,
+        userData: [{ nama: "", gambar: "" }],
+      });
+
+      // this.handleGetNameUser(ID);
+      this.handleGetDataUser(ID);
+      this.handleGetChat(ID);
+    }
+  };
+
+  handleClickItemUserChat = (ID) => {
+    // console.log("ID user chat", ID);
+    // const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
     this.setState({
       userID: ID,
       chatBoxMode: true,
       userData: [{ nama: "", gambar: "" }],
     });
 
-    // this.handleGetNameUser(ID);
     this.handleGetDataUser(ID);
     this.handleGetChat(ID);
   };
@@ -119,7 +151,7 @@ class Pesan extends Component {
             return data;
           });
         } else {
-          console.log("tidak chat");
+          console.log("tidak ada chat");
         }
 
         this.setState({ dataChat: data });
@@ -156,7 +188,7 @@ class Pesan extends Component {
         this.setState({ dataHistoryChat: data }, () => {
           this.susunDataHistoryChat();
         });
-        console.log("history chat: ", this.state.dataHistoryChat);
+        // console.log("history chat: ", this.state.dataHistoryChat);
 
         // this.susunDataHistoryChat();
       });
@@ -168,22 +200,27 @@ class Pesan extends Component {
 
     if (this.state.dataHistoryChat.length > 0) {
       this.state.dataHistoryChat.map(async (chat) => {
-        console.log("susun data id", chat.id);
+        // console.log("susun data id", chat.id);
 
         const dataUser = await this.dataUserForHistoryChat(chat.id);
+        const dataLastChat = await this.dataChatForHistoryChat(chat.id);
         let namaUser = dataUser[0].nama;
         let photoUser = dataUser[0].photo;
+        let tanggal = dataLastChat[0].tanggal;
+        let lastChat = dataLastChat[0].lastChat;
 
-        // console.log("ambil data user", dataUser[0].nama);
+        // console.log("ambil data chat", dataLastChat);
 
         dataHistoryChat.push({
           id: chat.id,
           nama: namaUser,
           photo: photoUser,
+          tanggalLastChat: tanggal,
+          lastChat: lastChat,
         });
 
         this.setState({ dataHistoryChat }, () => {
-          console.log("hasil susun data", this.state.dataHistoryChat);
+          // console.log("hasil susun data last chat", this.state.dataHistoryChat);
         });
         // return dataHistoryChat;
       });
@@ -225,7 +262,7 @@ class Pesan extends Component {
             nama: snapshot.val() && snapshot.val().Nama,
             photo: snapshot.val() && snapshot.val().Profile_Picture,
           });
-          // console.log(dataUserNya);
+          // console.log(snapshot.val());
 
           // return dataUserNya;
           resolve(dataUserNya);
@@ -235,14 +272,57 @@ class Pesan extends Component {
     // return dataUserNya;
   };
 
+  dataChatForHistoryChat = (ID) => {
+    const dataChatNya = [];
+
+    // const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
+
+    return new Promise((resolve) => {
+      firebase
+        .database()
+        .ref("/chat/" + ID)
+        .orderByChild("Waktu")
+        .limitToLast(1)
+        .on("value", (snapshot) => {
+          // dataChatNya.push({
+          //   lastChat: snapshot.val() && snapshot.val().Pesan,
+          //   tanggal: snapshot.val() && snapshot.val().Waktu,
+          // });
+
+          // console.log("Data last chat", snapshot.val());
+
+          Object.keys(snapshot.val()).map((key) => {
+            dataChatNya.push({
+              // id: key,
+              // data: snapshot.val()[key],
+
+              lastChat: snapshot.val() && snapshot.val()[key].Pesan,
+              tanggal: snapshot.val() && snapshot.val()[key].Waktu,
+            });
+            // console.log(dataChatNya);
+
+            return dataChatNya;
+          });
+
+          // return dataUserNya;
+          resolve(dataChatNya);
+        });
+    });
+  };
+
+  showContact = (e) => {
+    if (this.state.contact[0].mode === false) {
+      this.setState({ contact: [{ height: 200, mode: true }] });
+    } else {
+      this.setState({ contact: [{ height: 0, mode: false }] });
+    }
+  };
+
   render() {
     return (
       <div className="chatbox">
         {/* List User Who Messege You */}
-        <div
-          className="d-flex flex-column align-items-stretch flex-shrink-0 bg-white"
-          // style={{ width: 380, height: 640 }}
-        >
+        <div className="direct-chat d-flex flex-column align-items-stretch flex-shrink-0 bg-white">
           <div className="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
             <span className="fs-5 fw-semibold select-user">Pilih User</span>
 
@@ -252,27 +332,102 @@ class Pesan extends Component {
               onChange={(e) => this.handleSelectUser(e)}
             >
               <option></option>
-              <option>Q6oONNZcYTawpMtsrv6CsTa2uz43</option>
-              <option>zAhbiHR06ZQbwSdTiT6ftB91BH62</option>
-              <option>User 3</option>
-              <option>User 5</option>
-              <option>User 6</option>
+              {this.state.listUser.length > 0 ? (
+                <Fragment>
+                  {this.state.listUser.map((list) => {
+                    // console.log("render list", list);
+                    return (
+                      <option key={list.id} data-key={list.id}>
+                        {list.nama}
+                      </option>
+                    );
+                  })}
+                </Fragment>
+              ) : null}
             </select>
+
+            <button
+              type="button"
+              className="btn btn-tool"
+              data-toggle="tooltip"
+              title="Contacts"
+              data-widget="chat-pane-toggle"
+              onClick={this.showContact}
+            >
+              <i className="fas fa-comments" />
+            </button>
           </div>
+
           <div className="list-group list-group-flush border-bottom scrollarea">
+            <div
+              className="card-body"
+              style={{ height: this.state.contact[0].height }}
+            >
+              <div className="direct-chat-contacts">
+                <ul className="contacts-list">
+                  <li>
+                    <a href="/#">
+                      <img
+                        className="contacts-list-img"
+                        src="dist/img/user2-160x160.jpg"
+                        alt="userkjahw.dh"
+                      />
+                      <div className="contacts-list-info">
+                        <span className="contacts-list-name">
+                          Count Dracula
+                          <small className="contacts-list-date float-right">
+                            2/28/2015
+                          </small>
+                        </span>
+                        <span className="contacts-list-msg">
+                          How have you been? I was...
+                        </span>
+                      </div>
+                      {/* /.contacts-list-info */}
+                    </a>
+                  </li>
+                  {/* End Contact Item */}
+                  <li>
+                    <a href="/#">
+                      <img
+                        className="contacts-list-img"
+                        src="dist/img/user2-160x160.jpg"
+                        alt="usekawkhdakw"
+                      />
+                      <div className="contacts-list-info">
+                        <span className="contacts-list-name">
+                          Sarah Doe
+                          <small className="contacts-list-date float-right">
+                            2/23/2015
+                          </small>
+                        </span>
+                        <span className="contacts-list-msg">
+                          I will be waiting for...
+                        </span>
+                      </div>
+                      {/* /.contacts-list-info */}
+                    </a>
+                  </li>
+                  {/* End Contact Item */}
+                </ul>
+                {/* /.contacts-list */}
+              </div>
+            </div>
+
             {this.state.dataHistoryChat.length > 0 ? (
               <Fragment>
                 {this.state.dataHistoryChat.map((chat) => {
-                  console.log("data yang di render", chat);
+                  // console.log("data yang di render", chat);
                   // console.log("data yang di render", chat.dataSusun);
 
                   return (
                     <ItemUserChat
                       key={chat.id}
+                      userID={chat.id}
                       nama={chat.nama}
-                      // photo={dataUserNya[0].photo}
-                      // tanggal={dataUserNya}
-                      // PesanTerakhir={dataUserNya}
+                      photo={chat.photo}
+                      tanggal={chat.tanggalLastChat}
+                      PesanTerakhir={chat.lastChat}
                       ActionClick={(e) => this.handleClickItemUserChat(e)}
                     />
                   );
