@@ -1,4 +1,3 @@
-import { reload } from "firebase/auth";
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
