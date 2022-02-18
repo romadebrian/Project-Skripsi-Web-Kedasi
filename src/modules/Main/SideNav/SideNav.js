@@ -1,8 +1,19 @@
+import { reload } from "firebase/auth";
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./SideNav.css";
 
 class SideNav extends Component {
+  handleLogout = () => {
+    localStorage.removeItem("UserId");
+    localStorage.removeItem("UserEmail");
+
+    this.props.history.push("/login");
+
+    window.location.reload();
+  };
+
   render() {
     return (
       <div>
@@ -68,7 +79,7 @@ class SideNav extends Component {
                     <p>Pesan</p>
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item" onClick={this.handleLogout}>
                   <Link to="/logout" className="nav-link">
                     <i className="nav-icon fas fa-sign-out-alt" />
                     <p>Logout</p>
@@ -86,4 +97,4 @@ class SideNav extends Component {
   }
 }
 
-export default SideNav;
+export default withRouter(SideNav);
