@@ -1,5 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  withRouter,
+} from "react-router-dom";
 // import $ from "jquery";
 import Header from "./Header/Header";
 import SideNav from "./SideNav/SideNav";
@@ -17,7 +22,19 @@ import PesanRuangan from "../../pages/Ruangan/PesanRuangan/PesanRuangan";
 import PesanRuanganV2 from "../../pages/Ruangan/PesanRuangan/PesanRuanganV2";
 
 // Fungsi untuk yang di tampilkan ke index.html
-function App() {
+function App(props) {
+  // const history = useHistory();
+
+  useEffect(() => {
+    // const navigate = useNavigate();
+
+    const token = localStorage.getItem("UserId");
+    if (!token) {
+      props.history.push("/login");
+      // navigate("/login");
+    }
+  });
+
   return (
     <Router>
       <div className="hold-transition sidebar-mini layout-fixed">
@@ -70,4 +87,4 @@ function App() {
   );
 }
 
-export default App;
+export default withRouter(App);
