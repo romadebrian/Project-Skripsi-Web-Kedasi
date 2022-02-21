@@ -3,7 +3,8 @@ import firebase from "../../config/firebase";
 import { storage } from "../../config/firebase";
 import { sendPasswordResetEmail, getAuth } from "firebase/auth";
 import "./Profile.css";
-import Swal from "sweetalert2";
+// import Swal from "sweetalert2";
+import Toast from "../../component/toast/Toast";
 // import toastr from "toastr";
 // import "toastr/build/toastr.min.css";
 
@@ -14,7 +15,7 @@ class Profile extends Component {
     email: "",
     telepon: "",
     alamat: "",
-    setimage: null,
+    setimage: "",
     url: "",
     setUrl: "",
     progress: "0",
@@ -115,74 +116,87 @@ class Profile extends Component {
 
   handleUploadImage = () => {
     // console.log(this.state.setimage);
-    const uploadTask = storage
-      .ref(`profile/${this.state.setimage.name}`)
-      .put(this.state.setimage);
+    if (this.state.setimage === "") {
+      console.log("Foto belum  di pilih");
+      // const toast = [{ icon: "iconnya", title: "isinya" }];
+      Toast([{ icon: "error", title: "File belum di pilih" }]);
+    } else {
+      const uploadTask = storage
+        .ref(`profile/${this.state.setimage.name}`)
+        .put(this.state.setimage);
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        // setProgress(progress);
-        this.setState({
-          statusUpload: true,
-          setProgress: progress,
-        });
-        console.log(this.state.setProgress + " %");
-        // document.title = "Upload " + this.state.setProgress + "%";
-        // if (this.state.setProgress === "100") {
-        //   alert("Update Foto Berhasil");
-        // }
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref("profile")
-          .child(this.state.setimage.name)
-          .getDownloadURL()
-          .then((url) => {
-            // console.log(url);
-            // setUrl(url);
-            this.setState({
-              setUrl: url,
-            });
-            // alert("Update Foto Berhasil");
-            firebase
-              .database()
-              .ref("users/" + this.state.userId)
-              .set(
-                {
-                  Nama: this.state.nama,
-                  Email: this.state.email,
-                  Telepon: this.state.telepon,
-                  Alamat: this.state.alamat,
-                  Profile_Picture: this.state.setUrl,
-                },
-                (error) => {
-                  if (error) {
-                    // The write failed...
-                    alert("Gagal Simpan Ke Database");
-                  } else {
-                    // Data saved successfully!
-                    // alert("Update Foto Berhasil");
-
-                    this.toastSucces();
-
-                    console.log(this.state.setUrl);
-                    this.setState({
-                      statusUpload: false,
-                      foto: "Pilih Foto",
-                    });
-                  }
-                }
-              );
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          // setProgress(progress);
+          this.setState({
+            statusUpload: true,
+            setProgress: progress,
           });
-      }
-    );
+          console.log(this.state.setProgress + " %");
+          // document.title = "Upload " + this.state.setProgress + "%";
+          // if (this.state.setProgress === "100") {
+          //   alert("Update Foto Berhasil");
+          // }
+        },
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          storage
+            .ref("profile")
+            .child(this.state.setimage.name)
+            .getDownloadURL()
+            .then((url) => {
+              // console.log(url);
+              // setUrl(url);
+              this.setState({
+                setUrl: url,
+              });
+              // alert("Update Foto Berhasil");
+              firebase
+                .database()
+                .ref("users/" + this.state.userId)
+                .set(
+                  {
+                    Nama: this.state.nama,
+                    Email: this.state.email,
+                    Telepon: this.state.telepon,
+                    Alamat: this.state.alamat,
+                    Profile_Picture: this.state.setUrl,
+                  },
+                  (error) => {
+                    if (error) {
+                      // The write failed...
+                      alert("Gagal Simpan Ke Database");
+                    } else {
+                      // Data saved successfully!
+                      // alert("Update Foto Berhasil");
+
+                      // this.toastSucces();
+                      Toast([
+                        {
+                          icon: "success",
+                          title: "Profile berhasil di perbarui.",
+                        },
+                      ]);
+
+                      console.log(this.state.setUrl);
+                      this.setState({
+                        setimage: "",
+                        statusUpload: false,
+                        foto: "Pilih Foto",
+                      });
+                    }
+                  }
+                );
+            });
+        }
+      );
+    }
   };
 
   handleChangePassword = () => {
@@ -197,19 +211,19 @@ class Profile extends Component {
       });
   };
 
-  toastSucces = () => {
-    var Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-    });
+  // toastSucces = () => {
+  //   var Toast = Swal.mixin({
+  //     toast: true,
+  //     position: "top-end",
+  //     showConfirmButton: false,
+  //     timer: 3000,
+  //   });
 
-    Toast.fire({
-      icon: "success",
-      title: "Profile berhasil di perbarui.",
-    });
-  };
+  //   Toast.fire({
+  //     icon: "success",
+  //     title: "Profile berhasil di perbarui.",
+  //   });
+  // };
 
   testhandle = () => {
     console.log(this.state.setimage);
@@ -322,6 +336,7 @@ class Profile extends Component {
                         type="file"
                         className="custom-file-input"
                         id="foto"
+                        accept="image/png, image/gif, image/jpeg"
                         onChange={this.fileSelectHandler}
                       />
                       <label
