@@ -371,7 +371,7 @@ class Pesan extends Component {
                       {this.state.listUser.map((list) => {
                         // console.log("render list", list);
                         return (
-                          <li>
+                          <li key={list.id}>
                             <a href="/#">
                               <img
                                 className="contacts-list-img"
