@@ -33,6 +33,7 @@ class Pesan extends Component {
             listUser.push({
               id: key,
               nama: snapshot.val() && snapshot.val()[key].Nama,
+              photo: snapshot.val() && snapshot.val()[key].Profile_Picture,
             });
             return listUser;
           });
@@ -365,49 +366,38 @@ class Pesan extends Component {
             >
               <div className="direct-chat-contacts">
                 <ul className="contacts-list">
-                  <li>
-                    <a href="/#">
-                      <img
-                        className="contacts-list-img"
-                        src="dist/img/user2-160x160.jpg"
-                        alt="userkjahw.dh"
-                      />
-                      <div className="contacts-list-info">
-                        <span className="contacts-list-name">
-                          Count Dracula
-                          <small className="contacts-list-date float-right">
-                            2/28/2015
-                          </small>
-                        </span>
-                        <span className="contacts-list-msg">
-                          How have you been? I was...
-                        </span>
-                      </div>
-                      {/* /.contacts-list-info */}
-                    </a>
-                  </li>
-                  {/* End Contact Item */}
-                  <li>
-                    <a href="/#">
-                      <img
-                        className="contacts-list-img"
-                        src="dist/img/user2-160x160.jpg"
-                        alt="usekawkhdakw"
-                      />
-                      <div className="contacts-list-info">
-                        <span className="contacts-list-name">
-                          Sarah Doe
-                          <small className="contacts-list-date float-right">
-                            2/23/2015
-                          </small>
-                        </span>
-                        <span className="contacts-list-msg">
-                          I will be waiting for...
-                        </span>
-                      </div>
-                      {/* /.contacts-list-info */}
-                    </a>
-                  </li>
+                  {this.state.listUser.length > 0 ? (
+                    <Fragment>
+                      {this.state.listUser.map((list) => {
+                        // console.log("render list", list);
+                        return (
+                          <li>
+                            <a href="/#">
+                              <img
+                                className="contacts-list-img"
+                                src={list.photo}
+                                width="40"
+                                height="40"
+                                alt="userkjahw.dh"
+                              />
+                              <div className="nama-contactnya">{list.nama}</div>
+                              {/* <div className="contacts-list-info">
+                                <span className="contacts-list-name">
+                                  <small className="contacts-list-date float-right">
+                                    2/28/2015
+                                  </small>
+                                </span>
+                                <span className="contacts-list-msg">
+                                  How have you been? I was...
+                                </span>
+                              </div> */}
+                              {/* /.contacts-list-info */}
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </Fragment>
+                  ) : null}
                   {/* End Contact Item */}
                 </ul>
                 {/* /.contacts-list */}

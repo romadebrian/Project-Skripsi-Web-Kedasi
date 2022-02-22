@@ -117,3 +117,14 @@ html {
 .chatbox .select-user {
   width: 90px;
 }
+
+.chatbox .nama-contactnya {
+  margin-left: 50px;
+  margin-top: 5px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+}
