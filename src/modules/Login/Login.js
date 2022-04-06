@@ -30,6 +30,7 @@ class Login extends Component {
         localStorage.setItem("UserId", JSON.stringify(user.uid));
         localStorage.setItem("UserEmail", JSON.stringify(user.email));
         this.toastSucces();
+        // console.log(this.props);
         this.props.history.push("/");
       })
       .catch((error) => {
