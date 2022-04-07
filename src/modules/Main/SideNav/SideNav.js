@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { getAuth } from "../../../config/firebase";
 import "./SideNav.css";
 
 class SideNav extends Component {
@@ -9,6 +10,8 @@ class SideNav extends Component {
     localStorage.removeItem("UserEmail");
 
     this.props.history.push("/login");
+
+    getAuth.signOut();
 
     window.location.reload();
   };

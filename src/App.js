@@ -3,68 +3,89 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Navigate,
+  Redirect,
 } from "react-router-dom";
-import { connect } from "react-redux";
 // import $ from "jquery";
 
 // import Footer from "./modules/Main/Footer/Footer";
 import Main from "./modules/Main/main";
 import Login from "./modules/Login/Login";
 import LupaPassword from "./modules/Login/LupaPassword/LupaPassword";
-import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { AuthContextProvider, useAuthState } from "./config/firebase";
+
+// const PrivateRoute = ({ component: C, ...props }) => {
+//   const { isAuthenticated } = useAuthState();
+//   console.log(isAuthenticated);
+//   return (
+//     <Route
+//       {...props}
+//       render={(routeProps) =>
+//         isAuthenticated ? (
+//           <C {...routeProps} />
+//         ) : (
+//           <Redirect
+//             to={{
+//               pathname: "/login",
+//             }}
+//           />
+//         )
+//       }
+//     />
+//   );
+// };
 
 function App() {
   return (
-    <Router>
-      {/* Preloader */}
-      <div className="preloader flex-column justify-content-center align-items-center">
-        <img
-          className="animation__shake"
-          src="/dist/img/kedasi logo.jpg"
-          alt="AdminLTELogo"
-          height={60}
-          width={60}
-        />
-      </div>
-      <Switch>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/lupa_password">
-          <LupaPassword />
-        </Route>
-        <Route path="/">
-          <Main />
-        </Route>
-      </Switch>
+    <AuthContextProvider>
+      <Router>
+        {/* Preloader */}
+        <div className="preloader flex-column justify-content-center align-items-center">
+          <img
+            className="animation__shake"
+            src="/dist/img/kedasi logo.jpg"
+            alt="AdminLTELogo"
+            height={60}
+            width={60}
+          />
+        </div>
+        <Switch>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <Route exact path="/lupa_password">
+            <LupaPassword />
+          </Route>
+          <PrivateRoute path="/">
+            <Main />
+          </PrivateRoute>
+        </Switch>
 
-      {/* <Footer /> */}
-    </Router>
+        {/* <Footer /> */}
+      </Router>
+    </AuthContextProvider>
   );
 }
 
-let usernya = null;
+export default App;
 
-const mapStateToProps = (state) => {
-  // console.log("log global state", state);
-  usernya = state;
-
-  return state;
-};
-
-function PrivateRoute({ children }) {
-  let IsLogin = usernya.user != null;
-  let location = useLocation();
-
-  console.log("IsLogin:", IsLogin);
-  if (!IsLogin) {
-    alert("you are not logged in");
-    return <Link to="/login" state={{ from: location }} replace />;
-  }
-
-  return children;
+function PrivateRoute({ children, ...rest }) {
+  const { isAuthenticated } = useAuthState();
+  console.log(isAuthenticated);
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        isAuthenticated ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  );
 }
-
-export default connect(mapStateToProps)(App);

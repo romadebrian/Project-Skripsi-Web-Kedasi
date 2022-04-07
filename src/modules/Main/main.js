@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -25,15 +25,15 @@ import PesanRuanganV2 from "../../pages/Ruangan/PesanRuangan/PesanRuanganV2";
 function App(props) {
   // const history = useHistory();
 
-  useEffect(() => {
-    // const navigate = useNavigate();
+  // useEffect(() => {
+  //   // const navigate = useNavigate();
 
-    const token = localStorage.getItem("UserId");
-    if (!token) {
-      props.history.push("/login");
-      // navigate("/login");
-    }
-  });
+  //   const token = localStorage.getItem("UserId");
+  //   if (!token) {
+  //     props.history.push("/login");
+  //     // navigate("/login");
+  //   }
+  // });
 
   return (
     <Router>

@@ -29,6 +29,7 @@ class Profile extends Component {
   // const [progress, setProgress] = useState(0);
 
   componentDidMount() {
+    console.log("Profile Log", this.props);
     // document.title = "Profile";
     return firebase
       .database()
