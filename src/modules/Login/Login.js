@@ -30,6 +30,7 @@ class Login extends Component {
         localStorage.setItem("UserId", JSON.stringify(user.uid));
         localStorage.setItem("UserEmail", JSON.stringify(user.email));
         this.toastSucces();
+        // console.log(this.props);
         this.props.history.push("/");
       })
       .catch((error) => {
@@ -92,12 +93,12 @@ class Login extends Component {
               onKeyPress={this.hangleKeyPress}
             />
           </div>
-          <div className="checkbox mb-3">
+          {/* <div className="checkbox mb-3">
             <label>
               <input type="checkbox" defaultValue="remember-me" />
               <span> ingat saya </span>
             </label>
-          </div>
+          </div> */}
           <button
             className="w-100 btn btn-lg btn-primary btn-login"
             onClick={this.handleLogin}
