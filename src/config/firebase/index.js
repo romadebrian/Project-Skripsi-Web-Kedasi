@@ -1,9 +1,7 @@
-import { onAuthStateChanged } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/database";
 import "firebase/compat/storage";
-import { createContext, useContext, useEffect, useState } from "react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCc5ek9ssBoMX3Qq3lbZmPzPO3-DbabQYU",
@@ -23,32 +21,3 @@ export const database = firebase.database();
 export const storage = firebase.storage();
 
 export default firebase;
-
-export const AuthContext = createContext();
-
-export const AuthContextProvider = (props) => {
-  const [user, setUser] = useState("loading");
-  // const [error, setError] = useState(null);
-  console.log("datauser firebase", user);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth, setUser);
-    return () => unsubscribe;
-  }, []);
-
-  return <AuthContext.Provider value={user} {...props} />;
-};
-
-export const useAuthState = () => {
-  const auth = useContext(AuthContext);
-  // console.log("test", auth);
-
-  return { ...auth, isAuthenticated: auth != null };
-};
-
-export const DataCurrentUser = () => {
-  const dataUser = useContext(AuthContext);
-  console.log("test", dataUser);
-
-  return { dataUser };
-};

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import firebase from "../../config/firebase";
 import { storage } from "../../config/firebase";
 import { sendPasswordResetEmail, getAuth } from "firebase/auth";
+import { DataCurrentUser } from "../../config/context/Context";
+
 import "./Profile.css";
 // import Swal from "sweetalert2";
 import Toast from "../../component/toast/Toast";
@@ -28,8 +30,9 @@ class Profile extends Component {
   // const [url, setUrl] = useState("");
   // const [progress, setProgress] = useState(0);
 
-  componentDidMount() {
+  async componentDidMount() {
     console.log("Profile Log", this.props);
+    console.log("Profile Log 2", this);
     // document.title = "Profile";
     return firebase
       .database()
@@ -418,4 +421,4 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+export default DataCurrentUser(Profile);

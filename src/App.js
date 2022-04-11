@@ -11,7 +11,7 @@ import {
 import Main from "./modules/Main/main";
 import Login from "./modules/Login/Login";
 import LupaPassword from "./modules/Login/LupaPassword/LupaPassword";
-import { AuthContextProvider, useAuthState } from "./config/firebase";
+import { AuthContextProvider, useAuthState } from "./config/context/Context";
 
 // const PrivateRoute = ({ component: C, ...props }) => {
 //   const { isAuthenticated } = useAuthState();
