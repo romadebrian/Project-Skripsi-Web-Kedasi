@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import firebase from "../../../config/firebase";
 
+import "./DetailOrder.css";
+
 function DetailOrder(props) {
   const [isloaded, setLoaded] = useState(false);
 
@@ -186,7 +188,11 @@ function DetailOrder(props) {
   };
 
   return (
-    <div className="modal fade" id="form-edit" onMouseEnter={metodeGetData}>
+    <div
+      className="detailorder modal fade "
+      id="form-edit"
+      onMouseEnter={metodeGetData}
+    >
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="card card-primary">
@@ -344,18 +350,43 @@ function DetailOrder(props) {
               </div>
               {/* /.card-body */}
               <div className="card-footer">
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  data-target="#ModalClose"
-                  data-dismiss="modal"
-                  style={{ marginLeft: 10 }}
-                >
-                  Cancel
-                </button>
+                <div className="row">
+                  <div className="col-6">
+                    <button type="submit" className="btn btn-primary">
+                      Submit
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      data-target="#ModalClose"
+                      data-dismiss="modal"
+                      style={{ marginLeft: 10 }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+
+                  <div className="input-group upload-picture col-6 d-flex ">
+                    <div className="row ">
+                      <div className="custom-file col-6">
+                        <input
+                          type="file"
+                          className="custom-file-input"
+                          id="exampleInputFile"
+                        />
+                        <label
+                          className="custom-file-label"
+                          htmlFor="exampleInputFile"
+                        >
+                          Choose file
+                        </label>
+                      </div>
+                      <div className="input-group-append ">
+                        <span className="input-group-text">Upload</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </form>
           </div>
