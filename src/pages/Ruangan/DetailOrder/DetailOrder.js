@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import firebase from "../../../config/firebase";
 
-import "./DetailOrder.css";
-
 function DetailOrder(props) {
   const [isloaded, setLoaded] = useState(false);
 
