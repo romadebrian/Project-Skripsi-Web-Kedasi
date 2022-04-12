@@ -351,7 +351,7 @@ function DetailOrder(props) {
               {/* /.card-body */}
               <div className="card-footer">
                 <div className="row">
-                  <div className="col-6">
+                  <div className="col-3">
                     <button type="submit" className="btn btn-primary">
                       Submit
                     </button>
@@ -366,8 +366,11 @@ function DetailOrder(props) {
                     </button>
                   </div>
 
-                  <div className="input-group upload-picture col-6 d-flex ">
-                    <div className="row ">
+                  <div className="input-group d-block col-9">
+                    <div className="row d-flex flex-row-reverse">
+                      <div className="input-group-append">
+                        <span className="btn btn-primary">Upload</span>
+                      </div>
                       <div className="custom-file col-6">
                         <input
                           type="file"
@@ -380,9 +383,6 @@ function DetailOrder(props) {
                         >
                           Choose file
                         </label>
-                      </div>
-                      <div className="input-group-append ">
-                        <span className="input-group-text">Upload</span>
                       </div>
                     </div>
                   </div>
