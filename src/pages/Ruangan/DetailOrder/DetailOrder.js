@@ -6,8 +6,8 @@ import Toast from "../../../component/toast/Toast";
 
 function DetailOrder(props) {
   const [isloaded, setLoaded] = useState(false);
-  const [image, setimage] = useState("");
-  const [foto, setFoto] = useState("");
+  const [fileFoto, setFileFoto] = useState("");
+  const [fotoName, setFotoName] = useState("Choose File");
   const [statusUpload, setStatusUpload] = useState("Upload");
   const [progress, setProgress] = useState("");
 
@@ -30,7 +30,7 @@ function DetailOrder(props) {
     });
 
     if (isloaded === false) {
-      console.log("DetailOrder Props: ", props);
+      // console.log("DetailOrder Props: ", props);
 
       setLoaded(true);
     }
@@ -79,6 +79,8 @@ function DetailOrder(props) {
           TanggalSewa: e.target[3].value,
           TanggalSelesai: e.target[4].value,
           Status: StatusPembayaran,
+
+          BuktiPembayaran: valDetailOrder.BuktiPembayaran,
         },
         (error) => {
           if (error) {
@@ -186,21 +188,23 @@ function DetailOrder(props) {
 
   const fileSelectHandler = (event) => {
     console.log(event.target.files[0]);
-    setimage(event.target.files[0]);
-    setFoto(event.target.files[0].name);
+    setFileFoto(event.target.files[0]);
+    setFotoName(event.target.files[0].name);
+
+    console.log(valDetailOrder.idOrder);
   };
 
   const handleUploadFoto = async (e) => {
     const PrimaryKey = await getPrimaryKey();
 
-    if (image === "") {
+    if (fileFoto === "") {
       console.log("Foto belum  di pilih");
       Toast([{ icon: "error", title: "File belum di pilih" }]);
     } else {
       // console.log(image.name);
 
       // Save foto to firebase storage
-      const uploadTask = storage.ref(`payment/${image.name}`).put(image);
+      const uploadTask = storage.ref(`payment/${fileFoto.name}`).put(fileFoto);
 
       // Get Status Upload
       uploadTask.on(
@@ -211,7 +215,7 @@ function DetailOrder(props) {
           );
           setProgress(progress);
           setStatusUpload("Uploading");
-          console.log(this.state.setProgress + " %");
+          console.log(progress + " %");
         },
         (error) => {
           console.log(error);
@@ -219,13 +223,49 @@ function DetailOrder(props) {
         () => {
           storage
             .ref("payment")
-            .child(image.name)
+            .child(fileFoto.name)
             .getDownloadURL()
             .then((url) => {
               setValDetailOrder({
                 ...valDetailOrder,
                 BuktiPembayaran: url,
               });
+
+              // Update Data Firebase
+              firebase
+                .database()
+                .ref("order/" + PrimaryKey)
+                .set(
+                  {
+                    OrderId: valDetailOrder.idOrder,
+                    NamaPemesan: valDetailOrder.pemesan,
+                    Ruangan: valDetailOrder.ruangannya,
+                    TanggalSewa: valDetailOrder.tglSewa,
+                    TanggalSelesai: valDetailOrder.tglSelesai,
+                    Status: valDetailOrder.statPembayaran,
+                    BuktiPembayaran: valDetailOrder.BuktiPembayaran,
+                  },
+                  (error) => {
+                    if (error) {
+                      // The write failed...
+                      alert("Gagal Simpan Ke Database");
+                    } else {
+                      // Data saved successfully!
+                      Toast([
+                        {
+                          icon: "success",
+                          title: "Profile berhasil di perbarui.",
+                        },
+                      ]);
+
+                      console.log(valDetailOrder.BuktiPembayaran);
+
+                      setFileFoto(null);
+                      setStatusUpload("Upload");
+                      // setFotoName("")
+                    }
+                  }
+                );
             });
         }
       );
