@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import firebase from "../../../config/firebase";
+import firebase, { storage } from "../../../config/firebase";
 
 import Toast from "../../../component/toast/Toast";
 
 function DetailOrder(props) {
   const [isloaded, setLoaded] = useState(false);
+  const [image, setimage] = useState("");
+  const [foto, setFoto] = useState("");
+  const [statusUpload, setStatusUpload] = useState("Upload");
+  const [progress, setProgress] = useState("");
 
   const [valDetailOrder, setValDetailOrder] = useState({
     idOrder: "",
@@ -14,6 +18,7 @@ function DetailOrder(props) {
     tglSewa: "",
     tglSelesai: "",
     statPembayaran: "",
+    BuktiPembayaran: "",
   });
 
   useEffect(() => {
@@ -25,7 +30,7 @@ function DetailOrder(props) {
     });
 
     if (isloaded === false) {
-      // console.log(new Date());
+      console.log("DetailOrder Props: ", props);
 
       setLoaded(true);
     }
@@ -118,7 +123,7 @@ function DetailOrder(props) {
           Object.keys(snapshot.val()).map((key) => {
             // console.log(key);
             resolve(key);
-            return null;
+            return key;
           });
         });
     });
@@ -180,19 +185,23 @@ function DetailOrder(props) {
   };
 
   const fileSelectHandler = (event) => {
-    console.log(event.target.files[0].name);
-    this.setState({
-      setimage: event.target.files[0],
-      foto: event.target.files[0].name,
-    });
+    console.log(event.target.files[0]);
+    setimage(event.target.files[0]);
+    setFoto(event.target.files[0].name);
   };
 
-  const handleUploadFoto = (e) => {
-    if (this.state.setimage === "") {
+  const handleUploadFoto = async (e) => {
+    const PrimaryKey = await getPrimaryKey();
+
+    if (image === "") {
       console.log("Foto belum  di pilih");
-      // const toast = [{ icon: "iconnya", title: "isinya" }];
       Toast([{ icon: "error", title: "File belum di pilih" }]);
     } else {
+      // console.log(image.name);
+
+      // Save foto to firebase storage
+      const uploadTask = storage.ref(`payment/${image.name}`).put(image);
+
       // toastSucces();
     }
   };
@@ -393,13 +402,20 @@ function DetailOrder(props) {
                   <div className="input-group d-block col-9">
                     <div className="row d-flex flex-row-reverse">
                       <div className="input-group-append">
-                        <span className="btn btn-success">Upload</span>
+                        <span
+                          className="btn btn-success"
+                          onClick={handleUploadFoto}
+                        >
+                          {statusUpload}
+                        </span>
                       </div>
                       <div className="custom-file col-6">
                         <input
                           type="file"
                           className="custom-file-input"
-                          id="exampleInputFile"
+                          id="InputPaymentFoto"
+                          accept="image/png, image/gif, image/jpeg"
+                          onChange={fileSelectHandler}
                         />
                         <label
                           className="custom-file-label"

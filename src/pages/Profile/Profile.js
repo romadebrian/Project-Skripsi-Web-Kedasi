@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import firebase from "../../config/firebase";
-import { storage } from "../../config/firebase";
+import firebase, { storage } from "../../config/firebase";
 import { sendPasswordResetEmail, getAuth } from "firebase/auth";
 import { DataCurrentUser } from "../../config/context/Context";
 
