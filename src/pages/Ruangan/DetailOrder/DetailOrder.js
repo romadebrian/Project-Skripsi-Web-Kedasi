@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import firebase from "../../../config/firebase";
 
+import Toast from "../../../component/toast/Toast";
+
 function DetailOrder(props) {
   const [isloaded, setLoaded] = useState(false);
 
@@ -80,7 +82,13 @@ function DetailOrder(props) {
           } else {
             // Data saved successfully!
             // alert("Order Berhasil Di Simpan");
-            toastSucces();
+
+            Toast([
+              {
+                icon: "success",
+                title: "Perbaruan Pemesanan Ruangan Berhasil",
+              },
+            ]);
             console.log(
               "send value: ",
               e.target[0].value,
@@ -169,6 +177,24 @@ function DetailOrder(props) {
     }
 
     // console.log(e);
+  };
+
+  const fileSelectHandler = (event) => {
+    console.log(event.target.files[0].name);
+    this.setState({
+      setimage: event.target.files[0],
+      foto: event.target.files[0].name,
+    });
+  };
+
+  const handleUploadFoto = (e) => {
+    if (this.state.setimage === "") {
+      console.log("Foto belum  di pilih");
+      // const toast = [{ icon: "iconnya", title: "isinya" }];
+      Toast([{ icon: "error", title: "File belum di pilih" }]);
+    } else {
+      // toastSucces();
+    }
   };
 
   const toastSucces = () => {
