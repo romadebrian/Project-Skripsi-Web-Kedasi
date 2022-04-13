@@ -202,6 +202,34 @@ function DetailOrder(props) {
       // Save foto to firebase storage
       const uploadTask = storage.ref(`payment/${image.name}`).put(image);
 
+      // Get Status Upload
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(progress);
+          setStatusUpload("Uploading");
+          console.log(this.state.setProgress + " %");
+        },
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          storage
+            .ref("payment")
+            .child(image.name)
+            .getDownloadURL()
+            .then((url) => {
+              setValDetailOrder({
+                ...valDetailOrder,
+                BuktiPembayaran: url,
+              });
+            });
+        }
+      );
+
       // toastSucces();
     }
   };
