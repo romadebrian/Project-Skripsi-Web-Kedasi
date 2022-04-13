@@ -367,7 +367,7 @@ function DetailOrder(props) {
                   <div className="input-group d-block col-9">
                     <div className="row d-flex flex-row-reverse">
                       <div className="input-group-append">
-                        <span className="btn btn-primary">Upload</span>
+                        <span className="btn btn-success">Upload</span>
                       </div>
                       <div className="custom-file col-6">
                         <input
