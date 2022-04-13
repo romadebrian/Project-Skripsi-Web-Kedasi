@@ -18,7 +18,7 @@ class Profile extends Component {
     telepon: "",
     alamat: "",
     setimage: "",
-    url: "",
+    // url: "",
     setUrl: "",
     progress: "0",
     setProgress: "0",
