@@ -3,7 +3,7 @@ import "./Login.css";
 // import appFirebase from "../../config/firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Link, withRouter } from "react-router-dom";
-import Swal from "sweetalert2";
+import Toast from "../../component/toast/Toast";
 
 class Login extends Component {
   state = {
@@ -29,7 +29,12 @@ class Login extends Component {
         console.log("Email: ", user.email);
         localStorage.setItem("UserId", JSON.stringify(user.uid));
         localStorage.setItem("UserEmail", JSON.stringify(user.email));
-        this.toastSucces();
+        Toast([
+          {
+            icon: "success",
+            title: "Login Berhasil",
+          },
+        ]);
         // console.log(this.props);
         this.props.history.push("/");
       })
@@ -46,20 +51,6 @@ class Login extends Component {
     if (event.key === "Enter") {
       this.handleLogin();
     }
-  };
-
-  toastSucces = () => {
-    var Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-    });
-
-    Toast.fire({
-      icon: "success",
-      title: "Login Berhasil",
-    });
   };
 
   render() {
