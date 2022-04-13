@@ -102,9 +102,14 @@ class Profile extends Component {
             // Data saved successfully!
             // alert("Profile Berhasil Di Simpan");
 
-            this.toastSucces();
+            // this.toastSucces();
 
-            // toastr.success("Profile Berhasil Di Simpan");
+            Toast([
+              {
+                icon: "success",
+                title: "Profile berhasil di perbarui.",
+              },
+            ]);
 
             console.log(
               this.state.nama,
