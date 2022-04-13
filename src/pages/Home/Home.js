@@ -33,7 +33,7 @@ function Home() {
               {/* small box */}
               <div className="small-box bg-info">
                 <div className="inner">
-                  <h3>150</h3>
+                  <h3>5</h3>
                   <p>New Orders</p>
                 </div>
                 <div className="icon">
@@ -49,10 +49,8 @@ function Home() {
               {/* small box */}
               <div className="small-box bg-success">
                 <div className="inner">
-                  <h3>
-                    53<sup style={{ fontSize: 20 }}>%</sup>
-                  </h3>
-                  <p>Bounce Rate</p>
+                  <h3>5</h3>
+                  <p>Room Active</p>
                 </div>
                 <div className="icon">
                   <i className="ion ion-stats-bars" />
@@ -67,8 +65,8 @@ function Home() {
               {/* small box */}
               <div className="small-box bg-warning">
                 <div className="inner">
-                  <h3>44</h3>
-                  <p>User Registrations</p>
+                  <h3>3</h3>
+                  <p>Unpaid Order</p>
                 </div>
                 <div className="icon">
                   <i className="ion ion-person-add" />
@@ -83,8 +81,10 @@ function Home() {
               {/* small box */}
               <div className="small-box bg-danger">
                 <div className="inner">
-                  <h3>65</h3>
-                  <p>Unique Visitors</p>
+                  <h3>10</h3>
+                  <p>
+                    Total Order <br /> On This Month
+                  </p>
                 </div>
                 <div className="icon">
                   <i className="ion ion-pie-graph" />
