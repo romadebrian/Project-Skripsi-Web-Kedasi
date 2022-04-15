@@ -8,8 +8,9 @@ function DetailOrder(props) {
   const [isloaded, setLoaded] = useState(false);
   const [fileFoto, setFileFoto] = useState("");
   const [fotoName, setFotoName] = useState("Choose File");
-  const [statusUpload, setStatusUpload] = useState("Upload");
+  const [statusUpload, setStatusUpload] = useState("Add File");
   // const [progress, setProgress] = useState("");
+  const [styleButton, setStyleButton] = useState("btn-success");
 
   const [valDetailOrder, setValDetailOrder] = useState({
     idOrder: "",
@@ -193,8 +194,9 @@ function DetailOrder(props) {
     console.log(event.target.files[0]);
     setFileFoto(event.target.files[0]);
     setFotoName(event.target.files[0].name);
-
-    console.log(valDetailOrder.idOrder);
+    setStatusUpload("Upload");
+    setStyleButton("btn-primary");
+    // console.log(valDetailOrder.idOrder);
   };
 
   const handleUploadFoto = async (e) => {
@@ -218,6 +220,7 @@ function DetailOrder(props) {
           );
           setFotoName(progress + " %");
           setStatusUpload("Uploading");
+          setStyleButton("btn-danger");
           console.log(progress + " %");
         },
         (error) => {
@@ -269,8 +272,9 @@ function DetailOrder(props) {
                       });
 
                       setFileFoto(null);
-                      setStatusUpload("Upload");
+                      setStatusUpload("Change");
                       setFotoName("Choose File");
+                      setStyleButton("btn-warning");
                     }
                   }
                 );
@@ -294,6 +298,19 @@ function DetailOrder(props) {
       icon: "success",
       title: "Perbaruan Pemesanan Ruangan Berhasil",
     });
+  };
+
+  const stylingButton = (action) => {
+    console.log(action);
+    if (statusUpload === "Add File") {
+      setStyleButton("btn-success");
+    } else if (statusUpload === "Upload") {
+      setStyleButton("btn-primary");
+    } else if (statusUpload === "Uploading") {
+      setStyleButton("btn-danger");
+    } else if (statusUpload === "Change") {
+      setStyleButton("btn-warning");
+    }
   };
 
   return (
@@ -479,7 +496,8 @@ function DetailOrder(props) {
                     <div className="row d-flex flex-row-reverse">
                       <div className="input-group-append">
                         <span
-                          className="btn btn-success"
+                          // className="btn btn-success"
+                          className={`btn ${styleButton}`}
                           onClick={handleUploadFoto}
                         >
                           {statusUpload}
