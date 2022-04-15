@@ -9,7 +9,7 @@ function DetailOrder(props) {
   const [fileFoto, setFileFoto] = useState("");
   const [fotoName, setFotoName] = useState("Choose File");
   const [statusUpload, setStatusUpload] = useState("Upload");
-  const [progress, setProgress] = useState("");
+  // const [progress, setProgress] = useState("");
 
   const [valDetailOrder, setValDetailOrder] = useState({
     idOrder: "",
@@ -216,7 +216,7 @@ function DetailOrder(props) {
           const progress = Math.round(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           );
-          setFotoName(progress);
+          setFotoName(progress + " %");
           setStatusUpload("Uploading");
           console.log(progress + " %");
         },
@@ -270,7 +270,7 @@ function DetailOrder(props) {
 
                       setFileFoto(null);
                       setStatusUpload("Upload");
-                      setFotoName()
+                      setFotoName("Choose File");
                     }
                   }
                 );
