@@ -21,6 +21,8 @@ function DetailOrder(props) {
     BuktiPembayaran: "",
   });
 
+  // console.log("data update", valDetailOrder);
+
   useEffect(() => {
     window.$("#EditTanggalSewa").datetimepicker({
       format: "DD-MM-YYYY",
@@ -145,6 +147,7 @@ function DetailOrder(props) {
         tglSewa: data.TanggalSewa,
         tglSelesai: data.TanggalSelesai,
         statPembayaran: data.Status,
+        BuktiPembayaran: valDetailOrder.BuktiPembayaran,
       });
 
       props.disableModeEdit();
@@ -213,7 +216,7 @@ function DetailOrder(props) {
           const progress = Math.round(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           );
-          setProgress(progress);
+          setFotoName(progress);
           setStatusUpload("Uploading");
           console.log(progress + " %");
         },
@@ -226,11 +229,6 @@ function DetailOrder(props) {
             .child(fileFoto.name)
             .getDownloadURL()
             .then((url) => {
-              setValDetailOrder({
-                ...valDetailOrder,
-                BuktiPembayaran: url,
-              });
-
               // Update Data Firebase
               firebase
                 .database()
@@ -243,7 +241,7 @@ function DetailOrder(props) {
                     TanggalSewa: valDetailOrder.tglSewa,
                     TanggalSelesai: valDetailOrder.tglSelesai,
                     Status: valDetailOrder.statPembayaran,
-                    BuktiPembayaran: valDetailOrder.BuktiPembayaran,
+                    BuktiPembayaran: url,
                   },
                   (error) => {
                     if (error) {
@@ -260,9 +258,19 @@ function DetailOrder(props) {
 
                       console.log(valDetailOrder.BuktiPembayaran);
 
+                      setValDetailOrder({
+                        idOrder: valDetailOrder.idOrder,
+                        pemesan: valDetailOrder.pemesan,
+                        ruangannya: valDetailOrder.ruangannya,
+                        tglSewa: valDetailOrder.tglSewa,
+                        tglSelesai: valDetailOrder.tglSelesai,
+                        statPembayaran: valDetailOrder.statPembayaran,
+                        BuktiPembayaran: url,
+                      });
+
                       setFileFoto(null);
                       setStatusUpload("Upload");
-                      // setFotoName("")
+                      setFotoName()
                     }
                   }
                 );
@@ -489,7 +497,7 @@ function DetailOrder(props) {
                           className="custom-file-label"
                           htmlFor="exampleInputFile"
                         >
-                          Choose file
+                          {fotoName}
                         </label>
                       </div>
                     </div>
