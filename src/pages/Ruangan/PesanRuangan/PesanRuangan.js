@@ -76,6 +76,7 @@ function PesanRuangan(props) {
           TanggalSewa: e.target[3].value,
           TanggalSelesai: e.target[4].value,
           Status: StatusPembayaran,
+          BuktiPembayaran: "",
         },
         (error) => {
           if (error) {
