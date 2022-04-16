@@ -82,7 +82,6 @@ function DetailOrder(props) {
           TanggalSewa: e.target[3].value,
           TanggalSelesai: e.target[4].value,
           Status: StatusPembayaran,
-
           BuktiPembayaran: valDetailOrder.BuktiPembayaran,
         },
         (error) => {
@@ -139,7 +138,7 @@ function DetailOrder(props) {
       const data = props.dataDetail;
 
       // props.editFunction();
-      console.log("Datanya", data.Ruangan);
+      console.log("Datanya", data);
 
       setValDetailOrder({
         idOrder: data.OrderId,
@@ -148,7 +147,7 @@ function DetailOrder(props) {
         tglSewa: data.TanggalSewa,
         tglSelesai: data.TanggalSelesai,
         statPembayaran: data.Status,
-        BuktiPembayaran: valDetailOrder.BuktiPembayaran,
+        BuktiPembayaran: data.BuktiPembayaran,
       });
 
       props.disableModeEdit();

@@ -95,7 +95,7 @@ class Ruangan extends Component {
           console.log("Data tidak ditemukan");
         }
 
-        // console.log(dataHasil[0].data.OrderId);
+        // console.log(dataHasil[0].data);
         this.setState({ orderDetail: dataHasil[0].data });
         // this.setState({ orderDetail: dataHasil });
 
