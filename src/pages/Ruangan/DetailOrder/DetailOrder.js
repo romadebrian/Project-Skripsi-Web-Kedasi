@@ -300,19 +300,6 @@ function DetailOrder(props) {
     });
   };
 
-  const stylingButton = (action) => {
-    console.log(action);
-    if (statusUpload === "Add File") {
-      setStyleButton("btn-success");
-    } else if (statusUpload === "Upload") {
-      setStyleButton("btn-primary");
-    } else if (statusUpload === "Uploading") {
-      setStyleButton("btn-danger");
-    } else if (statusUpload === "Change") {
-      setStyleButton("btn-warning");
-    }
-  };
-
   return (
     <div
       className="detailorder modal fade "
