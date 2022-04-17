@@ -150,6 +150,18 @@ function DetailOrder(props) {
         BuktiPembayaran: data.BuktiPembayaran,
       });
 
+      getFotoInfo();
+
+      if (data.BuktiPembayaran === "") {
+        setStatusUpload("Upload");
+        setFotoName("Choose File");
+        setStyleButton("btn-success");
+      } else {
+        setStatusUpload("Change");
+        setFotoName("Sudah Bayar");
+        setStyleButton("btn-warning");
+      }
+
       props.disableModeEdit();
     } else {
       return null;
@@ -208,7 +220,9 @@ function DetailOrder(props) {
       // console.log(image.name);
 
       // Save foto to firebase storage
-      const uploadTask = storage.ref(`payment/${fileFoto.name}`).put(fileFoto);
+      const uploadTask = storage
+        .ref(`payment/${props.dataDetail.Ruangan}.`)
+        .put(fileFoto);
 
       // Get Status Upload
       uploadTask.on(
@@ -229,8 +243,8 @@ function DetailOrder(props) {
           storage
             .ref("payment")
             .child(fileFoto.name)
-            .getDownloadURL()
-            .then((url) => {
+            .getMetadata()
+            .then((MetaDataFoto) => {
               // Update Data Firebase
               firebase
                 .database()
@@ -243,7 +257,7 @@ function DetailOrder(props) {
                     TanggalSewa: valDetailOrder.tglSewa,
                     TanggalSelesai: valDetailOrder.tglSelesai,
                     Status: valDetailOrder.statPembayaran,
-                    BuktiPembayaran: url,
+                    BuktiPembayaran: MetaDataFoto.name,
                   },
                   (error) => {
                     if (error) {
@@ -258,16 +272,11 @@ function DetailOrder(props) {
                         },
                       ]);
 
-                      console.log(valDetailOrder.BuktiPembayaran);
+                      // console.log(valDetailOrder.BuktiPembayaran);
 
                       setValDetailOrder({
-                        idOrder: valDetailOrder.idOrder,
-                        pemesan: valDetailOrder.pemesan,
-                        ruangannya: valDetailOrder.ruangannya,
-                        tglSewa: valDetailOrder.tglSewa,
-                        tglSelesai: valDetailOrder.tglSelesai,
-                        statPembayaran: valDetailOrder.statPembayaran,
-                        BuktiPembayaran: url,
+                        ...valDetailOrder,
+                        BuktiPembayaran: MetaDataFoto.name,
                       });
 
                       setFileFoto(null);
@@ -297,6 +306,18 @@ function DetailOrder(props) {
       icon: "success",
       title: "Perbaruan Pemesanan Ruangan Berhasil",
     });
+  };
+
+  const getFotoInfo = (name) => {
+    console.log(props.dataDetail.Ruangan);
+
+    storage
+      .ref("payment")
+      .child("buktiPembayaran.jpg")
+      .getMetadata()
+      .then((Metadata) => {
+        console.log(Metadata);
+      });
   };
 
   return (

@@ -48,7 +48,7 @@ class Ruangan extends Component {
 
         // console.log(this.state.orderList.length);
 
-        console.log("val Order: ", data);
+        console.log("List Order: ", data);
 
         // dispatch({ type: "SET_NOTES", value: data });
         // resolve(snapshot.val());
