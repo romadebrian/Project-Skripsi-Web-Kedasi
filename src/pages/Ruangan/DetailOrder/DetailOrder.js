@@ -7,9 +7,9 @@ import Toast from "../../../component/toast/Toast";
 function DetailOrder(props) {
   const [isloaded, setLoaded] = useState(false);
   const [fileFoto, setFileFoto] = useState("");
-  const [fotoName, setFotoName] = useState("Choose File");
-  const [statusUpload, setStatusUpload] = useState("Add File");
-  // const [progress, setProgress] = useState("");
+  const [fotoName, setFotoName] = useState("");
+  const [statusUpload, setStatusUpload] = useState("");
+  const [FileType, setFileType] = useState("");
   const [styleButton, setStyleButton] = useState("btn-success");
 
   const [valDetailOrder, setValDetailOrder] = useState({
@@ -105,7 +105,8 @@ function DetailOrder(props) {
               e.target[2].value,
               e.target[3].value,
               e.target[4].value,
-              StatusPembayaran
+              StatusPembayaran,
+              valDetailOrder.BuktiPembayaran
             );
             // window.location.reload();
           }
@@ -150,15 +151,13 @@ function DetailOrder(props) {
         BuktiPembayaran: data.BuktiPembayaran,
       });
 
-      getFotoInfo();
-
       if (data.BuktiPembayaran === "") {
-        setStatusUpload("Upload");
+        setStatusUpload("Add File");
         setFotoName("Choose File");
         setStyleButton("btn-success");
       } else {
-        setStatusUpload("Change");
-        setFotoName("Sudah Bayar");
+        setStatusUpload("View");
+        setFotoName(props.dataDetail.BuktiPembayaran);
         setStyleButton("btn-warning");
       }
 
@@ -204,97 +203,111 @@ function DetailOrder(props) {
   const fileSelectHandler = (event) => {
     console.log(event.target.files[0]);
     setFileFoto(event.target.files[0]);
-    setFotoName(event.target.files[0].name);
+    setFotoName(event.target.files[0]?.name);
     setStatusUpload("Upload");
     setStyleButton("btn-primary");
-    // console.log(valDetailOrder.idOrder);
+
+    if (event.target.files[0].type === "image/png") {
+      setFileType(".png");
+    } else if (event.target.files[0].type === "image/jpeg") {
+      setFileType(".jpeg");
+    } else if (event.target.files[0].type === "image/jpg") {
+      setFileType(".jpg");
+    }
+
+    // console.log(event.target.files[0].type);
   };
 
   const handleUploadFoto = async (e) => {
     const PrimaryKey = await getPrimaryKey();
 
-    if (fileFoto === "") {
-      console.log("Foto belum  di pilih");
-      Toast([{ icon: "error", title: "File belum di pilih" }]);
-    } else {
-      // console.log(image.name);
+    if (statusUpload === "Upload") {
+      if (fileFoto === "") {
+        console.log("Foto belum  di pilih");
+        Toast([{ icon: "error", title: "File belum di pilih" }]);
+      } else {
+        // console.log(image.name);
 
-      // Save foto to firebase storage
-      const uploadTask = storage
-        .ref(`payment/${props.dataDetail.Ruangan}.`)
-        .put(fileFoto);
+        // Save foto to firebase storage
+        const fileName = props.dataDetail.OrderId + FileType;
+        const uploadTask = storage.ref(`payment/${fileName}`).put(fileFoto);
 
-      // Get Status Upload
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setFotoName(progress + " %");
-          setStatusUpload("Uploading");
-          setStyleButton("btn-danger");
-          console.log(progress + " %");
-        },
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          storage
-            .ref("payment")
-            .child(fileFoto.name)
-            .getMetadata()
-            .then((MetaDataFoto) => {
-              // Update Data Firebase
-              firebase
-                .database()
-                .ref("order/" + PrimaryKey)
-                .set(
-                  {
-                    OrderId: valDetailOrder.idOrder,
-                    NamaPemesan: valDetailOrder.pemesan,
-                    Ruangan: valDetailOrder.ruangannya,
-                    TanggalSewa: valDetailOrder.tglSewa,
-                    TanggalSelesai: valDetailOrder.tglSelesai,
-                    Status: valDetailOrder.statPembayaran,
-                    BuktiPembayaran: MetaDataFoto.name,
-                  },
-                  (error) => {
-                    if (error) {
-                      // The write failed...
-                      alert("Gagal Simpan Ke Database");
-                    } else {
-                      // Data saved successfully!
-                      Toast([
-                        {
-                          icon: "success",
-                          title: "Profile berhasil di perbarui.",
-                        },
-                      ]);
+        // Get Status Upload
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            setFotoName(progress + " %");
+            setStatusUpload("Uploading");
+            setStyleButton("btn-danger");
+            console.log(progress + " %");
+          },
+          (error) => {
+            console.log(error);
+          },
+          () => {
+            storage
+              .ref("payment")
+              .child(fileName)
+              .getMetadata()
+              .then((MetaDataFoto) => {
+                // Update Data Firebase
+                firebase
+                  .database()
+                  .ref("order/" + PrimaryKey)
+                  .set(
+                    {
+                      OrderId: valDetailOrder.idOrder,
+                      NamaPemesan: valDetailOrder.pemesan,
+                      Ruangan: valDetailOrder.ruangannya,
+                      TanggalSewa: valDetailOrder.tglSewa,
+                      TanggalSelesai: valDetailOrder.tglSelesai,
+                      Status: valDetailOrder.statPembayaran,
+                      BuktiPembayaran: MetaDataFoto.name,
+                    },
+                    (error) => {
+                      if (error) {
+                        // The write failed...
+                        alert("Gagal Simpan Ke Database");
+                      } else {
+                        // Data saved successfully!
+                        Toast([
+                          {
+                            icon: "success",
+                            title: "Pesanan berhasil di perbarui 1.",
+                          },
+                        ]);
 
-                      // console.log(valDetailOrder.BuktiPembayaran);
+                        // console.log(valDetailOrder.BuktiPembayaran);
 
-                      setValDetailOrder({
-                        ...valDetailOrder,
-                        BuktiPembayaran: MetaDataFoto.name,
-                      });
+                        setValDetailOrder({
+                          ...valDetailOrder,
+                          BuktiPembayaran: MetaDataFoto.name,
+                        });
 
-                      setFileFoto(null);
-                      setStatusUpload("Change");
-                      setFotoName("Choose File");
-                      setStyleButton("btn-warning");
+                        setFileFoto(null);
+                        setStatusUpload("View");
+                        setFotoName(fileName);
+                        setStyleButton("btn-warning");
+                      }
                     }
-                  }
-                );
-            });
-        }
-      );
+                  );
+              });
+          }
+        );
 
-      // toastSucces();
+        // toastSucces();
+      }
+    } else if (statusUpload === "View") {
+      openFoto();
+    } else if (statusUpload === "Add File") {
+    } else if (statusUpload === "Uploading") {
     }
   };
 
-  const toastSucces = () => {
+  const toastProgressUpload = () => {
     var Toast = Swal.mixin({
       toast: true,
       position: "top-end",
@@ -308,15 +321,13 @@ function DetailOrder(props) {
     });
   };
 
-  const getFotoInfo = (name) => {
-    console.log(props.dataDetail.Ruangan);
-
+  const openFoto = (name) => {
     storage
       .ref("payment")
-      .child("buktiPembayaran.jpg")
-      .getMetadata()
-      .then((Metadata) => {
-        console.log(Metadata);
+      .child(props.dataDetail.BuktiPembayaran)
+      .getDownloadURL()
+      .then((url) => {
+        window.open(url, "_blank", "noopener,noreferrer");
       });
   };
 
@@ -515,7 +526,7 @@ function DetailOrder(props) {
                           type="file"
                           className="custom-file-input"
                           id="InputPaymentFoto"
-                          accept="image/png, image/gif, image/jpeg"
+                          accept="image/png, image/jpeg, image/jpg"
                           onChange={fileSelectHandler}
                         />
                         <label
