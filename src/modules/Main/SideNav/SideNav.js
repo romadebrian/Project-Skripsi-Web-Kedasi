@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getAuth } from "../../../config/firebase";
+import firebase from "../../../config/firebase";
+
 import "./SideNav.css";
 
 function SideNav(props) {
   let location = useLocation();
   const [currentPage, setCurrentPage] = useState("");
+  const [dataUser, setDataUser] = useState({
+    nama: "",
+    foto: "",
+  });
 
-  React.useEffect(() => {
+  useEffect(() => {
     // console.log("lokasi", currentPage);
     if (location.pathname === "/ruangan") {
       console.log("page ruangan");
@@ -22,6 +28,8 @@ function SideNav(props) {
     } else {
       setCurrentPage("");
     }
+
+    GetDataUser();
   }, [location]);
 
   const handleLogout = () => {
@@ -31,6 +39,38 @@ function SideNav(props) {
     getAuth.signOut();
     // this.props.history.push("/login");
     // window.location.reload();
+  };
+
+  const GetDataUser = () => {
+    let userId = JSON.parse(localStorage.getItem("UserId"));
+
+    return firebase
+      .database()
+      .ref("/users/" + userId)
+      .once("value")
+      .then(
+        (snapshot) => {
+          // this.setState({
+          //   nama: snapshot.val() && snapshot.val().Nama,
+          //   setUrl: snapshot.val() && snapshot.val().Profile_Picture,
+          // });
+          setDataUser({
+            nama: snapshot.val() && snapshot.val().Nama,
+            foto: snapshot.val() && snapshot.val().Profile_Picture,
+          });
+          // console.log(username);
+          // console.log("Photo Profile Link ", this.state.setUrl);
+          // console.log(snapshot.val() && snapshot.val().Nama);
+        },
+        (error) => {
+          if (error) {
+            console.log("read failed", error);
+            // The write failed...
+          } else {
+            // Data saved successfully!
+          }
+        }
+      );
   };
 
   return (
@@ -58,14 +98,16 @@ function SideNav(props) {
           <div className="user-panel mt-3 pb-3 mb-3 d-flex">
             <div className="image">
               <img
-                src="dist/img/romadebrian.png"
+                // src="dist/img/romadebrian.png"
+                src={dataUser.foto}
                 className="img-circle elevation-2"
+                style={{ height: "34px" }}
                 alt="User_Image"
               />
             </div>
             <div className="info">
               <Link to="/profile" className="d-block">
-                Roma Debrian
+                {dataUser.nama}
               </Link>
             </div>
           </div>
