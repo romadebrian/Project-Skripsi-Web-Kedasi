@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Swal from "sweetalert2";
+// import Swal from "sweetalert2";
 import firebase, { storage } from "../../../config/firebase";
 
 import Toast from "../../../component/toast/Toast";
@@ -98,6 +98,7 @@ function DetailOrder(props) {
                 title: "Perbaruan Pemesanan Ruangan Berhasil",
               },
             ]);
+
             console.log(
               "send value: ",
               e.target[0].value,
@@ -239,6 +240,7 @@ function DetailOrder(props) {
             const progress = Math.round(
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100
             );
+
             setFotoName(progress + " %");
             setStatusUpload("Uploading");
             setStyleButton("btn-danger");
@@ -307,19 +309,23 @@ function DetailOrder(props) {
     }
   };
 
-  const toastProgressUpload = () => {
-    var Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-    });
+  // const toastProgressUpload = async (val) => {
+  //   let progress = getVal();
+  //   console.log("progressnya", progress);
 
-    Toast.fire({
-      icon: "success",
-      title: "Perbaruan Pemesanan Ruangan Berhasil",
-    });
-  };
+  //   var Toast = Swal.mixin({
+  //     toast: true,
+  //     position: "top-end",
+  //     showConfirmButton: false,
+  //     timer: 3000,
+  //     timerProgressBar: true,
+  //   });
+
+  //   Toast.fire({
+  //     icon: "success",
+  //     title: progress,
+  //   });
+  // };
 
   const openFoto = (name) => {
     storage
