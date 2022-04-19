@@ -171,6 +171,7 @@ class Header extends Component {
                   <Fragment>
                     {this.state.listNotifikasi.map((result) => {
                       // console.log(result.id);
+                      const elapsedTime = () => {};
                       return (
                         // <ItemNotification
                         //   key={result.id}
