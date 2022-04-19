@@ -64,9 +64,9 @@ class Header extends Component {
               </a>
             </li>
             <li className="nav-item d-none d-sm-inline-block">
-              <a href="/" className="nav-link">
+              <Link to="/" className="nav-link">
                 Home
-              </a>
+              </Link>
             </li>
           </ul>
           {/* Right navbar links */}
@@ -164,7 +164,7 @@ class Header extends Component {
               </a>
               <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <span className="dropdown-item dropdown-header">
-                  15 Notifications
+                  {this.state.listNotifikasi.length} Notifications
                 </span>
 
                 {this.state.listNotifikasi.length > 0 ? (
@@ -207,9 +207,12 @@ class Header extends Component {
                 ) : null}
 
                 <div className="dropdown-divider" />
-                <a href="/" className="dropdown-item dropdown-footer">
+                <Link
+                  to="/notifikasi"
+                  className="dropdown-item dropdown-footer"
+                >
                   See All Notifications
-                </a>
+                </Link>
               </div>
             </li>
             <li className="nav-item">
