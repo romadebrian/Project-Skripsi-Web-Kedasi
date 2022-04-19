@@ -1,12 +1,12 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Component } from "react";
+import { Link } from "react-router-dom";
 import firebase from "../../../config/firebase";
 
 // rafce (react)
 class Header extends Component {
   state = {
-    dataNotifikasi: "",
-    dataDetail: "",
+    listNotifikasi: "",
   };
 
   componentDidMount() {
@@ -14,7 +14,7 @@ class Header extends Component {
   }
 
   componentDidUpdate() {
-    console.log("header log", this.state.dataNotifikasi);
+    console.log("header log", this.state.listNotifikasi);
   }
 
   handleFullScreen = (e) => {
@@ -39,9 +39,9 @@ class Header extends Component {
           console.log("Data tidak ditemukan");
         }
 
-        this.setState({ dataNotifikasi: data });
+        this.setState({ listNotifikasi: data });
 
-        console.log("List Notification in header: ", this.state.dataNotifikasi);
+        console.log("List Notification in header: ", this.state.listNotifikasi);
       });
   };
 
@@ -167,27 +167,44 @@ class Header extends Component {
                   15 Notifications
                 </span>
 
-                <div className="dropdown-divider" />
-                <a href="/" className="dropdown-item">
-                  <i className="fas fa-circle text-success mr-2" />
-                  Seseorang memesan ruangan 005
-                  <span className="float-right text-muted text-sm">3 mins</span>
-                </a>
-
-                <div className="dropdown-divider" />
-                <a href="/" className="dropdown-item text-truncate">
-                  <i className="fas fa-circle text-success mr-2" />
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Pellentesque arcu urna, pharetra a leo non, venenatis accumsan
-                  nibh. Duis ac feugiat magna.
-                  <span className="float-right text-muted text-sm">3 mins</span>
-                </a>
-
-                <div className="dropdown-divider" />
-                <a href="/" className="dropdown-item">
-                  <i className="fas fa-file mr-2" /> 3 new reports
-                  <span className="float-right text-muted text-sm">2 days</span>
-                </a>
+                {this.state.listNotifikasi.length > 0 ? (
+                  <Fragment>
+                    {this.state.listNotifikasi.map((result) => {
+                      // console.log(result.id);
+                      return (
+                        // <ItemNotification
+                        //   key={result.id}
+                        //   primaryKey={result.id}
+                        //   tanggal="30-01-2021"
+                        //   judul={result.data.Judul}
+                        //   isi={result.data.Isi}
+                        //   pelanggan={result.data.Target}
+                        //   aksi={result.data.Aksi}
+                        //   status={result.data.Status}
+                        //   sendData={(e) => this.setNewJudul(e)}
+                        // />
+                        <Fragment key={result.id}>
+                          <div className="dropdown-divider" />
+                          <Link
+                            to="/notifikasi"
+                            className="dropdown-item text-truncate"
+                          >
+                            {/* <i className="fas fa-circle text-light mr-2" /> */}
+                            {result.data.Status !== "Read" ? (
+                              <i className="fa fa-circle text-success mr-2"></i>
+                            ) : (
+                              <i className="fas fa-circle text-light mr-2" />
+                            )}
+                            {result.data.Judul}
+                            <span className="float-right text-muted text-sm">
+                              3 mins
+                            </span>
+                          </Link>
+                        </Fragment>
+                      );
+                    })}
+                  </Fragment>
+                ) : null}
 
                 <div className="dropdown-divider" />
                 <a href="/" className="dropdown-item dropdown-footer">
