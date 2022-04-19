@@ -1,10 +1,48 @@
 import React from "react";
 import { Component } from "react";
+import firebase from "../../../config/firebase";
 
 // rafce (react)
 class Header extends Component {
+  state = {
+    dataNotifikasi: "",
+    dataDetail: "",
+  };
+
+  componentDidMount() {
+    this.handleGetDataNotification();
+  }
+
+  componentDidUpdate() {
+    console.log("header log", this.state.dataNotifikasi);
+  }
+
   handleFullScreen = (e) => {
     e.preventDefault();
+  };
+
+  handleGetDataNotification = () => {
+    return firebase
+      .database()
+      .ref("/notifikasi/")
+      .on("value", (snapshot) => {
+        const data = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            data.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
+            return data;
+          });
+        } else {
+          console.log("Data tidak ditemukan");
+        }
+
+        this.setState({ dataNotifikasi: data });
+
+        console.log("List Notification in header: ", this.state.dataNotifikasi);
+      });
   };
 
   render() {
@@ -117,6 +155,7 @@ class Header extends Component {
                 </a>
               </div>
             </li>
+
             {/* Notifications Dropdown Menu */}
             <li className="nav-item dropdown">
               <a className="nav-link" data-toggle="dropdown" href="/">
@@ -127,23 +166,29 @@ class Header extends Component {
                 <span className="dropdown-item dropdown-header">
                   15 Notifications
                 </span>
+
                 <div className="dropdown-divider" />
                 <a href="/" className="dropdown-item">
-                  <i className="fas fa-envelope mr-2" /> 4 new messages
+                  <i className="fas fa-circle text-success mr-2" />
+                  Seseorang memesan ruangan 005
                   <span className="float-right text-muted text-sm">3 mins</span>
                 </a>
+
                 <div className="dropdown-divider" />
-                <a href="/" className="dropdown-item">
-                  <i className="fas fa-users mr-2" /> 8 friend requests
-                  <span className="float-right text-muted text-sm">
-                    12 hours
-                  </span>
+                <a href="/" className="dropdown-item text-truncate">
+                  <i className="fas fa-circle text-success mr-2" />
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Pellentesque arcu urna, pharetra a leo non, venenatis accumsan
+                  nibh. Duis ac feugiat magna.
+                  <span className="float-right text-muted text-sm">3 mins</span>
                 </a>
+
                 <div className="dropdown-divider" />
                 <a href="/" className="dropdown-item">
                   <i className="fas fa-file mr-2" /> 3 new reports
                   <span className="float-right text-muted text-sm">2 days</span>
                 </a>
+
                 <div className="dropdown-divider" />
                 <a href="/" className="dropdown-item dropdown-footer">
                   See All Notifications
