@@ -22,6 +22,7 @@ function CreateNotification(props) {
 
   const handleSubmit = (e) => {
     var aksinya;
+    var tanggal = new Date().toUTCString();
     e.preventDefault();
 
     console.log("Judul: ", e.target[0].value);
@@ -50,6 +51,7 @@ function CreateNotification(props) {
           Isi: e.target[1].value,
           Target: e.target[2].value,
           Aksi: aksinya,
+          waktu: tanggal,
           Status: "Unread",
         },
         (error) => {
