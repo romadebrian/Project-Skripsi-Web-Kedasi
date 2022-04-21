@@ -47,11 +47,13 @@ class Header extends Component {
       });
   };
 
-  getDeferentTime = () => {
-    var date1 = new Date(this.state.listNotifikasi[5].data.waktu);
+  getDeferentTime = (tanggal) => {
+    var date1 = new Date(tanggal);
     var date2 = new Date();
 
     var Difference_In_Time = date2.getTime() - date1.getTime();
+
+    var Difference_In_Minute = Math.round(Difference_In_Time / (1000 * 60));
 
     var Difference_In_Hours = Math.round(Difference_In_Time / (1000 * 3600));
 
@@ -59,11 +61,19 @@ class Header extends Component {
       Difference_In_Time / (1000 * 3600 * 24)
     );
 
-    console.log("Tanggal Notifikasi", date1);
-    console.log("Tanggal Sekarang", date2);
+    // console.log("Tanggal Notifikasi", date1);
+    // console.log("Tanggal Sekarang", date2);
 
-    console.log("Deferent Hours", Difference_In_Hours);
-    // console.log("Deferent Days", Difference_In_Days);
+    if (Difference_In_Minute <= 60) {
+      // console.log("Deferent Minute", Difference_In_Minute);
+      return Difference_In_Minute + " Minute";
+    } else if (Difference_In_Hours <= 24) {
+      // console.log("Deferent Hours", Difference_In_Hours);
+      return Difference_In_Hours + " Hours";
+    } else {
+      // console.log("Deferent Days", Difference_In_Days);
+      return Difference_In_Days + " Days";
+    }
   };
 
   render() {
@@ -192,7 +202,9 @@ class Header extends Component {
                   <Fragment>
                     {this.state.listNotifikasi.map((result) => {
                       // console.log(result.id);
-                      const elapsedTime = () => {};
+                      const elapsedTime = this.getDeferentTime(
+                        result.data.waktu
+                      );
                       return (
                         // <ItemNotification
                         //   key={result.id}
@@ -219,7 +231,7 @@ class Header extends Component {
                             )}
                             {result.data.Judul}
                             <span className="float-right text-muted text-sm">
-                              3 mins
+                              {elapsedTime}
                             </span>
                           </Link>
                         </Fragment>
