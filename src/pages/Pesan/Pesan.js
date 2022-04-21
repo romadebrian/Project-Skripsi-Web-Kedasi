@@ -11,7 +11,7 @@ class Pesan extends Component {
     adminData: [{ nama: "", gambar: "" }],
     chatBoxMode: false,
     dataChat: "",
-    dataHistoryChat: "",
+    dataHistoryChat: [],
     listUser: "",
     contact: [{ height: "0", mode: false }],
   };
@@ -381,17 +381,6 @@ class Pesan extends Component {
                                 alt="userkjahw.dh"
                               />
                               <div className="nama-contactnya">{list.nama}</div>
-                              {/* <div className="contacts-list-info">
-                                <span className="contacts-list-name">
-                                  <small className="contacts-list-date float-right">
-                                    2/28/2015
-                                  </small>
-                                </span>
-                                <span className="contacts-list-msg">
-                                  How have you been? I was...
-                                </span>
-                              </div> */}
-                              {/* /.contacts-list-info */}
                             </a>
                           </li>
                         );

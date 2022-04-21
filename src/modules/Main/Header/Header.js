@@ -13,10 +13,6 @@ class Header extends Component {
     this.handleGetDataNotification();
   }
 
-  componentDidUpdate() {
-    console.log("header log", this.state.listNotifikasi);
-  }
-
   handleFullScreen = (e) => {
     e.preventDefault();
   };
@@ -43,7 +39,7 @@ class Header extends Component {
           this.getDeferentTime();
         });
 
-        console.log("List Notification in header: ", this.state.listNotifikasi);
+        // console.log("List Notification in header: ", this.state.listNotifikasi);
       });
   };
 

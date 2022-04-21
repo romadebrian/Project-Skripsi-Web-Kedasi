@@ -17,13 +17,13 @@ function SideNav(props) {
   useEffect(() => {
     // console.log("lokasi", currentPage);
     if (location.pathname === "/ruangan") {
-      console.log("page ruangan");
+      // console.log("page ruangan");
       setCurrentPage("ruangan");
     } else if (location.pathname === "/notifikasi") {
-      console.log("page Notifikasi");
+      // console.log("page Notifikasi");
       setCurrentPage("notifikasi");
     } else if (location.pathname === "/pesan") {
-      console.log("page pesan");
+      // console.log("page pesan");
       setCurrentPage("pesan");
     } else {
       setCurrentPage("");

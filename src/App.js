@@ -70,7 +70,7 @@ export default App;
 
 function PrivateRoute({ children, ...rest }) {
   const { isAuthenticated } = useAuthState();
-  console.log(isAuthenticated);
+  // console.log(isAuthenticated);
   return (
     <Route
       {...rest}
