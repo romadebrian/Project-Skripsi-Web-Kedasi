@@ -206,17 +206,6 @@ class Header extends Component {
                         result.data.waktu
                       );
                       return (
-                        // <ItemNotification
-                        //   key={result.id}
-                        //   primaryKey={result.id}
-                        //   tanggal="30-01-2021"
-                        //   judul={result.data.Judul}
-                        //   isi={result.data.Isi}
-                        //   pelanggan={result.data.Target}
-                        //   aksi={result.data.Aksi}
-                        //   status={result.data.Status}
-                        //   sendData={(e) => this.setNewJudul(e)}
-                        // />
                         <Fragment key={result.id}>
                           <div className="dropdown-divider" />
                           <Link
