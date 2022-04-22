@@ -18,7 +18,7 @@ class Pesan extends Component {
 
   componentDidMount() {
     this.handleGetDataAdmin();
-    this.handleHistoryChat();
+    this.getListPrimarykeyUserWasChat();
     this.handleGetListUser();
   }
 
@@ -42,7 +42,7 @@ class Pesan extends Component {
         }
 
         this.setState({ listUser: listUser });
-        console.log("list user: ", listUser);
+        // console.log("list user: ", listUser);
       });
   };
 
@@ -160,7 +160,7 @@ class Pesan extends Component {
       });
   };
 
-  handleHistoryChat = () => {
+  getListPrimarykeyUserWasChat = () => {
     firebase
       .database()
       .ref("/chat/")
@@ -172,7 +172,7 @@ class Pesan extends Component {
               id: key,
             });
 
-            // console.log(key);
+            console.log(key);
 
             // console.log(
             //   snapshot.val()["Q6oONNZcYTawpMtsrv6CsTa2uz43"][
@@ -187,15 +187,13 @@ class Pesan extends Component {
         }
 
         this.setState({ dataHistoryChat: data }, () => {
-          this.susunDataHistoryChat();
+          this.handleHistoryChat();
         });
         // console.log("history chat: ", this.state.dataHistoryChat);
-
-        // this.susunDataHistoryChat();
       });
   };
 
-  susunDataHistoryChat = async () => {
+  handleHistoryChat = async () => {
     // deklarasi variable harus sama dengan di state
     const dataHistoryChat = [];
 
@@ -203,12 +201,16 @@ class Pesan extends Component {
       this.state.dataHistoryChat.map(async (chat) => {
         // console.log("susun data id", chat.id);
 
+        // Get User Info from table user based on user prymary key in list history chat
         const dataUser = await this.dataUserForHistoryChat(chat.id);
-        const dataLastChat = await this.dataChatForHistoryChat(chat.id);
+        // Get data Last Chat based on user primary key in list history chat
+        const LastChatData = await this.dataLastChat(chat.id);
+
         let namaUser = dataUser[0].nama;
         let photoUser = dataUser[0].photo;
-        let tanggal = dataLastChat[0].tanggal;
-        let lastChat = dataLastChat[0].lastChat;
+
+        let tanggal = LastChatData[0].tanggal;
+        let lastChat = LastChatData[0].lastChat;
 
         // console.log("ambil data chat", dataLastChat);
 
@@ -233,24 +235,7 @@ class Pesan extends Component {
   };
 
   dataUserForHistoryChat = (ID) => {
-    // kirim(() => {
-    //   return "dataUserNya";
-    // });
-
     const dataUserNya = [];
-
-    // console.log(ID);
-    // const IdUser = ID;
-
-    // const dataUserNya = [
-    //   {
-    //     keyID: IdUser,
-    //     nama: "Roma Debrian",
-    //     photo:
-    //       "https://firebasestorage.googleapis.com/v0/b/kedasi.appspot.com/o/profile%2FFBslBdIUcAUmb4u.jpg?alt=media&token=67a18d19-c5e7-4ca2-8338-d224eb2c25bd",
-    //   },
-    // ];
-    // return dataUserNya;
 
     return new Promise((resolve) => {
       firebase
@@ -273,7 +258,7 @@ class Pesan extends Component {
     // return dataUserNya;
   };
 
-  dataChatForHistoryChat = (ID) => {
+  dataLastChat = (ID) => {
     const dataChatNya = [];
 
     // const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
@@ -282,14 +267,8 @@ class Pesan extends Component {
       firebase
         .database()
         .ref("/chat/" + ID)
-        .orderByChild("Waktu")
         .limitToLast(1)
         .on("value", (snapshot) => {
-          // dataChatNya.push({
-          //   lastChat: snapshot.val() && snapshot.val().Pesan,
-          //   tanggal: snapshot.val() && snapshot.val().Waktu,
-          // });
-
           // console.log("Data last chat", snapshot.val());
 
           Object.keys(snapshot.val()).map((key) => {
