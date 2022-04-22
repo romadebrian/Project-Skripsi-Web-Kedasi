@@ -6,16 +6,22 @@ import firebase from "../../../config/firebase";
 // rafce (react)
 class Header extends Component {
   state = {
-    listNotifikasi: "",
+    listNotifikasi: [],
+    dataHistoryChat: [],
   };
 
   componentDidMount() {
     this.handleGetDataNotification();
+    this.getListPrimarykeyUserWasChat();
   }
 
   handleFullScreen = (e) => {
     e.preventDefault();
   };
+
+  //
+  // Function for Notification
+  //
 
   handleGetDataNotification = () => {
     return firebase
@@ -70,6 +76,140 @@ class Header extends Component {
       // console.log("Deferent Days", Difference_In_Days);
       return Difference_In_Days + " Days";
     }
+  };
+
+  //
+  // Function for live chat
+  //
+
+  getListPrimarykeyUserWasChat = () => {
+    firebase
+      .database()
+      .ref("/chat/")
+      .on("value", (snapshot) => {
+        const data = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            data.push({
+              id: key,
+            });
+
+            // console.log(key);
+
+            // console.log(
+            //   snapshot.val()["Q6oONNZcYTawpMtsrv6CsTa2uz43"][
+            //     "-Mt4jhrsapvSMaYPmGpt"
+            //   ].Pesan
+            // );
+
+            return data;
+          });
+        } else {
+          console.log("tidak chat");
+        }
+
+        this.setState({ dataHistoryChat: data }, () => {
+          this.handleHistoryChat();
+        });
+        // console.log("history chat: ", this.state.dataHistoryChat);
+      });
+  };
+
+  handleHistoryChat = async () => {
+    // deklarasi variable harus sama dengan di state
+    const dataHistoryChat = [];
+
+    if (this.state.dataHistoryChat.length > 0) {
+      this.state.dataHistoryChat.map(async (chat) => {
+        // console.log("susun data id", chat.id);
+
+        // Get User Info from table user based on user prymary key in list history chat
+        const dataUser = await this.dataUserForHistoryChat(chat.id);
+        // Get data Last Chat based on user primary key in list history chat
+        const LastChatData = await this.dataLastChat(chat.id);
+
+        let namaUser = dataUser[0].nama;
+        let photoUser = dataUser[0].photo;
+
+        let tanggal = LastChatData[0].tanggal;
+        let lastChat = LastChatData[0].lastChat;
+
+        // console.log("ambil data chat", dataLastChat);
+
+        dataHistoryChat.push({
+          id: chat.id,
+          nama: namaUser,
+          photo: photoUser,
+          tanggalLastChat: tanggal,
+          lastChat: lastChat,
+        });
+
+        this.setState({ dataHistoryChat }, () => {
+          console.log("hasil susun data last chat", this.state.dataHistoryChat);
+        });
+        // return dataHistoryChat;
+      });
+    } else {
+      console.log("data kosong");
+    }
+
+    // console.log("data history chat =", this.state.dataHistoryChat);
+  };
+
+  dataUserForHistoryChat = (ID) => {
+    const dataUserNya = [];
+
+    return new Promise((resolve) => {
+      firebase
+        .database()
+        .ref("/users/" + ID)
+        .on("value", (snapshot) => {
+          // const dataUserNya = [];
+
+          dataUserNya.push({
+            nama: snapshot.val() && snapshot.val().Nama,
+            photo: snapshot.val() && snapshot.val().Profile_Picture,
+          });
+          // console.log(snapshot.val());
+
+          // return dataUserNya;
+          resolve(dataUserNya);
+        });
+    });
+
+    // return dataUserNya;
+  };
+
+  dataLastChat = (ID) => {
+    const dataChatNya = [];
+
+    // const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
+
+    return new Promise((resolve) => {
+      firebase
+        .database()
+        .ref("/chat/" + ID)
+        .limitToLast(1)
+        .on("value", (snapshot) => {
+          // console.log("Data last chat", snapshot.val());
+
+          Object.keys(snapshot.val()).map((key) => {
+            dataChatNya.push({
+              // id: key,
+              // data: snapshot.val()[key],
+
+              lastChat: snapshot.val() && snapshot.val()[key].Pesan,
+              tanggal: snapshot.val() && snapshot.val()[key].Waktu,
+            });
+            // console.log(dataChatNya);
+
+            return dataChatNya;
+          });
+
+          // return dataUserNya;
+          resolve(dataChatNya);
+        });
+    });
   };
 
   render() {

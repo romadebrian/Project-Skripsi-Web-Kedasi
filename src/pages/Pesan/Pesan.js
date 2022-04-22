@@ -172,7 +172,7 @@ class Pesan extends Component {
               id: key,
             });
 
-            console.log(key);
+            // console.log(key);
 
             // console.log(
             //   snapshot.val()["Q6oONNZcYTawpMtsrv6CsTa2uz43"][
