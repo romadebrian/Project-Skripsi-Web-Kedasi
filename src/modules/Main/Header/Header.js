@@ -128,7 +128,9 @@ class Header extends Component {
                   </div>
                   {/* Message End */}
                 </a>
+
                 <div className="dropdown-divider" />
+
                 <a href="/" className="dropdown-item">
                   {/* Message Start */}
                   <div className="media">
@@ -140,9 +142,7 @@ class Header extends Component {
                     <div className="media-body">
                       <h3 className="dropdown-item-title">
                         John Pierce
-                        <span className="float-right text-sm text-muted">
-                          <i className="fas fa-star" />
-                        </span>
+                        <span className="float-right text-sm text-muted"></span>
                       </h3>
                       <p className="text-sm">I got your message bro</p>
                       <p className="text-sm text-muted">
@@ -152,7 +152,9 @@ class Header extends Component {
                   </div>
                   {/* Message End */}
                 </a>
+
                 <div className="dropdown-divider" />
+
                 <a href="/" className="dropdown-item">
                   {/* Message Start */}
                   <div className="media">
@@ -164,9 +166,7 @@ class Header extends Component {
                     <div className="media-body">
                       <h3 className="dropdown-item-title">
                         Nora Silvester
-                        <span className="float-right text-sm text-warning">
-                          <i className="fas fa-star" />
-                        </span>
+                        <span className="float-right text-sm text-warning"></span>
                       </h3>
                       <p className="text-sm">The subject goes here</p>
                       <p className="text-sm text-muted">
