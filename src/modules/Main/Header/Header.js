@@ -268,32 +268,55 @@ class Header extends Component {
                   </div>
                   {/* Message End */}
                 </a>
-
                 <div className="dropdown-divider" />
 
-                <a href="/" className="dropdown-item">
-                  {/* Message Start */}
-                  <div className="media">
-                    <img
-                      src="/dist/img/romadebrian.png"
-                      alt="User Avatar"
-                      className="img-size-50 img-circle mr-3"
-                    />
-                    <div className="media-body">
-                      <h3 className="dropdown-item-title">
-                        John Pierce
-                        <span className="float-right text-sm text-muted"></span>
-                      </h3>
-                      <p className="text-sm">I got your message bro</p>
-                      <p className="text-sm text-muted">
-                        <i className="far fa-clock mr-1" /> 4 Hours Ago
-                      </p>
-                    </div>
-                  </div>
-                  {/* Message End */}
-                </a>
+                {this.state.dataHistoryChat.length > 0 ? (
+                  <Fragment>
+                    {this.state.dataHistoryChat.map((chat) => {
+                      // console.log("data yang di render", chat);
+                      // console.log("data yang di render", chat.dataSusun);
 
-                <div className="dropdown-divider" />
+                      return (
+                        // <ItemUserChat
+                        //   key={chat.id}
+                        //   userID={chat.id}
+                        //   nama={chat.nama}
+                        //   photo={chat.photo}
+                        //   tanggal={chat.tanggalLastChat}
+                        //   PesanTerakhir={chat.lastChat}
+                        //   ActionClick={(e) => this.handleClickItemUserChat(e)}
+                        // />
+                        <Fragment key={chat.id}>
+                          <a href="/" className="dropdown-item">
+                            {/* Message Start */}
+                            <div className="media">
+                              <img
+                                src="/dist/img/romadebrian.png"
+                                alt="User Avatar"
+                                className="img-size-50 img-circle mr-3"
+                              />
+                              <div className="media-body">
+                                <h3 className="dropdown-item-title">
+                                  John Pierce
+                                  <span className="float-right text-sm text-muted"></span>
+                                </h3>
+                                <p className="text-sm">
+                                  I got your message bro
+                                </p>
+                                <p className="text-sm text-muted">
+                                  <i className="far fa-clock mr-1" /> 4 Hours
+                                  Ago
+                                </p>
+                              </div>
+                            </div>
+                            {/* Message End */}
+                          </a>
+                          <div className="dropdown-divider" />
+                        </Fragment>
+                      );
+                    })}
+                  </Fragment>
+                ) : null}
 
                 <a href="/" className="dropdown-item">
                   {/* Message Start */}
