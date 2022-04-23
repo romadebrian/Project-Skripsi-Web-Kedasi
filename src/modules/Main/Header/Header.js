@@ -7,7 +7,8 @@ import firebase from "../../../config/firebase";
 class Header extends Component {
   state = {
     listNotifikasi: [],
-    dataHistoryChat: [],
+    listHistoryChat: [],
+    totalUnreadNotification: 0,
   };
 
   componentDidMount() {
@@ -17,36 +18,6 @@ class Header extends Component {
 
   handleFullScreen = (e) => {
     e.preventDefault();
-  };
-
-  //
-  // Function for Notification
-  //
-
-  handleGetDataNotification = () => {
-    return firebase
-      .database()
-      .ref("/notifikasi/")
-      .on("value", (snapshot) => {
-        const data = [];
-        if (snapshot.exists()) {
-          Object.keys(snapshot.val()).map((key) => {
-            data.push({
-              id: key,
-              data: snapshot.val()[key],
-            });
-            return data;
-          });
-        } else {
-          console.log("Data tidak ditemukan");
-        }
-
-        this.setState({ listNotifikasi: data }, () => {
-          this.getDeferentTime();
-        });
-
-        // console.log("List Notification in header: ", this.state.listNotifikasi);
-      });
   };
 
   getDeferentTime = (tanggal) => {
@@ -79,6 +50,56 @@ class Header extends Component {
   };
 
   //
+  // Function for Notification
+  //
+
+  handleGetDataNotification = () => {
+    return firebase
+      .database()
+      .ref("/notifikasi/")
+      .on("value", (snapshot) => {
+        const data = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            data.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
+            return data;
+          });
+        } else {
+          console.log("Data tidak ditemukan");
+        }
+
+        this.setState({ listNotifikasi: data }, () => {
+          this.getDeferentTime();
+          this.getTotalUnreadNotification();
+        });
+
+        // console.log("List Notification in header: ", this.state.listNotifikasi);
+      });
+  };
+
+  getTotalUnreadNotification = () => {
+    let totalUnread = 0;
+    let totalNotifikasi = this.state.listNotifikasi.length;
+
+    const checkUnread = (i) => {
+      if (this.state.listNotifikasi[i].data.Status === "Unread") {
+        totalUnread = totalUnread + 1;
+        this.setState({ totalUnreadNotification: totalUnread });
+        // console.log("total", totalUnread);
+      }
+    };
+
+    let i = 0;
+    do {
+      checkUnread(i);
+      i++;
+    } while (i < totalNotifikasi);
+  };
+
+  //
   // Function for live chat
   //
 
@@ -93,34 +114,26 @@ class Header extends Component {
             data.push({
               id: key,
             });
-
             // console.log(key);
-
-            // console.log(
-            //   snapshot.val()["Q6oONNZcYTawpMtsrv6CsTa2uz43"][
-            //     "-Mt4jhrsapvSMaYPmGpt"
-            //   ].Pesan
-            // );
-
             return data;
           });
         } else {
           console.log("tidak chat");
         }
 
-        this.setState({ dataHistoryChat: data }, () => {
+        this.setState({ listHistoryChat: data }, () => {
           this.handleHistoryChat();
         });
-        // console.log("history chat: ", this.state.dataHistoryChat);
+        // console.log("history chat: ", this.state.listHistoryChat);
       });
   };
 
   handleHistoryChat = async () => {
     // deklarasi variable harus sama dengan di state
-    const dataHistoryChat = [];
+    const listHistoryChat = [];
 
-    if (this.state.dataHistoryChat.length > 0) {
-      this.state.dataHistoryChat.map(async (chat) => {
+    if (this.state.listHistoryChat.length > 0) {
+      this.state.listHistoryChat.map(async (chat) => {
         // console.log("susun data id", chat.id);
 
         // Get User Info from table user based on user prymary key in list history chat
@@ -136,7 +149,7 @@ class Header extends Component {
 
         // console.log("ambil data chat", dataLastChat);
 
-        dataHistoryChat.push({
+        listHistoryChat.push({
           id: chat.id,
           nama: namaUser,
           photo: photoUser,
@@ -144,16 +157,15 @@ class Header extends Component {
           lastChat: lastChat,
         });
 
-        this.setState({ dataHistoryChat }, () => {
-          console.log("hasil susun data last chat", this.state.dataHistoryChat);
+        this.setState({ listHistoryChat }, () => {
+          // console.log("hasil susun data last chat", this.state.listHistoryChat);
         });
-        // return dataHistoryChat;
+        // return listHistoryChat;
       });
     } else {
       console.log("data kosong");
     }
-
-    // console.log("data history chat =", this.state.dataHistoryChat);
+    // console.log("data history chat =", this.state.listHistoryChat);
   };
 
   dataUserForHistoryChat = (ID) => {
@@ -165,13 +177,11 @@ class Header extends Component {
         .ref("/users/" + ID)
         .on("value", (snapshot) => {
           // const dataUserNya = [];
-
           dataUserNya.push({
             nama: snapshot.val() && snapshot.val().Nama,
             photo: snapshot.val() && snapshot.val().Profile_Picture,
           });
           // console.log(snapshot.val());
-
           // return dataUserNya;
           resolve(dataUserNya);
         });
@@ -182,9 +192,7 @@ class Header extends Component {
 
   dataLastChat = (ID) => {
     const dataChatNya = [];
-
     // const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
-
     return new Promise((resolve) => {
       firebase
         .database()
@@ -242,26 +250,18 @@ class Header extends Component {
             <li className="nav-item dropdown">
               <Link className="nav-link" data-toggle="dropdown" to="#">
                 <i className="far fa-comments" />
-                <span className="badge badge-danger navbar-badge">3</span>
+
+                {/* <span className="badge badge-danger navbar-badge">3</span> */}
               </Link>
               <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                {this.state.dataHistoryChat.length > 0 ? (
+                {this.state.listHistoryChat.length > 0 ? (
                   <Fragment>
-                    {this.state.dataHistoryChat.map((chat) => {
+                    {this.state.listHistoryChat.map((chat) => {
                       const elapsedTimeChat = this.getDeferentTime(
                         chat.tanggalLastChat
                       );
 
                       return (
-                        // <ItemUserChat
-                        //   key={chat.id}
-                        //   userID={chat.id}
-                        //   nama={chat.nama}
-                        //   photo={chat.photo}
-                        //   tanggal={chat.tanggalLastChat}
-                        //   PesanTerakhir={chat.lastChat}
-                        //   ActionClick={(e) => this.handleClickItemUserChat(e)}
-                        // />
                         <Fragment key={chat.id}>
                           <Link to="/pesan" className="dropdown-item">
                             {/* Message Start */}
@@ -293,9 +293,9 @@ class Header extends Component {
                   </Fragment>
                 ) : null}
 
-                <a href="/" className="dropdown-item dropdown-footer">
+                <Link to="/pesan" className="dropdown-item dropdown-footer">
                   See All Messages
-                </a>
+                </Link>
               </div>
             </li>
 
@@ -303,7 +303,11 @@ class Header extends Component {
             <li className="nav-item dropdown">
               <a className="nav-link" data-toggle="dropdown" href="/">
                 <i className="far fa-bell" />
-                <span className="badge badge-warning navbar-badge">15</span>
+                <span className="badge badge-warning navbar-badge">
+                  {this.state.totalUnreadNotification > 0
+                    ? this.state.totalUnreadNotification
+                    : null}
+                </span>
               </a>
               <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <span className="dropdown-item dropdown-header">
@@ -351,15 +355,15 @@ class Header extends Component {
               </div>
             </li>
             <li className="nav-item">
-              <a
+              <Link
                 className="nav-link"
                 data-widget="fullscreen"
-                href="/"
+                to="#"
                 role="button"
                 onClick={this.handleFullScreen}
               >
                 <i className="fas fa-expand-arrows-alt" />
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>
