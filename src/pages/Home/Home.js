@@ -13,6 +13,10 @@ class Home extends Component {
     this.handleGetData();
   }
 
+  componentWillUnmount() {
+    this.handleGetData();
+  }
+
   handleGetData = () => {
     return firebase
       .database()
@@ -39,32 +43,37 @@ class Home extends Component {
   };
 
   handleTotalOrderStatus = () => {
-    console.log(this.state.listOrder[1].data.Status);
+    // console.log(this.state.listOrder[1].data.Status);
     let totalOrder = this.state.listOrder.length;
 
-    console.log(totalOrder);
+    // console.log(totalOrder);
 
     let Active = 0;
     let Pennding = 0;
     let Done = 0;
     let Cancel = 0;
 
-    const checkStatus = (i) => {
+    const checkStatus = async (i) => {
       if (this.state.listOrder[i].data.Status === "Active") {
         Active = Active + 1;
-        this.setState(
-          {
-            totalStatus: [
-              {
-                ...this.state.totalStatus[0],
-                totalActive: Active,
-              },
-            ],
-          },
-          () => {
-            console.log(this.state);
-          }
-        );
+        // this.setState(
+        //   {
+        //     totalStatus: [
+        //       { ...this.state.totalStatus[0], totalActive: Active },
+        //     ],
+        //   },
+        //   () => {
+        //     console.log(this.state);
+        //   }
+        // );
+      } else if (
+        this.state.listOrder[i].data.Status === "Menunggu Pembayaran"
+      ) {
+        Pennding = Pennding + 1;
+      } else if (this.state.listOrder[i].data.Status === "Selesai") {
+        Done = Done + 1;
+      } else if (this.state.listOrder[i].data.Status === "Batal") {
+        Cancel = Cancel + 1;
       }
     };
 
@@ -73,6 +82,22 @@ class Home extends Component {
       checkStatus(i);
       i++;
     } while (i < totalOrder);
+
+    this.setState(
+      {
+        totalStatus: [
+          {
+            totalActive: Active,
+            totalPending: Pennding,
+            totalDone: Done,
+            totalCancel: Cancel,
+          },
+        ],
+      },
+      () => {
+        console.log(this.state.totalStatus[0]);
+      }
+    );
   };
 
   render() {
@@ -110,7 +135,7 @@ class Home extends Component {
                 {/* small box */}
                 <div className="small-box bg-success">
                   <div className="inner">
-                    <h3>{this.state.totalStatus[0].totalActive}</h3>
+                    <h3> {this.state.totalStatus[0].totalActive} </h3>
                     <p>Orders Active</p>
                   </div>
                   <div className="icon">
@@ -126,7 +151,7 @@ class Home extends Component {
                 {/* small box */}
                 <div className="small-box bg-warning">
                   <div className="inner">
-                    <h3>5</h3>
+                    <h3> {this.state.totalStatus[0].totalPending} </h3>
                     <p>Unpaid Order</p>
                   </div>
                   <div className="icon">
@@ -142,7 +167,7 @@ class Home extends Component {
                 {/* small box */}
                 <div className="small-box bg-secondary">
                   <div className="inner">
-                    <h3>3</h3>
+                    <h3> {this.state.totalStatus[0].totalDone} </h3>
                     <p>Order Done</p>
                   </div>
                   <div className="icon">
@@ -158,7 +183,7 @@ class Home extends Component {
                 {/* small box */}
                 <div className="small-box bg-danger">
                   <div className="inner">
-                    <h3>10</h3>
+                    <h3> {this.state.totalStatus[0].totalCancel} </h3>
                     <p>Order Cancel</p>
                   </div>
                   <div className="icon">

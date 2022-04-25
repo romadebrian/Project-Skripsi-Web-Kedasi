@@ -21,6 +21,8 @@ class Ruangan extends Component {
 
   componentDidUpdate() {}
 
+  componentWillUnmount() {}
+
   handleGetData = () => {
     return firebase
       .database()
