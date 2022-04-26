@@ -109,6 +109,10 @@ function PesanRuangan(props) {
       );
   };
 
+  const checkDateAvaliable = (e) => {
+    console.log(e);
+  };
+
   const toastSucces = () => {
     var Toast = Swal.mixin({
       toast: true,
@@ -214,6 +218,12 @@ function PesanRuangan(props) {
                     >
                       <div className="input-group-text">
                         <i className="fa fa-calendar" />
+                      </div>
+                      <div
+                        className="input-group-text"
+                        onClick={(e) => checkDateAvaliable(e)}
+                      >
+                        <i className="fa fa-search" />
                       </div>
                     </div>
                   </div>
