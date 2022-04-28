@@ -110,6 +110,8 @@ function PesanRuangan(props) {
   };
 
   const checkDateAvaliable = (e) => {
+    console.log(e.nativeEvent.path);
+    console.log(e.nativeEvent.path[5][4].value);
     console.log(e);
   };
 
@@ -209,7 +211,8 @@ function PesanRuangan(props) {
                       className="form-control datetimepicker-input"
                       data-target="#TanggalSelesai"
                       value={tanggalSekarang}
-                      onChange={(e) => console.log(e.target.value)}
+                      // onChange={(e) => console.log(e.target.value)}
+                      readOnly
                     />
                     <div
                       className="input-group-append"
