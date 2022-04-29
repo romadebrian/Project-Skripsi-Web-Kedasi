@@ -6,8 +6,8 @@ import firebase from "../../../config/firebase";
 function PesanRuangan(props) {
   const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [isloaded, setLoaded] = useState(false);
-  // const [statusPembayaran, setStatusPembayaran] = useState("");
-  // const [tampilModal, setTampilModal] = useState(true);
+  const [tglMulai, setTglMulai] = useState("");
+  const [tglSelesai, setTglSelesai] = useState("");
 
   useEffect(() => {
     window.$("#TanggalSewa").datetimepicker({
@@ -110,9 +110,17 @@ function PesanRuangan(props) {
   };
 
   const checkDateAvaliable = (e) => {
-    console.log(e.nativeEvent.path);
-    console.log(e.nativeEvent.path[5][4].value);
+    // console.log(e.nativeEvent.path);
+    // console.log(e.nativeEvent.path[5][4].value);
+    console.log(e.target.parentNode.firstChild.offsetParent);
+  };
+
+  const handleChange = (e) => {
     console.log(e);
+    console.log(e.target.parentElement[3].value);
+    // params.target.parentNode.children[0].innerText;
+    // console.log("Tanggal Sewa: ", e.target[3].value);
+    // console.log("Tanggal Selesai: ", e.target[4].value);
   };
 
   const toastSucces = () => {
@@ -139,7 +147,7 @@ function PesanRuangan(props) {
             </div>
             {/* /.card-header */}
             {/* form start */}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} onMouseEnter={(e) => handleChange(e)}>
               <div className="card-body">
                 <div className="form-group">
                   <label>Order ID</label>
