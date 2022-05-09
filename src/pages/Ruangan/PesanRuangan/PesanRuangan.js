@@ -5,8 +5,10 @@ import firebase from "../../../config/firebase";
 import DateTimePicker from "react-datetime-picker";
 
 function PesanRuangan(props) {
-  const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [isloaded, setLoaded] = useState(false);
+  const [paket, setPaket] = useState("");
+  const [totalPaket, setTotalPaket] = useState(1);
+  const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [tglMulai, setTglMulai] = useState("");
   const [tglSelesai, setTglSelesai] = useState("");
 
@@ -28,7 +30,7 @@ function PesanRuangan(props) {
         "-" +
         hariini.getFullYear();
 
-      setTanggalSekarang(tgl);
+      setTanggalSekarang(hariini);
     }
 
     if (isloaded === false) {
@@ -119,12 +121,14 @@ function PesanRuangan(props) {
   };
 
   const handleChange = (e) => {
-    console.log(e);
+    console.log(e.target.value);
     // console.log(e.target.parentElement[3].value);
     // params.target.parentNode.children[0].innerText;
     // console.log("Tanggal Sewa: ", e.target[3].value);
     // console.log("Tanggal Selesai: ", e.target[4].value);
   };
+
+  const handleTotalPayment = () => {};
 
   const toastSucces = () => {
     var Toast = Swal.mixin({
@@ -170,7 +174,7 @@ function PesanRuangan(props) {
                 <div className="form-group">
                   <label>Paket</label>
                   <div className="input-group" id="Paket">
-                    <select className="form-control">
+                    <select className="form-control" onChange={handleChange}>
                       <option>--- Casual Coworking ---</option>
                       <option>PERJAM</option>
                       <option>HARIAN</option>
@@ -189,7 +193,8 @@ function PesanRuangan(props) {
                         id="quantity"
                         name="quantity"
                         min="1"
-                        defaultValue="1"
+                        defaultValue={totalPaket}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -202,12 +207,13 @@ function PesanRuangan(props) {
                     className="form-control"
                     id="NamaPemesan"
                     placeholder="Nama Pemesan"
+                    onChange={handleChange}
                   />
                 </div>
 
                 <div className="form-group">
                   <label>Ruangan</label>
-                  <select className="form-control">
+                  <select className="form-control" onChange={handleChange}>
                     <option>ROOM 001</option>
                     <option>ROOM 002</option>
                     <option>ROOM 003</option>
