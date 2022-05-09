@@ -8,6 +8,8 @@ function PesanRuangan(props) {
   const [isloaded, setLoaded] = useState(false);
   const [paket, setPaket] = useState("");
   const [totalPaket, setTotalPaket] = useState(1);
+  const [nameCostumer, setNameCostumer] = useState("");
+  const [room, setRoom] = useState("");
   const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [tglMulai, setTglMulai] = useState("");
   const [tglSelesai, setTglSelesai] = useState("");
