@@ -119,7 +119,10 @@ function PesanRuangan(props) {
   const checkDateAvaliable = (e) => {
     // console.log(e.nativeEvent.path);
     // console.log(e.nativeEvent.path[5][4].value);
-    console.log(e.target.parentNode.firstChild.offsetParent);
+    // console.log(e.target.parentNode.firstChild.offsetParent);
+
+    console.log(paket);
+    console.log(totalPaket);
   };
 
   const handleChange = (e) => {
@@ -176,7 +179,10 @@ function PesanRuangan(props) {
                 <div className="form-group">
                   <label>Paket</label>
                   <div className="input-group" id="Paket">
-                    <select className="form-control" onChange={handleChange}>
+                    <select
+                      className="form-control"
+                      onChange={(e) => setPaket(e.target.value)}
+                    >
                       <option>--- Casual Coworking ---</option>
                       <option>PERJAM</option>
                       <option>HARIAN</option>
@@ -196,7 +202,7 @@ function PesanRuangan(props) {
                         name="quantity"
                         min="1"
                         defaultValue={totalPaket}
-                        onChange={handleChange}
+                        onChange={(e) => setTotalPaket(e.target.value)}
                       />
                     </div>
                   </div>
@@ -209,13 +215,16 @@ function PesanRuangan(props) {
                     className="form-control"
                     id="NamaPemesan"
                     placeholder="Nama Pemesan"
-                    onChange={handleChange}
+                    onChange={(e) => setNameCostumer(e.target.value)}
                   />
                 </div>
 
                 <div className="form-group">
                   <label>Ruangan</label>
-                  <select className="form-control" onChange={handleChange}>
+                  <select
+                    className="form-control"
+                    onChange={(e) => setRoom(e.target.value)}
+                  >
                     <option>ROOM 001</option>
                     <option>ROOM 002</option>
                     <option>ROOM 003</option>
@@ -250,11 +259,7 @@ function PesanRuangan(props) {
                       value={tglMulai}
                       format={"dd-MM-y"}
                     />
-                    <div
-                      className="input-group-append"
-                      data-target="#TanggalSelesai"
-                      data-toggle="datetimepicker"
-                    >
+                    <div className="input-group-append">
                       <div
                         className="input-group-text"
                         onClick={(e) => checkDateAvaliable(e)}
