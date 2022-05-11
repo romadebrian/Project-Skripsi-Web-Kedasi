@@ -6,10 +6,12 @@ import DateTimePicker from "react-datetime-picker";
 
 function PesanRuangan(props) {
   const [isloaded, setLoaded] = useState(false);
+
   const [paket, setPaket] = useState("");
   const [totalPaket, setTotalPaket] = useState(1);
   const [nameCostumer, setNameCostumer] = useState("");
   const [room, setRoom] = useState("");
+
   const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [tglMulai, setTglMulai] = useState("");
   const [tglSelesai, setTglSelesai] = useState("");
@@ -21,6 +23,8 @@ function PesanRuangan(props) {
     // window.$("#TanggalSelesai").datetimepicker({
     //   format: "DD-MM-YYYY",
     // });
+
+    handleTotalPayment();
 
     function convertTanggalSekarang() {
       let hariini = new Date();
@@ -133,7 +137,19 @@ function PesanRuangan(props) {
     // console.log("Tanggal Selesai: ", e.target[4].value);
   };
 
-  const handleTotalPayment = () => {};
+  const handleTotalPayment = () => {
+    if (
+      paket === "" &&
+      totalPaket === "" &&
+      nameCostumer === "" &&
+      room === "" &&
+      tglMulai === ""
+    ) {
+      console.log("inputan masih ada yang kosong");
+    } else {
+      console.log("Totalnya adalah");
+    }
+  };
 
   const toastSucces = () => {
     var Toast = Swal.mixin({
