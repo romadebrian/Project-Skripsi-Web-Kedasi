@@ -2,20 +2,29 @@ import React from "react"; //rfce
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import firebase from "../../../config/firebase";
+import DateTimePicker from "react-datetime-picker";
 
 function PesanRuangan(props) {
-  const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [isloaded, setLoaded] = useState(false);
-  // const [statusPembayaran, setStatusPembayaran] = useState("");
-  // const [tampilModal, setTampilModal] = useState(true);
+
+  const [paket, setPaket] = useState("");
+  const [totalPaket, setTotalPaket] = useState(1);
+  const [nameCostumer, setNameCostumer] = useState("");
+  const [room, setRoom] = useState("");
+
+  const [tanggalSekarang, setTanggalSekarang] = useState("");
+  const [tglMulai, setTglMulai] = useState("");
+  const [tglSelesai, setTglSelesai] = useState("");
+
+  const [totalPayment, setTotalPayment] = useState(0);
 
   useEffect(() => {
-    window.$("#TanggalSewa").datetimepicker({
-      format: "DD-MM-YYYY",
-    });
-    window.$("#TanggalSelesai").datetimepicker({
-      format: "DD-MM-YYYY",
-    });
+    // window.$("#TanggalSewa").datetimepicker({
+    //   format: "DD-MM-YYYY",
+    // });
+    // window.$("#TanggalSelesai").datetimepicker({
+    //   format: "DD-MM-YYYY",
+    // });
 
     function convertTanggalSekarang() {
       let hariini = new Date();
@@ -27,7 +36,7 @@ function PesanRuangan(props) {
         "-" +
         hariini.getFullYear();
 
-      setTanggalSekarang(tgl);
+      setTanggalSekarang(hariini);
     }
 
     if (isloaded === false) {
@@ -37,11 +46,36 @@ function PesanRuangan(props) {
 
       setLoaded(true);
     }
-  }, [isloaded]);
+
+    // Handle Total Payment
+    let ConvertToCurrency = Intl.NumberFormat("en-US");
+
+    if (paket === "PERJAM") {
+      setTotalPayment(ConvertToCurrency.format(30000 * totalPaket));
+    } else if (paket === "HARIAN") {
+      setTotalPayment(ConvertToCurrency.format(100000 * totalPaket));
+    } else if (paket === "HARIAN(PELAJAR)") {
+      setTotalPayment(ConvertToCurrency.format(75000 * totalPaket));
+    } else if (paket === "BULANAN 25JAM") {
+      setTotalPayment(ConvertToCurrency.format(450000 * totalPaket));
+    } else if (paket === "BULANAN 50JAM") {
+      setTotalPayment(ConvertToCurrency.format(650000 * totalPaket));
+    } else if (paket === "BULANAN 100JAM") {
+      setTotalPayment(ConvertToCurrency.format(900000 * totalPaket));
+    } else if (paket === "BULANAN TANPA BATAS") {
+      setTotalPayment(ConvertToCurrency.format(1200000 * totalPaket));
+    } else {
+      setTotalPayment(0);
+    }
+
+    console.log(paket);
+  }, [isloaded, paket, totalPaket]);
 
   const handleSubmit = (e) => {
     var StatusPembayaran;
     e.preventDefault();
+
+    // console.log(e);
 
     console.log("Order Id: ", e.target[0].value);
     console.log("Nama Pemesan: ", e.target[1].value);
@@ -109,6 +143,34 @@ function PesanRuangan(props) {
       );
   };
 
+  const checkDateAvaliable = (e) => {
+    // console.log(e.nativeEvent.path);
+    // console.log(e.nativeEvent.path[5][4].value);
+    // console.log(e.target.parentNode.firstChild.offsetParent);
+
+    console.log(paket);
+    console.log(totalPaket);
+  };
+
+  const handleChange = (e) => {
+    console.log(e.target.value);
+    // console.log(e.target.parentElement[3].value);
+    // params.target.parentNode.children[0].innerText;
+    // console.log("Tanggal Sewa: ", e.target[3].value);
+    // console.log("Tanggal Selesai: ", e.target[4].value);
+  };
+
+  const handleTotalPayment = async () => {
+    if (paket !== "") {
+      setTotalPayment("1.000.000");
+      // console.log("Totalnya adalah");
+    } else {
+      // console.log("inputan masih ada yang kosong");
+    }
+
+    console.log("handleTotalPayment");
+  };
+
   const toastSucces = () => {
     var Toast = Swal.mixin({
       toast: true,
@@ -124,7 +186,11 @@ function PesanRuangan(props) {
   };
 
   return (
-    <div className="modal fade" id="modal-lg">
+    <div
+      className="modal fade"
+      id="modal-lg"
+      // onMouseEnter={(e) => handleChange(e)}
+    >
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="card card-primary">
@@ -145,18 +211,56 @@ function PesanRuangan(props) {
                     readOnly
                   />
                 </div>
+
+                <div className="form-group">
+                  <label>Paket</label>
+                  <div className="input-group" id="Paket">
+                    <select
+                      className="form-control"
+                      onChange={(e) => setPaket(e.target.value)}
+                    >
+                      <option>--- Casual Coworking ---</option>
+                      <option>PERJAM</option>
+                      <option>HARIAN</option>
+                      <option>HARIAN(PELAJAR)</option>
+                      <option>--- Monthly Coworking ---</option>
+                      <option>BULANAN 25JAM</option>
+                      <option>BULANAN 50JAM</option>
+                      <option>BULANAN 100JAM</option>
+                      <option>BULANAN TANPA BATAS</option>
+                    </select>
+
+                    <div className="input-group-append">
+                      <input
+                        style={{ width: "50px", paddingLeft: "10px" }}
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        min="1"
+                        defaultValue={totalPaket}
+                        onChange={(e) => setTotalPaket(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="form-group">
                   <label>Nama Pemesan</label>
                   <input
                     type="text"
                     className="form-control"
                     id="NamaPemesan"
-                    placeholder="Nama Panjang"
+                    placeholder="Nama Pemesan"
+                    onChange={(e) => setNameCostumer(e.target.value)}
                   />
                 </div>
+
                 <div className="form-group">
                   <label>Ruangan</label>
-                  <select className="form-control">
+                  <select
+                    className="form-control"
+                    onChange={(e) => setRoom(e.target.value)}
+                  >
                     <option>ROOM 001</option>
                     <option>ROOM 002</option>
                     <option>ROOM 003</option>
@@ -172,16 +276,34 @@ function PesanRuangan(props) {
                     id="TanggalSewa"
                     data-target-input="nearest"
                   >
-                    <input
+                    {/* <input
                       type="text"
                       className="form-control datetimepicker-input"
                       data-target="#TanggalSewa"
                       value={tanggalSekarang}
                       onChange={(e) => {
-                        console.log(e.target.value);
+                        console.log(tanggalSekarang);
                       }}
+                      // onCompositionUpdate={() => console.log(tanggalSekarang)}
+                    /> */}
+                    <DateTimePicker
+                      className="form-control "
+                      onChange={(e) => {
+                        setTglMulai(e);
+                        console.log(e);
+                      }}
+                      value={tglMulai}
+                      format={"dd-MM-y"}
                     />
-                    <div
+                    <div className="input-group-append">
+                      <div
+                        className="input-group-text"
+                        onClick={(e) => checkDateAvaliable(e)}
+                      >
+                        <i className="fa fa-search" />
+                      </div>
+                    </div>
+                    {/* <div
                       className="input-group-append"
                       data-target="#TanggalSewa"
                       data-toggle="datetimepicker"
@@ -189,11 +311,11 @@ function PesanRuangan(props) {
                       <div className="input-group-text">
                         <i className="fa fa-calendar" />
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
-                <div className="form-group">
+                {/* <div className="form-group">
                   <label>Tanggal Selesai:</label>
                   <div
                     className="input-group date"
@@ -205,7 +327,8 @@ function PesanRuangan(props) {
                       className="form-control datetimepicker-input"
                       data-target="#TanggalSelesai"
                       value={tanggalSekarang}
-                      onChange={(e) => console.log(e.target.value)}
+                      // onChange={(e) => console.log(e.target.value)}
+                      readOnly
                     />
                     <div
                       className="input-group-append"
@@ -215,9 +338,15 @@ function PesanRuangan(props) {
                       <div className="input-group-text">
                         <i className="fa fa-calendar" />
                       </div>
+                      <div
+                        className="input-group-text"
+                        onClick={(e) => checkDateAvaliable(e)}
+                      >
+                        <i className="fa fa-search" />
+                      </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="form-group">
                   <label>Status</label>
@@ -255,6 +384,11 @@ function PesanRuangan(props) {
                 </div>
               </div>
               {/* /.card-body */}
+
+              <div style={{ marginRight: "10px", color: "green" }}>
+                <h3 className="float-right">Total Rp {totalPayment}</h3>
+              </div>
+
               <div className="card-footer">
                 <button type="submit" className="btn btn-primary">
                   Submit
