@@ -16,6 +16,8 @@ function PesanRuangan(props) {
   const [tglMulai, setTglMulai] = useState("");
   const [tglSelesai, setTglSelesai] = useState("");
 
+  const [totalPayment, setTotalPayment] = useState(0);
+
   useEffect(() => {
     // window.$("#TanggalSewa").datetimepicker({
     //   format: "DD-MM-YYYY",
@@ -23,8 +25,6 @@ function PesanRuangan(props) {
     // window.$("#TanggalSelesai").datetimepicker({
     //   format: "DD-MM-YYYY",
     // });
-
-    handleTotalPayment();
 
     function convertTanggalSekarang() {
       let hariini = new Date();
@@ -46,7 +46,30 @@ function PesanRuangan(props) {
 
       setLoaded(true);
     }
-  }, [isloaded]);
+
+    // Handle Total Payment
+    let ConvertToCurrency = Intl.NumberFormat("en-US");
+
+    if (paket === "PERJAM") {
+      setTotalPayment(ConvertToCurrency.format(30000 * totalPaket));
+    } else if (paket === "HARIAN") {
+      setTotalPayment(ConvertToCurrency.format(100000 * totalPaket));
+    } else if (paket === "HARIAN(PELAJAR)") {
+      setTotalPayment(ConvertToCurrency.format(75000 * totalPaket));
+    } else if (paket === "BULANAN 25JAM") {
+      setTotalPayment(ConvertToCurrency.format(450000 * totalPaket));
+    } else if (paket === "BULANAN 50JAM") {
+      setTotalPayment(ConvertToCurrency.format(650000 * totalPaket));
+    } else if (paket === "BULANAN 100JAM") {
+      setTotalPayment(ConvertToCurrency.format(900000 * totalPaket));
+    } else if (paket === "BULANAN TANPA BATAS") {
+      setTotalPayment(ConvertToCurrency.format(1200000 * totalPaket));
+    } else {
+      setTotalPayment(0);
+    }
+
+    console.log(paket);
+  }, [isloaded, paket, totalPaket]);
 
   const handleSubmit = (e) => {
     var StatusPembayaran;
@@ -137,18 +160,15 @@ function PesanRuangan(props) {
     // console.log("Tanggal Selesai: ", e.target[4].value);
   };
 
-  const handleTotalPayment = () => {
-    if (
-      paket === "" &&
-      totalPaket === "" &&
-      nameCostumer === "" &&
-      room === "" &&
-      tglMulai === ""
-    ) {
-      console.log("inputan masih ada yang kosong");
+  const handleTotalPayment = async () => {
+    if (paket !== "") {
+      setTotalPayment("1.000.000");
+      // console.log("Totalnya adalah");
     } else {
-      console.log("Totalnya adalah");
+      // console.log("inputan masih ada yang kosong");
     }
+
+    console.log("handleTotalPayment");
   };
 
   const toastSucces = () => {
@@ -366,7 +386,7 @@ function PesanRuangan(props) {
               {/* /.card-body */}
 
               <div style={{ marginRight: "10px", color: "green" }}>
-                <h3 className="float-right">Total Rp 1.200.000</h3>
+                <h3 className="float-right">Total Rp {totalPayment}</h3>
               </div>
 
               <div className="card-footer">
