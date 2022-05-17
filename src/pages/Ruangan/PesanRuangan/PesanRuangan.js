@@ -10,7 +10,7 @@ function PesanRuangan(props) {
   const [paket, setPaket] = useState("");
   const [totalPaket, setTotalPaket] = useState(1);
   const [nameCostumer, setNameCostumer] = useState("");
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState("ROOM 001");
 
   const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [tglMulai, setTglMulai] = useState("");
@@ -150,6 +150,31 @@ function PesanRuangan(props) {
 
     console.log(paket);
     console.log(totalPaket);
+    console.log(room);
+    console.log(tglMulai);
+
+    return firebase
+      .database()
+      .ref("/order/")
+      .orderByChild("Ruangan")
+      .equalTo(room)
+      .on("value", (snapshot) => {
+        const dataHasil = [];
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            dataHasil.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
+            return dataHasil;
+          });
+        } else {
+          console.log("Data tidak ditemukan");
+        }
+
+        console.log(dataHasil);
+        // this.setState({ orderDetail: dataHasil[0].data });
+      });
   };
 
   const handleChange = (e) => {
