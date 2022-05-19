@@ -153,6 +153,7 @@ function PesanRuangan(props) {
     console.log(room);
     console.log(tglMulai);
 
+    //////////////////// Colect data from firebase ////////////////////
     return firebase
       .database()
       .ref("/order/")
@@ -175,25 +176,24 @@ function PesanRuangan(props) {
         console.log(dataHasil);
         console.log(dataHasil[0].data.TanggalSewa);
         console.log(dataHasil[0].data.TanggalSelesai);
-        console.log(tglMulai);
-        // this.setState({ orderDetail: dataHasil[0].data });
 
-        // Formating Selected Date
+        //////////////////// Formating Start Date ////////////////////
+        console.log("tglMulai", tglMulai);
+        let startDay = tglMulai;
 
-        let hariini = tglMulai;
-
-        let tgl =
-          hariini.getDate() +
+        let tglStart =
+          startDay.getDate() +
           "-" +
-          parseInt(hariini.getMonth() + 1) +
+          parseInt(startDay.getMonth() + 1) +
           "-" +
-          hariini.getFullYear();
+          startDay.getFullYear();
 
-        console.log(tgl);
+        console.log("tglStart", tglStart);
 
+        //////////////////// Check Avaliable Start Date ////////////////////
         var dateFrom = dataHasil[0].data.TanggalSewa;
         var dateTo = dataHasil[0].data.TanggalSelesai;
-        var dateCheck = tgl;
+        var dateCheck = tglStart;
 
         var d1 = dateFrom.split("-");
         var d2 = dateTo.split("-");
@@ -207,7 +207,48 @@ function PesanRuangan(props) {
         var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
         var check = new Date(c[2], parseInt(c[1]) - 1, c[0]);
 
-        console.log(check >= from && check <= to);
+        var resultStart = check >= from && check <= to;
+
+        console.log("resultStart", resultStart);
+
+        //////////////////// Tanggal selesai ////////////////////
+        var tglBerakhir = new Date(tglMulai);
+        tglBerakhir.setMonth(tglBerakhir.getMonth() + 1);
+
+        // var increseDate = tangMulai.getMonth() + 3;
+        // setTglSelesai(tangMulai.getMonth() + 3);
+
+        console.log("tglBerakhir", tglBerakhir);
+        // this.setState({ orderDetail: dataHasil[0].data });
+
+        // Formating Finish Date
+        let finishDay = tglBerakhir;
+
+        let dateFinish =
+          finishDay.getDate() +
+          "-" +
+          parseInt(finishDay.getMonth() + 1) +
+          "-" +
+          finishDay.getFullYear();
+
+        console.log("dateFinish", dateFinish);
+
+        //////////////////// Check Avaliable End Date ////////////////////
+        // var dateFrom2 = dataHasil[0].data.TanggalSewa;
+        // var dateTo2 = dataHasil[0].data.TanggalSelesai;
+        var dateCheck2 = dateFinish;
+
+        // var d1 = dateFrom2.split("-");
+        // var d2 = dateTo2.split("-");
+        var ce = dateCheck2.split("-");
+
+        // var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+        // var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
+        var checkEnd = new Date(ce[2], parseInt(ce[1]) - 1, ce[0]);
+
+        var resultEnd = checkEnd >= from && checkEnd <= to;
+
+        console.log("resultEnd", resultEnd);
       });
   };
 

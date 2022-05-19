@@ -503,7 +503,7 @@ function DetailOrder(props) {
                 <div className="row">
                   <div className="col-3">
                     <button type="submit" className="btn btn-primary">
-                      Submit
+                      Update
                     </button>
                     <button
                       type="button"
