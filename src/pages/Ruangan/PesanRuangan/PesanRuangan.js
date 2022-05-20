@@ -68,7 +68,7 @@ function PesanRuangan(props) {
       setTotalPayment(0);
     }
 
-    console.log(paket);
+    // console.log(paket);
   }, [isloaded, paket, totalPaket]);
 
   const handleSubmit = (e) => {
@@ -178,26 +178,47 @@ function PesanRuangan(props) {
         console.log(dataHasil[0].data.TanggalSelesai);
 
         //////////////////// Formating Start Date ////////////////////
-        console.log("tglMulai", tglMulai);
-        let startDay = tglMulai;
+        console.log("tglMulai ", tglMulai);
+        // let startDay = tglMulai;
 
-        let tglStart =
-          startDay.getDate() +
+        let StartDate =
+          tglMulai.getDate() +
           "-" +
-          parseInt(startDay.getMonth() + 1) +
+          parseInt(tglMulai.getMonth() + 1) +
           "-" +
-          startDay.getFullYear();
+          tglMulai.getFullYear();
 
-        console.log("tglStart", tglStart);
+        console.log("StartDate ", StartDate);
+
+        //////////////////// Formating Finish Date ////////////////////
+        var IncreseDate = new Date(
+          "Wed May 25 2022 00:00:00 GMT+0700 (Western Indonesia Time)"
+        );
+
+        // var IncreseDate = new Date(tglMulai);
+        // IncreseDate.setMonth(IncreseDate.getMonth() + 3);
+
+        let DateAfterIncresed = IncreseDate;
+
+        let FinishDay =
+          DateAfterIncresed.getDate() +
+          "-" +
+          parseInt(DateAfterIncresed.getMonth() + 1) +
+          "-" +
+          DateAfterIncresed.getFullYear();
+
+        console.log("FinishDay ", FinishDay);
 
         //////////////////// Check Avaliable Start Date ////////////////////
         var dateFrom = dataHasil[0].data.TanggalSewa;
         var dateTo = dataHasil[0].data.TanggalSelesai;
-        var dateCheck = tglStart;
+        var dateStart = StartDate;
+        var dateEnd = FinishDay;
 
         var d1 = dateFrom.split("-");
         var d2 = dateTo.split("-");
-        var c = dateCheck.split("-");
+        var c1 = dateStart.split("-");
+        var c2 = dateEnd.split("-");
 
         // console.log(d1);
         // console.log(d2);
@@ -205,49 +226,13 @@ function PesanRuangan(props) {
 
         var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
         var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
-        var check = new Date(c[2], parseInt(c[1]) - 1, c[0]);
+        var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
+        var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
 
-        var resultStart = check >= from && check <= to;
+        var resultStart = check1 >= from && check1 <= to;
+        var resultEnd = check2 >= from && check2 <= to;
 
         console.log("resultStart", resultStart);
-
-        //////////////////// Tanggal selesai ////////////////////
-        var tglBerakhir = new Date(tglMulai);
-        tglBerakhir.setMonth(tglBerakhir.getMonth() + 1);
-
-        // var increseDate = tangMulai.getMonth() + 3;
-        // setTglSelesai(tangMulai.getMonth() + 3);
-
-        console.log("tglBerakhir", tglBerakhir);
-        // this.setState({ orderDetail: dataHasil[0].data });
-
-        // Formating Finish Date
-        let finishDay = tglBerakhir;
-
-        let dateFinish =
-          finishDay.getDate() +
-          "-" +
-          parseInt(finishDay.getMonth() + 1) +
-          "-" +
-          finishDay.getFullYear();
-
-        console.log("dateFinish", dateFinish);
-
-        //////////////////// Check Avaliable End Date ////////////////////
-        // var dateFrom2 = dataHasil[0].data.TanggalSewa;
-        // var dateTo2 = dataHasil[0].data.TanggalSelesai;
-        var dateCheck2 = dateFinish;
-
-        // var d1 = dateFrom2.split("-");
-        // var d2 = dateTo2.split("-");
-        var ce = dateCheck2.split("-");
-
-        // var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
-        // var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
-        var checkEnd = new Date(ce[2], parseInt(ce[1]) - 1, ce[0]);
-
-        var resultEnd = checkEnd >= from && checkEnd <= to;
-
         console.log("resultEnd", resultEnd);
       });
   };
