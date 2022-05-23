@@ -192,7 +192,7 @@ function PesanRuangan(props) {
 
         //////////////////// Formating Finish Date ////////////////////
         var IncreseDate = new Date(
-          "Wed May 25 2022 00:00:00 GMT+0700 (Western Indonesia Time)"
+          "Fri Jun 30 2022 00:00:00 GMT+0700 (Western Indonesia Time)"
         );
 
         // var IncreseDate = new Date(tglMulai);
@@ -230,10 +230,19 @@ function PesanRuangan(props) {
         var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
 
         var resultStart = check1 >= from && check1 <= to;
-        var resultEnd = check2 >= from && check2 <= to;
+        var resultStart2 = from >= check1 && from <= check2;
+
+        // var resultEnd = check2 >= from && check2 <= to;
+        // var resultEnd = check2 >= from && check2 <= to;
+
+        console.log("Start", check1);
+        console.log("End", check2);
+        console.log("From ", from);
+        console.log("to", to);
 
         console.log("resultStart", resultStart);
-        console.log("resultEnd", resultEnd);
+        console.log("resultStart2", resultStart2);
+        // console.log("resultEnd", resultEnd);
       });
   };
 
