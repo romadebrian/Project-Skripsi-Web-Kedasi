@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import firebase from "../../../config/firebase";
 import DateTimePicker from "react-datetime-picker";
+import Toast from "../../../component/toast/Toast";
 
 function PesanRuangan(props) {
   const [isloaded, setLoaded] = useState(false);
@@ -191,12 +192,12 @@ function PesanRuangan(props) {
         console.log("StartDate ", StartDate);
 
         //////////////////// Formating Finish Date ////////////////////
-        var IncreseDate = new Date(
-          "Fri Jun 30 2022 00:00:00 GMT+0700 (Western Indonesia Time)"
-        );
+        // var IncreseDate = new Date(
+        //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
+        // );
 
-        // var IncreseDate = new Date(tglMulai);
-        // IncreseDate.setMonth(IncreseDate.getMonth() + 3);
+        var IncreseDate = new Date(tglMulai);
+        IncreseDate.setMonth(IncreseDate.getMonth() + 3);
 
         let DateAfterIncresed = IncreseDate;
 
@@ -210,39 +211,70 @@ function PesanRuangan(props) {
         console.log("FinishDay ", FinishDay);
 
         //////////////////// Check Avaliable Start Date ////////////////////
-        var dateFrom = dataHasil[0].data.TanggalSewa;
-        var dateTo = dataHasil[0].data.TanggalSelesai;
-        var dateStart = StartDate;
-        var dateEnd = FinishDay;
+        let i = 0;
 
-        var d1 = dateFrom.split("-");
-        var d2 = dateTo.split("-");
-        var c1 = dateStart.split("-");
-        var c2 = dateEnd.split("-");
+        var statusAvaliable = true;
 
-        // console.log(d1);
-        // console.log(d2);
-        // console.log(c);
+        do {
+          var dateFrom = dataHasil[i].data.TanggalSewa;
+          var dateTo = dataHasil[i].data.TanggalSelesai;
+          var dateStart = StartDate;
+          var dateEnd = FinishDay;
 
-        var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
-        var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
-        var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
-        var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
+          var d1 = dateFrom.split("-");
+          var d2 = dateTo.split("-");
+          var c1 = dateStart.split("-");
+          var c2 = dateEnd.split("-");
 
-        var resultStart = check1 >= from && check1 <= to;
-        var resultStart2 = from >= check1 && from <= check2;
+          // console.log(d1);
+          // console.log(d2);
+          // console.log(c);
 
-        // var resultEnd = check2 >= from && check2 <= to;
-        // var resultEnd = check2 >= from && check2 <= to;
+          var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+          var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
+          var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
+          var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
 
-        console.log("Start", check1);
-        console.log("End", check2);
-        console.log("From ", from);
-        console.log("to", to);
+          var resultStart = check1 >= from && check1 <= to;
+          var resultStart2 = from >= check1 && from <= check2;
 
-        console.log("resultStart", resultStart);
-        console.log("resultStart2", resultStart2);
-        // console.log("resultEnd", resultEnd);
+          // var resultEnd = check2 >= from && check2 <= to;
+          // var resultEnd = check2 >= from && check2 <= to;
+
+          // console.log("Start", check1);
+          // console.log("End", check2);
+          // console.log("From ", from);
+          // console.log("to", to);
+
+          console.log("resultStart", resultStart);
+          console.log("resultStart2", resultStart2);
+          // console.log("resultEnd", resultEnd);
+
+          // use or (||) operator
+          if (statusAvaliable === true) {
+            if (resultStart === true || resultStart2 === true) {
+              statusAvaliable = false;
+            }
+          }
+
+          i++;
+        } while (i < dataHasil.length);
+
+        if (statusAvaliable === true) {
+          Toast([
+            {
+              icon: "success",
+              title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tersedia`,
+            },
+          ]);
+        } else {
+          Toast([
+            {
+              icon: "error",
+              title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
+            },
+          ]);
+        }
       });
   };
 

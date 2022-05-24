@@ -10,6 +10,7 @@ function Toast(props) {
     timer: 3000,
   });
 
+  // icon success, warning, error, info, question
   Toast.fire({
     icon: props[0].icon,
     title: props[0].title,
