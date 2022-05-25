@@ -154,6 +154,19 @@ function PesanRuangan(props) {
     console.log(room);
     console.log(tglMulai);
 
+    if (
+      paket === "" ||
+      paket === "--- Casual Coworking ---" ||
+      paket === "--- Monthly Coworking ---"
+    ) {
+      Toast([
+        {
+          icon: "error",
+          title: "Paket pesanan belum di pilih",
+        },
+      ]);
+    }
+
     //////////////////// Colect data from firebase ////////////////////
     return firebase
       .database()
@@ -197,7 +210,16 @@ function PesanRuangan(props) {
         // );
 
         var IncreseDate = new Date(tglMulai);
-        IncreseDate.setMonth(IncreseDate.getMonth() + 3);
+
+        if (
+          paket === "PERJAM" ||
+          paket === "HARIAN" ||
+          paket === "HARIAN(PELAJAR)"
+        ) {
+          console.log("Perjam/Perhari");
+        } else {
+          IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
+        }
 
         let DateAfterIncresed = IncreseDate;
 
