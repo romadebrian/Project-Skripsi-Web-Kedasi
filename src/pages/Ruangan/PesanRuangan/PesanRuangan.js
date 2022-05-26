@@ -165,139 +165,146 @@ function PesanRuangan(props) {
           title: "Paket pesanan belum di pilih",
         },
       ]);
-    }
-
-    //////////////////// Colect data from firebase ////////////////////
-    return firebase
-      .database()
-      .ref("/order/")
-      .orderByChild("Ruangan")
-      .equalTo(room)
-      .on("value", (snapshot) => {
-        const dataHasil = [];
-        if (snapshot.exists()) {
-          Object.keys(snapshot.val()).map((key) => {
-            dataHasil.push({
-              id: key,
-              data: snapshot.val()[key],
+    } else if (tglMulai === "") {
+      Toast([
+        {
+          icon: "error",
+          title: "Tanggal sewa tidak boleh kosong",
+        },
+      ]);
+    } else {
+      //////////////////// Colect data from firebase ////////////////////
+      return firebase
+        .database()
+        .ref("/order/")
+        .orderByChild("Ruangan")
+        .equalTo(room)
+        .on("value", (snapshot) => {
+          const dataHasil = [];
+          if (snapshot.exists()) {
+            Object.keys(snapshot.val()).map((key) => {
+              dataHasil.push({
+                id: key,
+                data: snapshot.val()[key],
+              });
+              return dataHasil;
             });
-            return dataHasil;
-          });
-        } else {
-          console.log("Data tidak ditemukan");
-        }
-
-        console.log(dataHasil);
-        console.log(dataHasil[0].data.TanggalSewa);
-        console.log(dataHasil[0].data.TanggalSelesai);
-
-        //////////////////// Formating Start Date ////////////////////
-        console.log("tglMulai ", tglMulai);
-        // let startDay = tglMulai;
-
-        let StartDate =
-          tglMulai.getDate() +
-          "-" +
-          parseInt(tglMulai.getMonth() + 1) +
-          "-" +
-          tglMulai.getFullYear();
-
-        console.log("StartDate ", StartDate);
-
-        //////////////////// Formating Finish Date ////////////////////
-        // var IncreseDate = new Date(
-        //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
-        // );
-
-        var IncreseDate = new Date(tglMulai);
-
-        if (
-          paket === "PERJAM" ||
-          paket === "HARIAN" ||
-          paket === "HARIAN(PELAJAR)"
-        ) {
-          console.log("Perjam/Perhari");
-        } else {
-          IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
-        }
-
-        let DateAfterIncresed = IncreseDate;
-
-        let FinishDay =
-          DateAfterIncresed.getDate() +
-          "-" +
-          parseInt(DateAfterIncresed.getMonth() + 1) +
-          "-" +
-          DateAfterIncresed.getFullYear();
-
-        console.log("FinishDay ", FinishDay);
-
-        //////////////////// Check Avaliable Start Date ////////////////////
-        let i = 0;
-
-        var statusAvaliable = true;
-
-        do {
-          var dateFrom = dataHasil[i].data.TanggalSewa;
-          var dateTo = dataHasil[i].data.TanggalSelesai;
-          var dateStart = StartDate;
-          var dateEnd = FinishDay;
-
-          var d1 = dateFrom.split("-");
-          var d2 = dateTo.split("-");
-          var c1 = dateStart.split("-");
-          var c2 = dateEnd.split("-");
-
-          // console.log(d1);
-          // console.log(d2);
-          // console.log(c);
-
-          var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
-          var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
-          var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
-          var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
-
-          var resultStart = check1 >= from && check1 <= to;
-          var resultStart2 = from >= check1 && from <= check2;
-
-          // var resultEnd = check2 >= from && check2 <= to;
-          // var resultEnd = check2 >= from && check2 <= to;
-
-          // console.log("Start", check1);
-          // console.log("End", check2);
-          // console.log("From ", from);
-          // console.log("to", to);
-
-          console.log("resultStart", resultStart);
-          console.log("resultStart2", resultStart2);
-          // console.log("resultEnd", resultEnd);
-
-          // use or (||) operator
-          if (statusAvaliable === true) {
-            if (resultStart === true || resultStart2 === true) {
-              statusAvaliable = false;
-            }
+          } else {
+            console.log("Data tidak ditemukan");
           }
 
-          i++;
-        } while (i < dataHasil.length);
+          console.log(dataHasil);
+          console.log(dataHasil[0].data.TanggalSewa);
+          console.log(dataHasil[0].data.TanggalSelesai);
 
-        if (statusAvaliable === true) {
-          Toast([
-            {
-              icon: "success",
-              title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tersedia`,
-            },
-          ]);
-        } else {
-          Toast([
-            {
-              icon: "error",
-              title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
-            },
-          ]);
-        }
-      });
+          //////////////////// Formating Start Date ////////////////////
+          console.log("tglMulai ", tglMulai);
+          // let startDay = tglMulai;
+
+          let StartDate =
+            tglMulai.getDate() +
+            "-" +
+            parseInt(tglMulai.getMonth() + 1) +
+            "-" +
+            tglMulai.getFullYear();
+
+          console.log("StartDate ", StartDate);
+
+          //////////////////// Formating Finish Date ////////////////////
+          // var IncreseDate = new Date(
+          //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
+          // );
+
+          var IncreseDate = new Date(tglMulai);
+
+          if (
+            paket === "PERJAM" ||
+            paket === "HARIAN" ||
+            paket === "HARIAN(PELAJAR)"
+          ) {
+            console.log("Perjam/Perhari");
+          } else {
+            IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
+          }
+
+          let DateAfterIncresed = IncreseDate;
+
+          let FinishDay =
+            DateAfterIncresed.getDate() +
+            "-" +
+            parseInt(DateAfterIncresed.getMonth() + 1) +
+            "-" +
+            DateAfterIncresed.getFullYear();
+
+          console.log("FinishDay ", FinishDay);
+
+          //////////////////// Check Avaliable Start Date ////////////////////
+          let i = 0;
+
+          var statusAvaliable = true;
+
+          do {
+            var dateFrom = dataHasil[i].data.TanggalSewa;
+            var dateTo = dataHasil[i].data.TanggalSelesai;
+            var dateStart = StartDate;
+            var dateEnd = FinishDay;
+
+            var d1 = dateFrom.split("-");
+            var d2 = dateTo.split("-");
+            var c1 = dateStart.split("-");
+            var c2 = dateEnd.split("-");
+
+            // console.log(d1);
+            // console.log(d2);
+            // console.log(c);
+
+            var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+            var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
+            var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
+            var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
+
+            var resultStart = check1 >= from && check1 <= to;
+            var resultStart2 = from >= check1 && from <= check2;
+
+            // var resultEnd = check2 >= from && check2 <= to;
+            // var resultEnd = check2 >= from && check2 <= to;
+
+            // console.log("Start", check1);
+            // console.log("End", check2);
+            // console.log("From ", from);
+            // console.log("to", to);
+
+            console.log("resultStart", resultStart);
+            console.log("resultStart2", resultStart2);
+            // console.log("resultEnd", resultEnd);
+
+            // use or (||) operator
+            if (statusAvaliable === true) {
+              if (resultStart === true || resultStart2 === true) {
+                statusAvaliable = false;
+              }
+            }
+
+            i++;
+          } while (i < dataHasil.length);
+
+          if (statusAvaliable === true) {
+            Toast([
+              {
+                icon: "success",
+                title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tersedia`,
+              },
+            ]);
+          } else {
+            Toast([
+              {
+                icon: "error",
+                title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
+              },
+            ]);
+          }
+        });
+    }
   };
 
   const handleChange = (e) => {
