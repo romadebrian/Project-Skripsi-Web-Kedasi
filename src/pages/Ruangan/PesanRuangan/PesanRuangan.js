@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import firebase from "../../../config/firebase";
 import DateTimePicker from "react-datetime-picker";
 import Toast from "../../../component/toast/Toast";
+import Ruangan from "../Ruangan";
 
 function PesanRuangan(props) {
   const [isloaded, setLoaded] = useState(false);
@@ -11,13 +12,15 @@ function PesanRuangan(props) {
   const [paket, setPaket] = useState("");
   const [totalPaket, setTotalPaket] = useState(1);
   const [nameCostumer, setNameCostumer] = useState("");
-  const [room, setRoom] = useState("ROOM 001");
+  const [room, setRoom] = useState("ROOM 000");
 
   const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [tglMulai, setTglMulai] = useState("");
   const [tglSelesai, setTglSelesai] = useState("");
 
   const [totalPayment, setTotalPayment] = useState(0);
+
+  const [periksa, serPeriksa] = useState(false);
 
   useEffect(() => {
     // window.$("#TanggalSewa").datetimepicker({
@@ -100,48 +103,72 @@ function PesanRuangan(props) {
       console.log("error");
     }
 
-    firebase
-      .database()
-      .ref("order")
-      .push(
+    if (periksa === false) {
+      Toast([
         {
-          OrderId: e.target[0].value,
-          NamaPemesan: e.target[1].value,
-          Ruangan: e.target[2].value,
-          TanggalSewa: e.target[3].value,
-          TanggalSelesai: e.target[4].value,
-          Status: StatusPembayaran,
-          BuktiPembayaran: "",
+          icon: "error",
+          title: "From belum lengkap",
         },
-        (error) => {
-          if (error) {
-            // The write failed...
-            alert("Gagal Simpan");
-          } else {
-            // Data saved successfully!
-            // alert("Profile Berhasil Di Simpan");
-            toastSucces();
-            console.log(
-              "send value: ",
-              e.target[0].value,
-              e.target[1].value,
-              e.target[2].value,
-              e.target[3].value,
-              e.target[4].value,
-              StatusPembayaran
-            );
+      ]);
+    } else if (nameCostumer === "") {
+      Toast([
+        {
+          icon: "error",
+          title: "From belum lengkap",
+        },
+      ]);
+    } else {
+      firebase
+        .database()
+        .ref("order")
+        .push(
+          {
+            OrderId: e.target[0].value,
+            NamaPemesan: e.target[1].value,
+            Ruangan: e.target[2].value,
+            TanggalSewa: e.target[3].value,
+            TanggalSelesai: e.target[4].value,
+            Status: StatusPembayaran,
+            BuktiPembayaran: "",
+          },
+          (error) => {
+            if (error) {
+              // The write failed...
+              alert("Gagal Simpan");
+            } else {
+              // Data saved successfully!
+              // alert("Profile Berhasil Di Simpan");
+              // toastSucces();
 
-            window.$("#modal-lg").modal("hide");
+              Toast([
+                {
+                  icon: "success",
+                  title: "Pemesanan Ruangan Berhasil",
+                },
+              ]);
 
-            // window.location.reload();
+              console.log(
+                "send value: ",
+                e.target[0].value,
+                e.target[1].value,
+                e.target[2].value,
+                e.target[3].value,
+                e.target[4].value,
+                StatusPembayaran
+              );
 
-            // window.$(this.modal).modal("hide");
-            // window.$(this.modal).on("hidden.bs.modal");
+              window.$("#modal-lg").modal("hide");
 
-            // e.target[10].dismiss = "modal";
+              // window.location.reload();
+
+              // window.$(this.modal).modal("hide");
+              // window.$(this.modal).on("hidden.bs.modal");
+
+              // e.target[10].dismiss = "modal";
+            }
           }
-        }
-      );
+        );
+    }
   };
 
   const checkDateAvaliable = (e) => {
@@ -187,121 +214,121 @@ function PesanRuangan(props) {
                 id: key,
                 data: snapshot.val()[key],
               });
-              return dataHasil;
+              // return dataHasil;
             });
-          } else {
-            console.log("Data tidak ditemukan");
-          }
 
-          console.log(dataHasil);
-          console.log(dataHasil[0].data.TanggalSewa);
-          console.log(dataHasil[0].data.TanggalSelesai);
+            console.log(dataHasil);
+            console.log(dataHasil[0].data.TanggalSewa);
+            console.log(dataHasil[0].data.TanggalSelesai);
 
-          //////////////////// Formating Start Date ////////////////////
-          console.log("tglMulai ", tglMulai);
-          // let startDay = tglMulai;
+            //////////////////// Formating Start Date ////////////////////
+            console.log("tglMulai ", tglMulai);
+            // let startDay = tglMulai;
 
-          let StartDate =
-            tglMulai.getDate() +
-            "-" +
-            parseInt(tglMulai.getMonth() + 1) +
-            "-" +
-            tglMulai.getFullYear();
+            let StartDate =
+              tglMulai.getDate() +
+              "-" +
+              parseInt(tglMulai.getMonth() + 1) +
+              "-" +
+              tglMulai.getFullYear();
 
-          console.log("StartDate ", StartDate);
+            console.log("StartDate ", StartDate);
 
-          //////////////////// Formating Finish Date ////////////////////
-          // var IncreseDate = new Date(
-          //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
-          // );
+            //////////////////// Formating Finish Date ////////////////////
+            // var IncreseDate = new Date(
+            //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
+            // );
 
-          var IncreseDate = new Date(tglMulai);
+            var IncreseDate = new Date(tglMulai);
 
-          if (
-            paket === "PERJAM" ||
-            paket === "HARIAN" ||
-            paket === "HARIAN(PELAJAR)"
-          ) {
-            console.log("Perjam/Perhari");
-          } else {
-            IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
-          }
-
-          let DateAfterIncresed = IncreseDate;
-
-          let FinishDay =
-            DateAfterIncresed.getDate() +
-            "-" +
-            parseInt(DateAfterIncresed.getMonth() + 1) +
-            "-" +
-            DateAfterIncresed.getFullYear();
-
-          console.log("FinishDay ", FinishDay);
-
-          //////////////////// Check Avaliable Start Date ////////////////////
-          let i = 0;
-
-          var statusAvaliable = true;
-
-          do {
-            var dateFrom = dataHasil[i].data.TanggalSewa;
-            var dateTo = dataHasil[i].data.TanggalSelesai;
-            var dateStart = StartDate;
-            var dateEnd = FinishDay;
-
-            var d1 = dateFrom.split("-");
-            var d2 = dateTo.split("-");
-            var c1 = dateStart.split("-");
-            var c2 = dateEnd.split("-");
-
-            // console.log(d1);
-            // console.log(d2);
-            // console.log(c);
-
-            var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
-            var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
-            var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
-            var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
-
-            var resultStart = check1 >= from && check1 <= to;
-            var resultStart2 = from >= check1 && from <= check2;
-
-            // var resultEnd = check2 >= from && check2 <= to;
-            // var resultEnd = check2 >= from && check2 <= to;
-
-            // console.log("Start", check1);
-            // console.log("End", check2);
-            // console.log("From ", from);
-            // console.log("to", to);
-
-            console.log("resultStart", resultStart);
-            console.log("resultStart2", resultStart2);
-            // console.log("resultEnd", resultEnd);
-
-            // use or (||) operator
-            if (statusAvaliable === true) {
-              if (resultStart === true || resultStart2 === true) {
-                statusAvaliable = false;
-              }
+            if (
+              paket === "PERJAM" ||
+              paket === "HARIAN" ||
+              paket === "HARIAN(PELAJAR)"
+            ) {
+              console.log("Perjam/Perhari");
+            } else {
+              IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
             }
 
-            i++;
-          } while (i < dataHasil.length);
+            let DateAfterIncresed = IncreseDate;
 
-          if (statusAvaliable === true) {
-            Toast([
-              {
-                icon: "success",
-                title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tersedia`,
-              },
-            ]);
+            let FinishDay =
+              DateAfterIncresed.getDate() +
+              "-" +
+              parseInt(DateAfterIncresed.getMonth() + 1) +
+              "-" +
+              DateAfterIncresed.getFullYear();
+
+            console.log("FinishDay ", FinishDay);
+
+            //////////////////// Check Avaliable Start Date ////////////////////
+            let i = 0;
+
+            var statusAvaliable = true;
+
+            do {
+              var dateFrom = dataHasil[i].data.TanggalSewa;
+              var dateTo = dataHasil[i].data.TanggalSelesai;
+              var dateStart = StartDate;
+              var dateEnd = FinishDay;
+
+              var d1 = dateFrom.split("-");
+              var d2 = dateTo.split("-");
+              var c1 = dateStart.split("-");
+              var c2 = dateEnd.split("-");
+
+              // console.log(d1);
+              // console.log(d2);
+              // console.log(c);
+
+              var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+              var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
+              var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
+              var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
+
+              var resultStart = check1 >= from && check1 <= to;
+              var resultStart2 = from >= check1 && from <= check2;
+
+              // var resultEnd = check2 >= from && check2 <= to;
+              // var resultEnd = check2 >= from && check2 <= to;
+
+              // console.log("Start", check1);
+              // console.log("End", check2);
+              // console.log("From ", from);
+              // console.log("to", to);
+
+              console.log("resultStart", resultStart);
+              console.log("resultStart2", resultStart2);
+              // console.log("resultEnd", resultEnd);
+
+              // use or (||) operator
+              if (statusAvaliable === true) {
+                if (resultStart === true || resultStart2 === true) {
+                  statusAvaliable = false;
+                }
+              }
+
+              i++;
+            } while (i < dataHasil.length);
+
+            if (statusAvaliable === true) {
+              Toast([
+                {
+                  icon: "success",
+                  title: `Ruangan ${room} Pada tanggal ${dateStart} - ${dateEnd} tersedia`,
+                },
+              ]);
+            } else {
+              Toast([
+                {
+                  icon: "error",
+                  title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
+                },
+              ]);
+            }
           } else {
-            Toast([
-              {
-                icon: "error",
-                title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
-              },
-            ]);
+            console.log("Data tidak ditemukan");
           }
         });
     }
@@ -416,6 +443,7 @@ function PesanRuangan(props) {
                     className="form-control"
                     onChange={(e) => setRoom(e.target.value)}
                   >
+                    <option>ROOM 000</option>
                     <option>ROOM 001</option>
                     <option>ROOM 002</option>
                     <option>ROOM 003</option>
