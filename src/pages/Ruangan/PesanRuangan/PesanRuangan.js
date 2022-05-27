@@ -20,7 +20,7 @@ function PesanRuangan(props) {
 
   const [totalPayment, setTotalPayment] = useState(0);
 
-  const [periksa, serPeriksa] = useState(false);
+  const [periksa, setPeriksa] = useState();
 
   useEffect(() => {
     // window.$("#TanggalSewa").datetimepicker({
@@ -103,18 +103,25 @@ function PesanRuangan(props) {
       console.log("error");
     }
 
-    if (periksa === false) {
+    if (nameCostumer === "") {
       Toast([
         {
           icon: "error",
-          title: "From belum lengkap",
+          title: "Nama costumer tidak boleh kosong",
         },
       ]);
-    } else if (nameCostumer === "") {
+    } else if (tglMulai === "") {
       Toast([
         {
           icon: "error",
-          title: "From belum lengkap",
+          title: "Tanggal belum di tentukan",
+        },
+      ]);
+    } else if (periksa === false) {
+      Toast([
+        {
+          icon: "error",
+          title: "Anda belum memeriksa ketersediaan ruangan",
         },
       ]);
     } else {
@@ -313,6 +320,8 @@ function PesanRuangan(props) {
             } while (i < dataHasil.length);
 
             if (statusAvaliable === true) {
+              setPeriksa(true);
+
               Toast([
                 {
                   icon: "success",
@@ -320,6 +329,7 @@ function PesanRuangan(props) {
                 },
               ]);
             } else {
+              setPeriksa(false);
               Toast([
                 {
                   icon: "error",
@@ -329,6 +339,13 @@ function PesanRuangan(props) {
             }
           } else {
             console.log("Data tidak ditemukan");
+            setPeriksa(true);
+            Toast([
+              {
+                icon: "success",
+                title: `Ruangan ${room} tersedia`,
+              },
+            ]);
           }
         });
     }
@@ -475,6 +492,7 @@ function PesanRuangan(props) {
                       format={"dd-MM-y"}
                       onChange={(e) => {
                         setTglMulai(e);
+                        setPeriksa(false);
                         // console.log(e);
                       }}
                     />
