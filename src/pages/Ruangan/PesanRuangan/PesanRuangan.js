@@ -16,11 +16,14 @@ function PesanRuangan(props) {
 
   const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [tglMulai, setTglMulai] = useState("");
+  const [convertTglMulai, setConvertTglMulai] = useState("");
   const [tglSelesai, setTglSelesai] = useState("");
 
-  const [totalPayment, setTotalPayment] = useState(0);
-
   const [periksa, setPeriksa] = useState();
+
+  const [statusPembayaran, setStatusPembayaran] = useState("Active");
+
+  const [totalPayment, setTotalPayment] = useState(0);
 
   useEffect(() => {
     // window.$("#TanggalSewa").datetimepicker({
@@ -76,32 +79,35 @@ function PesanRuangan(props) {
   }, [isloaded, paket, totalPaket]);
 
   const handleSubmit = (e) => {
-    var StatusPembayaran;
+    // var StatusPembayaran;
     e.preventDefault();
 
-    // console.log(e);
+    console.log(e);
 
     console.log("Order Id: ", e.target[0].value);
-    console.log("Nama Pemesan: ", e.target[1].value);
-    console.log("Ruangan: ", e.target[2].value);
-    console.log("Tanggal Sewa: ", e.target[3].value);
-    console.log("Tanggal Selesai: ", e.target[4].value);
+    console.log("Paket: ", paket);
+    // console.log("Jumlah Durasi: ", e.target[2].value);
+    console.log("Nama Costumer: ", e.target[3].value);
+    console.log("Ruangan: ", e.target[4].value);
+    console.log("Tanggal Mulai: ", convertTglMulai);
+    console.log("Tanggal Selesai: ", tglSelesai);
+    console.log("StatusPembayaran: ", statusPembayaran);
 
-    if (e.target[5].checked === true) {
-      StatusPembayaran = "Active";
-      console.log("Active");
-    } else if (e.target[6].checked === true) {
-      StatusPembayaran = "Menunggu Pembayaran";
-      console.log("Menunggu Pembayaran");
-    } else if (e.target[7].checked === true) {
-      StatusPembayaran = "Selesai";
-      console.log("Selesai");
-    } else if (e.target[8].checked === true) {
-      StatusPembayaran = "Batal";
-      console.log("Batal");
-    } else {
-      console.log("error");
-    }
+    // if (e.target[58].checked === true) {
+    //   StatusPembayaran = "Active";
+    //   console.log("Active");
+    // } else if (e.target[59].checked === true) {
+    //   StatusPembayaran = "Menunggu Pembayaran";
+    //   console.log("Menunggu Pembayaran");
+    // } else if (e.target[60].checked === true) {
+    //   StatusPembayaran = "Selesai";
+    //   console.log("Selesai");
+    // } else if (e.target[61].checked === true) {
+    //   StatusPembayaran = "Batal";
+    //   console.log("Batal");
+    // } else {
+    //   console.log("error");
+    // }
 
     if (nameCostumer === "") {
       Toast([
@@ -131,11 +137,12 @@ function PesanRuangan(props) {
         .push(
           {
             OrderId: e.target[0].value,
-            NamaPemesan: e.target[1].value,
-            Ruangan: e.target[2].value,
-            TanggalSewa: e.target[3].value,
-            TanggalSelesai: e.target[4].value,
-            Status: StatusPembayaran,
+            Paket: paket,
+            NamaPemesan: e.target[3].value,
+            Ruangan: e.target[4].value,
+            TanggalSewa: convertTglMulai,
+            TanggalSelesai: tglSelesai,
+            Status: statusPembayaran,
             BuktiPembayaran: "",
           },
           (error) => {
@@ -157,16 +164,17 @@ function PesanRuangan(props) {
               console.log(
                 "send value: ",
                 e.target[0].value,
-                e.target[1].value,
-                e.target[2].value,
+                paket,
                 e.target[3].value,
                 e.target[4].value,
-                StatusPembayaran
+                convertTglMulai,
+                tglSelesai,
+                statusPembayaran
               );
 
               window.$("#modal-lg").modal("hide");
 
-              // window.location.reload();
+              window.location.reload();
 
               // window.$(this.modal).modal("hide");
               // window.$(this.modal).on("hidden.bs.modal");
@@ -240,6 +248,7 @@ function PesanRuangan(props) {
               tglMulai.getFullYear();
 
             console.log("StartDate ", StartDate);
+            setConvertTglMulai(StartDate);
 
             //////////////////// Formating Finish Date ////////////////////
             // var IncreseDate = new Date(
@@ -268,6 +277,7 @@ function PesanRuangan(props) {
               DateAfterIncresed.getFullYear();
 
             console.log("FinishDay ", FinishDay);
+            setTglSelesai(FinishDay);
 
             //////////////////// Check Avaliable Start Date ////////////////////
             let i = 0;
@@ -339,6 +349,51 @@ function PesanRuangan(props) {
             }
           } else {
             console.log("Data tidak ditemukan");
+
+            //////////////////// Formating Start Date ////////////////////
+            console.log("tglMulai ", tglMulai);
+            // let startDay = tglMulai;
+
+            let StartDate =
+              tglMulai.getDate() +
+              "-" +
+              parseInt(tglMulai.getMonth() + 1) +
+              "-" +
+              tglMulai.getFullYear();
+
+            console.log("StartDate ", StartDate);
+            setConvertTglMulai(StartDate);
+
+            //////////////////// Formating Finish Date ////////////////////
+            // var IncreseDate = new Date(
+            //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
+            // );
+
+            var IncreseDate = new Date(tglMulai);
+
+            if (
+              paket === "PERJAM" ||
+              paket === "HARIAN" ||
+              paket === "HARIAN(PELAJAR)"
+            ) {
+              console.log("Perjam/Perhari");
+            } else {
+              IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
+            }
+
+            let DateAfterIncresed = IncreseDate;
+
+            let FinishDay =
+              DateAfterIncresed.getDate() +
+              "-" +
+              parseInt(DateAfterIncresed.getMonth() + 1) +
+              "-" +
+              DateAfterIncresed.getFullYear();
+
+            console.log("FinishDay ", FinishDay);
+            setTglSelesai(FinishDay);
+
+            //////////////////// Toast ////////////////////
             setPeriksa(true);
             Toast([
               {
@@ -493,7 +548,7 @@ function PesanRuangan(props) {
                       onChange={(e) => {
                         setTglMulai(e);
                         setPeriksa(false);
-                        // console.log(e);
+                        console.log(e);
                       }}
                     />
                     <div className="input-group-append">
@@ -560,6 +615,7 @@ function PesanRuangan(props) {
                       type="radio"
                       id="radioPrimary1"
                       name="r1"
+                      onClick={() => console.log("Active")}
                       defaultChecked
                     />
                     <label htmlFor="radioPrimary1">Active</label>
