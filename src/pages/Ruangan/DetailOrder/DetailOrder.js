@@ -173,11 +173,12 @@ function DetailOrder(props) {
         setStyleButton("btn-warning");
       }
 
-      var CurTglSewa = data.TanggalSewa;
-      var d1 = CurTglSewa.split("-");
+      var CurrentDateOrder = data.TanggalSewa;
+      var d1 = CurrentDateOrder.split("-");
       var resultConvert = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
 
       console.log(resultConvert);
+      setConvert2TglMulai(resultConvert);
 
       props.disableModeEdit();
     } else {
@@ -685,7 +686,7 @@ function DetailOrder(props) {
                   >
                     <DateTimePicker
                       className="form-control "
-                      // value={valDetailOrder.tglSewa}
+                      value={convert2TglMulai}
                       format={"dd-MM-y"}
                       onChange={(e) => {
                         // setTglMulai(e);
