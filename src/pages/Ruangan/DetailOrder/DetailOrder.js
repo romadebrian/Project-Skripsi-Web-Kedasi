@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 // import Swal from "sweetalert2";
 import firebase, { storage } from "../../../config/firebase";
+import DateTimePicker from "react-datetime-picker";
 
 import Toast from "../../../component/toast/Toast";
 
 function DetailOrder(props) {
+  const [paket, setPaket] = useState("");
+  const [totalPaket, setTotalPaket] = useState(1);
+
+  // const [nameCostumer, setNameCostumer] = useState("");
+
+  const [periksa, setPeriksa] = useState();
+
   const [isloaded, setLoaded] = useState(false);
   const [fileFoto, setFileFoto] = useState("");
   const [fotoName, setFotoName] = useState("");
@@ -21,6 +29,9 @@ function DetailOrder(props) {
     statPembayaran: "",
     BuktiPembayaran: "",
   });
+
+  const [convertTglMulai, setConvertTglMulai] = useState("");
+  const [convert2TglMulai, setConvert2TglMulai] = useState("");
 
   // console.log("data update", valDetailOrder);
 
@@ -49,8 +60,8 @@ function DetailOrder(props) {
 
     console.log(PrimaryKey);
 
-    console.log("Order Id: ", e.target[0].value);
-    console.log("Nama Pemesan: ", e.target[1].value);
+    console.log("Order Id: ", valDetailOrder.idOrder);
+    console.log("Nama Pemesan: ", valDetailOrder.pemesan);
     console.log("Ruangan: ", e.target[2].value);
     console.log("Tanggal Sewa: ", e.target[3].value);
     console.log("Tanggal Selesai: ", e.target[4].value);
@@ -71,48 +82,48 @@ function DetailOrder(props) {
       console.log("error");
     }
 
-    firebase
-      .database()
-      .ref("order/" + PrimaryKey)
-      .set(
-        {
-          OrderId: e.target[0].value,
-          NamaPemesan: e.target[1].value,
-          Ruangan: e.target[2].value,
-          TanggalSewa: e.target[3].value,
-          TanggalSelesai: e.target[4].value,
-          Status: StatusPembayaran,
-          BuktiPembayaran: valDetailOrder.BuktiPembayaran,
-        },
-        (error) => {
-          if (error) {
-            // The write failed...
-            alert("Gagal Simpan");
-          } else {
-            // Data saved successfully!
-            // alert("Order Berhasil Di Simpan");
+    // firebase
+    //   .database()
+    //   .ref("order/" + PrimaryKey)
+    //   .set(
+    //     {
+    //       OrderId: e.target[0].value,
+    //       NamaPemesan: e.target[1].value,
+    //       Ruangan: e.target[2].value,
+    //       TanggalSewa: e.target[3].value,
+    //       TanggalSelesai: e.target[4].value,
+    //       Status: StatusPembayaran,
+    //       BuktiPembayaran: valDetailOrder.BuktiPembayaran,
+    //     },
+    //     (error) => {
+    //       if (error) {
+    //         // The write failed...
+    //         alert("Gagal Simpan");
+    //       } else {
+    //         // Data saved successfully!
+    //         // alert("Order Berhasil Di Simpan");
 
-            Toast([
-              {
-                icon: "success",
-                title: "Perbaruan Pemesanan Ruangan Berhasil",
-              },
-            ]);
+    //         Toast([
+    //           {
+    //             icon: "success",
+    //             title: "Perbaruan Pemesanan Ruangan Berhasil",
+    //           },
+    //         ]);
 
-            console.log(
-              "send value: ",
-              e.target[0].value,
-              e.target[1].value,
-              e.target[2].value,
-              e.target[3].value,
-              e.target[4].value,
-              StatusPembayaran,
-              valDetailOrder.BuktiPembayaran
-            );
-            // window.location.reload();
-          }
-        }
-      );
+    //         console.log(
+    //           "send value: ",
+    //           e.target[0].value,
+    //           e.target[1].value,
+    //           e.target[2].value,
+    //           e.target[3].value,
+    //           e.target[4].value,
+    //           StatusPembayaran,
+    //           valDetailOrder.BuktiPembayaran
+    //         );
+    //         // window.location.reload();
+    //       }
+    //     }
+    //   );
 
     window.$("#form-edit").modal("hide");
   };
@@ -162,6 +173,12 @@ function DetailOrder(props) {
         setStyleButton("btn-warning");
       }
 
+      var CurTglSewa = data.TanggalSewa;
+      var d1 = CurTglSewa.split("-");
+      var resultConvert = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+
+      console.log(resultConvert);
+
       props.disableModeEdit();
     } else {
       return null;
@@ -199,6 +216,235 @@ function DetailOrder(props) {
     }
 
     // console.log(e);
+  };
+
+  const checkDateAvaliable = (e) => {
+    // console.log(e.nativeEvent.path);
+    // console.log(e.nativeEvent.path[5][4].value);
+    // console.log(e.target.parentNode.firstChild.offsetParent);
+
+    console.log(paket);
+    console.log(totalPaket);
+    console.log(valDetailOrder.ruangannya);
+    console.log(valDetailOrder.tglSewa);
+
+    if (
+      paket === "" ||
+      paket === "--- Casual Coworking ---" ||
+      paket === "--- Monthly Coworking ---"
+    ) {
+      Toast([
+        {
+          icon: "error",
+          title: "Paket pesanan belum di pilih",
+        },
+      ]);
+    }
+    // else if (tglMulai === "") {
+    //   Toast([
+    //     {
+    //       icon: "error",
+    //       title: "Tanggal sewa tidak boleh kosong",
+    //     },
+    //   ]);
+    // }
+    else {
+      //////////////////// Colect data from firebase ////////////////////
+      return firebase
+        .database()
+        .ref("/order/")
+        .orderByChild("Ruangan")
+        .equalTo(valDetailOrder.ruangannya)
+        .on("value", (snapshot) => {
+          const dataHasil = [];
+          if (snapshot.exists()) {
+            Object.keys(snapshot.val()).map((key) => {
+              dataHasil.push({
+                id: key,
+                data: snapshot.val()[key],
+              });
+              return dataHasil;
+            });
+
+            console.log(dataHasil);
+            console.log(dataHasil[0].data.TanggalSewa);
+            console.log(dataHasil[0].data.TanggalSelesai);
+
+            //////////////////// Formating Start Date ////////////////////
+            console.log("tglMulai ", valDetailOrder.tglSewa);
+            let startDay = valDetailOrder.tglSewa;
+
+            let StartDate =
+              startDay.getDate() +
+              "-" +
+              parseInt(startDay.getMonth() + 1) +
+              "-" +
+              startDay.getFullYear();
+
+            console.log("StartDate ", StartDate);
+            setConvertTglMulai(StartDate);
+
+            //////////////////// Formating Finish Date ////////////////////
+            // var IncreseDate = new Date(
+            //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
+            // );
+
+            var IncreseDate = new Date(valDetailOrder.tglSewa);
+
+            if (
+              paket === "PERJAM" ||
+              paket === "HARIAN" ||
+              paket === "HARIAN(PELAJAR)"
+            ) {
+              console.log("Perjam/Perhari");
+            } else {
+              IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
+            }
+
+            let DateAfterIncresed = IncreseDate;
+
+            let FinishDay =
+              DateAfterIncresed.getDate() +
+              "-" +
+              parseInt(DateAfterIncresed.getMonth() + 1) +
+              "-" +
+              DateAfterIncresed.getFullYear();
+
+            console.log("FinishDay ", FinishDay);
+            // setTglSelesai(FinishDay);
+            setValDetailOrder({
+              ...valDetailOrder,
+              tglSelesai: FinishDay,
+            });
+
+            //////////////////// Check Avaliable Start Date ////////////////////
+            let i = 0;
+
+            var statusAvaliable = true;
+
+            do {
+              var dateFrom = dataHasil[i].data.TanggalSewa;
+              var dateTo = dataHasil[i].data.TanggalSelesai;
+              var dateStart = StartDate;
+              var dateEnd = FinishDay;
+
+              var d1 = dateFrom.split("-");
+              var d2 = dateTo.split("-");
+              var c1 = dateStart.split("-");
+              var c2 = dateEnd.split("-");
+
+              // console.log(d1);
+              // console.log(d2);
+              // console.log(c);
+
+              var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+              var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
+              var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
+              var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
+
+              var resultStart = check1 >= from && check1 <= to;
+              var resultStart2 = from >= check1 && from <= check2;
+
+              // var resultEnd = check2 >= from && check2 <= to;
+              // var resultEnd = check2 >= from && check2 <= to;
+
+              // console.log("Start", check1);
+              // console.log("End", check2);
+              // console.log("From ", from);
+              // console.log("to", to);
+
+              console.log("resultStart", resultStart);
+              console.log("resultStart2", resultStart2);
+              // console.log("resultEnd", resultEnd);
+
+              // use or (||) operator
+              if (statusAvaliable === true) {
+                if (resultStart === true || resultStart2 === true) {
+                  statusAvaliable = false;
+                }
+              }
+
+              i++;
+            } while (i < dataHasil.length);
+
+            if (statusAvaliable === true) {
+              setPeriksa(true);
+
+              Toast([
+                {
+                  icon: "success",
+                  title: `Ruangan ${valDetailOrder.ruangannya} Pada tanggal ${dateStart} - ${dateEnd} tersedia`,
+                },
+              ]);
+            } else {
+              setPeriksa(false);
+              Toast([
+                {
+                  icon: "error",
+                  title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
+                },
+              ]);
+            }
+          } else {
+            console.log("Data tidak ditemukan");
+
+            //////////////////// Formating Start Date ////////////////////
+            console.log("tglMulai ", valDetailOrder.tglSewa);
+            let startDay = valDetailOrder.tglSewa;
+
+            let StartDate =
+              startDay.getDate() +
+              "-" +
+              parseInt(startDay.getMonth() + 1) +
+              "-" +
+              startDay.getFullYear();
+
+            console.log("StartDate ", StartDate);
+            setConvertTglMulai(StartDate);
+
+            //////////////////// Formating Finish Date ////////////////////
+            // var IncreseDate = new Date(
+            //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
+            // );
+
+            var IncreseDate2 = new Date(valDetailOrder.tglSewa);
+
+            if (
+              paket === "PERJAM" ||
+              paket === "HARIAN" ||
+              paket === "HARIAN(PELAJAR)"
+            ) {
+              console.log("Perjam/Perhari");
+            } else {
+              IncreseDate2.setMonth(IncreseDate2.getMonth() + totalPaket);
+            }
+
+            let DateAfterIncresed = IncreseDate2;
+
+            let FinishDay =
+              DateAfterIncresed.getDate() +
+              "-" +
+              parseInt(DateAfterIncresed.getMonth() + 1) +
+              "-" +
+              DateAfterIncresed.getFullYear();
+
+            console.log("FinishDay ", FinishDay);
+            setValDetailOrder({
+              ...valDetailOrder,
+              tglSelesai: FinishDay,
+            });
+
+            //////////////////// Toast ////////////////////
+            setPeriksa(true);
+            Toast([
+              {
+                icon: "success",
+                title: `Ruangan ${valDetailOrder.ruangannya} tersedia`,
+              },
+            ]);
+          }
+        });
+    }
   };
 
   const fileSelectHandler = (event) => {
@@ -363,6 +609,39 @@ function DetailOrder(props) {
                     readOnly
                   />
                 </div>
+
+                <div className="form-group">
+                  <label>Paket</label>
+                  <div className="input-group" id="Paket">
+                    <select
+                      className="form-control"
+                      onChange={(e) => setPaket(e.target.value)}
+                    >
+                      <option>--- Casual Coworking ---</option>
+                      <option>PERJAM</option>
+                      <option>HARIAN</option>
+                      <option>HARIAN(PELAJAR)</option>
+                      <option>--- Monthly Coworking ---</option>
+                      <option>BULANAN 25JAM</option>
+                      <option>BULANAN 50JAM</option>
+                      <option>BULANAN 100JAM</option>
+                      <option>BULANAN TANPA BATAS</option>
+                    </select>
+
+                    <div className="input-group-append">
+                      <input
+                        style={{ width: "50px", paddingLeft: "10px" }}
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        min="1"
+                        defaultValue={totalPaket}
+                        onChange={(e) => setTotalPaket(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="form-group">
                   <label>Nama Pemesan</label>
                   <input
@@ -371,9 +650,15 @@ function DetailOrder(props) {
                     id="NamaPemesan"
                     placeholder="Nama Panjang"
                     defaultValue={valDetailOrder.pemesan}
-                    onChange={(e) => handleChange(e)}
+                    onChange={(e) =>
+                      setValDetailOrder({
+                        ...valDetailOrder,
+                        pemesan: e.target.value,
+                      })
+                    }
                   />
                 </div>
+
                 <div className="form-group">
                   <label>Ruangan</label>
                   <select
@@ -382,6 +667,7 @@ function DetailOrder(props) {
                     value={valDetailOrder.ruangannya}
                     onChange={(e) => handleChange(e)}
                   >
+                    <option>ROOM 000</option>
                     <option>ROOM 001</option>
                     <option>ROOM 002</option>
                     <option>ROOM 003</option>
@@ -394,48 +680,29 @@ function DetailOrder(props) {
                   <label>Tanggal Sewa:</label>
                   <div
                     className="input-group date"
-                    id="EditTanggalSewa"
+                    id="TanggalSewa"
                     data-target-input="nearest"
                   >
-                    <input
-                      type="text"
-                      className="form-control datetimepicker-input"
-                      data-target="#EditTanggalSewa"
-                      defaultValue={valDetailOrder.tglSewa}
+                    <DateTimePicker
+                      className="form-control "
+                      // value={valDetailOrder.tglSewa}
+                      format={"dd-MM-y"}
+                      onChange={(e) => {
+                        // setTglMulai(e);
+                        setValDetailOrder({
+                          ...valDetailOrder,
+                          tglSewa: e,
+                        });
+                        setPeriksa(false);
+                        console.log(e);
+                      }}
                     />
-                    <div
-                      className="input-group-append"
-                      data-target="#EditTanggalSewa"
-                      data-toggle="datetimepicker"
-                    >
-                      <div className="input-group-text">
-                        <i className="fa fa-calendar" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Tanggal Selesai:</label>
-                  <div
-                    className="input-group date"
-                    id="EditTanggalSelesai"
-                    data-target-input="nearest"
-                  >
-                    <input
-                      type="text"
-                      className="form-control datetimepicker-input"
-                      data-target="#EditTanggalSelesai"
-                      defaultValue={valDetailOrder.tglSelesai}
-                      onChange={(e) => console.log(e.target.value)}
-                    />
-                    <div
-                      className="input-group-append"
-                      data-target="#EditTanggalSelesai"
-                      data-toggle="datetimepicker"
-                    >
-                      <div className="input-group-text">
-                        <i className="fa fa-calendar" />
+                    <div className="input-group-append">
+                      <div
+                        className="input-group-text"
+                        onClick={(e) => checkDateAvaliable(e)}
+                      >
+                        <i className="fa fa-search" />
                       </div>
                     </div>
                   </div>
