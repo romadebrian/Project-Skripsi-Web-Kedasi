@@ -22,6 +22,7 @@ function DetailOrder(props) {
 
   const [valDetailOrder, setValDetailOrder] = useState({
     idOrder: "",
+    Paket: "",
     pemesan: "",
     ruangannya: "",
     tglSewa: "",
@@ -155,6 +156,7 @@ function DetailOrder(props) {
 
       setValDetailOrder({
         idOrder: data.OrderId,
+        Paket: data.Paket,
         pemesan: data.NamaPemesan,
         ruangannya: data.Ruangan,
         tglSewa: data.TanggalSewa,
@@ -177,7 +179,7 @@ function DetailOrder(props) {
       var d1 = CurrentDateOrder.split("-");
       var resultConvert = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
 
-      console.log(resultConvert);
+      // console.log(resultConvert);
       setConvert2TglMulai(resultConvert);
 
       props.disableModeEdit();
@@ -616,6 +618,7 @@ function DetailOrder(props) {
                   <div className="input-group" id="Paket">
                     <select
                       className="form-control"
+                      value={valDetailOrder.Paket}
                       onChange={(e) => setPaket(e.target.value)}
                     >
                       <option>--- Casual Coworking ---</option>
