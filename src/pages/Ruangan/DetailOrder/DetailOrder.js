@@ -6,7 +6,6 @@ import DateTimePicker from "react-datetime-picker";
 import Toast from "../../../component/toast/Toast";
 
 function DetailOrder(props) {
-  const [paket, setPaket] = useState("");
   const [totalPaket, setTotalPaket] = useState(1);
 
   // const [nameCostumer, setNameCostumer] = useState("");
@@ -62,69 +61,73 @@ function DetailOrder(props) {
     console.log(PrimaryKey);
 
     console.log("Order Id: ", valDetailOrder.idOrder);
+    console.log("Paket: ", valDetailOrder.Paket);
+    console.log("Jumlah Paket", e.target[2].value);
     console.log("Nama Pemesan: ", valDetailOrder.pemesan);
-    console.log("Ruangan: ", e.target[2].value);
-    console.log("Tanggal Sewa: ", e.target[3].value);
-    console.log("Tanggal Selesai: ", e.target[4].value);
+    console.log("Ruangan: ", valDetailOrder.ruangannya);
+    console.log("Tanggal Sewa: ", valDetailOrder.tglSewa);
+    console.log("Tanggal Selesai: ", valDetailOrder.tglSelesai);
+    console.log("Status Pembayaran", valDetailOrder.statPembayaran);
 
-    if (e.target[5].checked === true) {
-      StatusPembayaran = "Active";
-      console.log("Active");
-    } else if (e.target[6].checked === true) {
-      StatusPembayaran = "Menunggu Pembayaran";
-      console.log("Menunggu Pembayaran");
-    } else if (e.target[7].checked === true) {
-      StatusPembayaran = "Selesai";
-      console.log("Selesai");
-    } else if (e.target[8].checked === true) {
-      StatusPembayaran = "Batal";
-      console.log("Batal");
-    } else {
-      console.log("error");
-    }
+    // if (e.target[5].checked === true) {
+    //   StatusPembayaran = "Active";
+    //   console.log("Active");
+    // } else if (e.target[6].checked === true) {
+    //   StatusPembayaran = "Menunggu Pembayaran";
+    //   console.log("Menunggu Pembayaran");
+    // } else if (e.target[7].checked === true) {
+    //   StatusPembayaran = "Selesai";
+    //   console.log("Selesai");
+    // } else if (e.target[8].checked === true) {
+    //   StatusPembayaran = "Batal";
+    //   console.log("Batal");
+    // } else {
+    //   console.log("error");
+    // }
 
-    // firebase
-    //   .database()
-    //   .ref("order/" + PrimaryKey)
-    //   .set(
-    //     {
-    //       OrderId: e.target[0].value,
-    //       NamaPemesan: e.target[1].value,
-    //       Ruangan: e.target[2].value,
-    //       TanggalSewa: e.target[3].value,
-    //       TanggalSelesai: e.target[4].value,
-    //       Status: StatusPembayaran,
-    //       BuktiPembayaran: valDetailOrder.BuktiPembayaran,
-    //     },
-    //     (error) => {
-    //       if (error) {
-    //         // The write failed...
-    //         alert("Gagal Simpan");
-    //       } else {
-    //         // Data saved successfully!
-    //         // alert("Order Berhasil Di Simpan");
+    firebase
+      .database()
+      .ref("order/" + PrimaryKey)
+      .set(
+        {
+          OrderId: valDetailOrder.idOrder,
+          Paket: valDetailOrder.Paket,
+          NamaPemesan: valDetailOrder.pemesan,
+          Ruangan: valDetailOrder.ruangannya,
+          TanggalSewa: valDetailOrder.tglSewa,
+          TanggalSelesai: valDetailOrder.tglSelesai,
+          Status: valDetailOrder.statPembayaran,
+          BuktiPembayaran: valDetailOrder.BuktiPembayaran,
+        },
+        (error) => {
+          if (error) {
+            // The write failed...
+            alert("Gagal Simpan");
+          } else {
+            // Data saved successfully!
+            // alert("Order Berhasil Di Simpan");
 
-    //         Toast([
-    //           {
-    //             icon: "success",
-    //             title: "Perbaruan Pemesanan Ruangan Berhasil",
-    //           },
-    //         ]);
+            Toast([
+              {
+                icon: "success",
+                title: "Perbaruan Pemesanan Ruangan Berhasil",
+              },
+            ]);
 
-    //         console.log(
-    //           "send value: ",
-    //           e.target[0].value,
-    //           e.target[1].value,
-    //           e.target[2].value,
-    //           e.target[3].value,
-    //           e.target[4].value,
-    //           StatusPembayaran,
-    //           valDetailOrder.BuktiPembayaran
-    //         );
-    //         // window.location.reload();
-    //       }
-    //     }
-    //   );
+            console.log(
+              "send value: ",
+              e.target[0].value,
+              e.target[1].value,
+              e.target[2].value,
+              e.target[3].value,
+              e.target[4].value,
+              StatusPembayaran,
+              valDetailOrder.BuktiPembayaran
+            );
+            // window.location.reload();
+          }
+        }
+      );
 
     window.$("#form-edit").modal("hide");
   };
@@ -180,7 +183,7 @@ function DetailOrder(props) {
       var resultConvert = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
 
       // console.log(resultConvert);
-      setConvert2TglMulai(resultConvert);
+      setConvertTglMulai(resultConvert);
 
       props.disableModeEdit();
     } else {
@@ -225,6 +228,8 @@ function DetailOrder(props) {
     // console.log(e.nativeEvent.path);
     // console.log(e.nativeEvent.path[5][4].value);
     // console.log(e.target.parentNode.firstChild.offsetParent);
+
+    var paket = valDetailOrder.Paket;
 
     console.log(paket);
     console.log(totalPaket);
@@ -274,8 +279,8 @@ function DetailOrder(props) {
             console.log(dataHasil[0].data.TanggalSelesai);
 
             //////////////////// Formating Start Date ////////////////////
-            console.log("tglMulai ", valDetailOrder.tglSewa);
-            let startDay = valDetailOrder.tglSewa;
+            console.log("tglMulai ", convertTglMulai);
+            let startDay = convertTglMulai;
 
             let StartDate =
               startDay.getDate() +
@@ -285,7 +290,11 @@ function DetailOrder(props) {
               startDay.getFullYear();
 
             console.log("StartDate ", StartDate);
-            setConvertTglMulai(StartDate);
+            // setConvertTglMulai(StartDate);
+            setValDetailOrder({
+              ...valDetailOrder,
+              tglSewa: StartDate,
+            });
 
             //////////////////// Formating Finish Date ////////////////////
             // var IncreseDate = new Date(
@@ -392,8 +401,8 @@ function DetailOrder(props) {
             console.log("Data tidak ditemukan");
 
             //////////////////// Formating Start Date ////////////////////
-            console.log("tglMulai ", valDetailOrder.tglSewa);
-            let startDay = valDetailOrder.tglSewa;
+            console.log("tglMulai ", convertTglMulai);
+            let startDay = convertTglMulai;
 
             let StartDate =
               startDay.getDate() +
@@ -403,7 +412,11 @@ function DetailOrder(props) {
               startDay.getFullYear();
 
             console.log("StartDate ", StartDate);
-            setConvertTglMulai(StartDate);
+            // setConvertTglMulai(StartDate);
+            setValDetailOrder({
+              ...valDetailOrder,
+              tglSewa: StartDate,
+            });
 
             //////////////////// Formating Finish Date ////////////////////
             // var IncreseDate = new Date(
@@ -411,6 +424,8 @@ function DetailOrder(props) {
             // );
 
             var IncreseDate2 = new Date(valDetailOrder.tglSewa);
+
+            // var paket = valDetailOrder.Paket;
 
             if (
               paket === "PERJAM" ||
@@ -619,7 +634,12 @@ function DetailOrder(props) {
                     <select
                       className="form-control"
                       value={valDetailOrder.Paket}
-                      onChange={(e) => setPaket(e.target.value)}
+                      onChange={(e) =>
+                        setValDetailOrder({
+                          ...valDetailOrder,
+                          Paket: e.target.value,
+                        })
+                      }
                     >
                       <option>--- Casual Coworking ---</option>
                       <option>PERJAM</option>
@@ -689,7 +709,7 @@ function DetailOrder(props) {
                   >
                     <DateTimePicker
                       className="form-control "
-                      value={convert2TglMulai}
+                      value={convertTglMulai}
                       format={"dd-MM-y"}
                       onChange={(e) => {
                         // setTglMulai(e);
