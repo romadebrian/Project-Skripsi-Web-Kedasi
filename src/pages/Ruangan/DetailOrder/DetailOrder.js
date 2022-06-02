@@ -10,7 +10,7 @@ function DetailOrder(props) {
 
   // const [nameCostumer, setNameCostumer] = useState("");
 
-  const [periksa, setPeriksa] = useState();
+  const [periksa, setPeriksa] = useState(true);
 
   const [isloaded, setLoaded] = useState(false);
   const [fileFoto, setFileFoto] = useState("");
@@ -85,51 +85,76 @@ function DetailOrder(props) {
     //   console.log("error");
     // }
 
-    firebase
-      .database()
-      .ref("order/" + PrimaryKey)
-      .set(
+    if (valDetailOrder.pemesan === "") {
+      Toast([
         {
-          OrderId: valDetailOrder.idOrder,
-          Paket: valDetailOrder.Paket,
-          NamaPemesan: valDetailOrder.pemesan,
-          Ruangan: valDetailOrder.ruangannya,
-          TanggalSewa: valDetailOrder.tglSewa,
-          TanggalSelesai: valDetailOrder.tglSelesai,
-          Status: valDetailOrder.statPembayaran,
-          BuktiPembayaran: valDetailOrder.BuktiPembayaran,
+          icon: "error",
+          title: "Nama pemesan tidak boleh kosong",
         },
-        (error) => {
-          if (error) {
-            // The write failed...
-            alert("Gagal Simpan");
-          } else {
-            // Data saved successfully!
-            // alert("Order Berhasil Di Simpan");
+      ]);
+    } else if (periksa === false) {
+      Toast([
+        {
+          icon: "error",
+          title: "Anda harus memeriksa ketersediaan ruangan kembali",
+        },
+      ]);
+    } else {
+      Toast([
+        {
+          icon: "success",
+          title: "berhasil",
+        },
+      ]);
 
-            Toast([
-              {
-                icon: "success",
-                title: "Perbaruan Pemesanan Ruangan Berhasil",
-              },
-            ]);
+      // firebase
+      //   .database()
+      //   .ref("order/" + PrimaryKey)
+      //   .set(
+      //     {
+      //       OrderId: valDetailOrder.idOrder,
+      //       Paket: valDetailOrder.Paket,
+      //       NamaPemesan: valDetailOrder.pemesan,
+      //       Ruangan: valDetailOrder.ruangannya,
+      //       TanggalSewa: valDetailOrder.tglSewa,
+      //       TanggalSelesai: valDetailOrder.tglSelesai,
+      //       Status: valDetailOrder.statPembayaran,
+      //       BuktiPembayaran: valDetailOrder.BuktiPembayaran,
+      //     },
+      //     (error) => {
+      //       if (error) {
+      //         // The write failed...
+      //         alert("Gagal Simpan");
+      //       } else {
+      //         // Data saved successfully!
+      //         // alert("Order Berhasil Di Simpan");
 
-            console.log(
-              "send value: ",
-              e.target[0].value,
-              e.target[1].value,
-              e.target[2].value,
-              e.target[3].value,
-              e.target[4].value,
-              StatusPembayaran,
-              valDetailOrder.BuktiPembayaran
-            );
-            // window.location.reload();
-          }
-        }
-      );
+      //         Toast([
+      //           {
+      //             icon: "success",
+      //             title: "Perbaruan Pemesanan Ruangan Berhasil",
+      //           },
+      //         ]);
 
-    window.$("#form-edit").modal("hide");
+      //         console.log(
+      //           "send value: ",
+      //           e.target[0].value,
+      //           e.target[1].value,
+      //           e.target[2].value,
+      //           e.target[3].value,
+      //           e.target[4].value,
+      //           StatusPembayaran,
+      //           valDetailOrder.BuktiPembayaran
+      //         );
+      //         // window.location.reload();
+      //       }
+      //     }
+      //   );
+
+      window.$("#form-edit").modal("hide");
+
+      window.location.reload();
+    }
   };
 
   const getPrimaryKey = () => {
@@ -301,7 +326,7 @@ function DetailOrder(props) {
             //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
             // );
 
-            var IncreseDate = new Date(valDetailOrder.tglSewa);
+            var IncreseDate = new Date(convertTglMulai);
 
             if (
               paket === "PERJAM" ||
@@ -634,12 +659,13 @@ function DetailOrder(props) {
                     <select
                       className="form-control"
                       value={valDetailOrder.Paket}
-                      onChange={(e) =>
+                      onChange={(e) => {
                         setValDetailOrder({
                           ...valDetailOrder,
                           Paket: e.target.value,
-                        })
-                      }
+                        });
+                        setPeriksa(false);
+                      }}
                     >
                       <option>--- Casual Coworking ---</option>
                       <option>PERJAM</option>
@@ -660,7 +686,10 @@ function DetailOrder(props) {
                         name="quantity"
                         min="1"
                         defaultValue={totalPaket}
-                        onChange={(e) => setTotalPaket(e.target.value)}
+                        onChange={(e) => {
+                          setTotalPaket(e.target.value);
+                          setPeriksa(false);
+                        }}
                       />
                     </div>
                   </div>
@@ -689,7 +718,10 @@ function DetailOrder(props) {
                     className="form-control"
                     id="Frm_Ruangan"
                     value={valDetailOrder.ruangannya}
-                    onChange={(e) => handleChange(e)}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setPeriksa(false);
+                    }}
                   >
                     <option>ROOM 000</option>
                     <option>ROOM 001</option>
