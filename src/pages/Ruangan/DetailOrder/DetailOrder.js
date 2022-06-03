@@ -31,7 +31,7 @@ function DetailOrder(props) {
   });
 
   const [convertTglMulai, setConvertTglMulai] = useState("");
-  const [convert2TglMulai, setConvert2TglMulai] = useState("");
+  const [unConvert, setUnConvert] = useState("");
 
   // console.log("data update", valDetailOrder);
 
@@ -208,7 +208,7 @@ function DetailOrder(props) {
       var resultConvert = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
 
       // console.log(resultConvert);
-      setConvertTglMulai(resultConvert);
+      setUnConvert(resultConvert);
 
       props.disableModeEdit();
     } else {
@@ -256,10 +256,10 @@ function DetailOrder(props) {
 
     var paket = valDetailOrder.Paket;
 
-    console.log(paket);
-    console.log(totalPaket);
-    console.log(valDetailOrder.ruangannya);
-    console.log(valDetailOrder.tglSewa);
+    console.log("paket", paket);
+    console.log("total paket", totalPaket);
+    console.log("ruanggannya", valDetailOrder.ruangannya);
+    console.log("tgl sewa", unConvert);
 
     if (
       paket === "" ||
@@ -316,8 +316,8 @@ function DetailOrder(props) {
             console.log(dataHasil[0].data.TanggalSelesai);
 
             //////////////////// Formating Start Date ////////////////////
-            console.log("tglMulai ", convertTglMulai);
-            let startDay = convertTglMulai;
+            console.log("tglMulai ", unConvert);
+            let startDay = unConvert;
 
             let StartDate =
               startDay.getDate() +
@@ -644,6 +644,8 @@ function DetailOrder(props) {
       });
   };
 
+  const convertTanggal = (val) => {};
+
   return (
     <div
       className="detailorder modal fade "
@@ -759,16 +761,15 @@ function DetailOrder(props) {
                   >
                     <DateTimePicker
                       className="form-control "
-                      value={convertTglMulai}
+                      value={unConvert}
                       format={"dd-MM-y"}
                       onChange={(e) => {
-                        // setTglMulai(e);
-                        setValDetailOrder({
-                          ...valDetailOrder,
-                          tglSewa: e,
-                        });
+                        // setValDetailOrder({
+                        //   ...valDetailOrder,
+                        //   tglSewa: e,
+                        // });
+                        setUnConvert(e);
                         setPeriksa(false);
-                        console.log(e);
                       }}
                     />
                     <div className="input-group-append">
