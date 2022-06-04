@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react"; //rce
+import { Link } from "react-router-dom";
 import PesanRuangan from "./PesanRuangan/PesanRuangan";
 // import ItemRuangan from "./props/Ruangan/ItemRuangan";
 import firebase from "../../config/firebase";
@@ -200,13 +201,16 @@ class Ruangan extends Component {
           >
             Buat Pesanan Baru
           </button>
-          <button
-            // href="/printlaporan"
-            className="btn btn-sm btn-secondary float-right"
-            onClick={this.handletes}
-          >
-            Print Laporan
-          </button>
+
+          <Link to="/print">
+            <button
+              className="btn btn-sm btn-secondary float-right"
+              onClick={this.handletes}
+            >
+              Print Laporan
+            </button>
+          </Link>
+
           <input
             type="text"
             className="float-right"
