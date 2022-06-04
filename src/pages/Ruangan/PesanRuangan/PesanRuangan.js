@@ -1,10 +1,10 @@
 import React from "react"; //rfce
 import { useState, useEffect } from "react";
-import Swal from "sweetalert2";
+// import Swal from "sweetalert2";
 import firebase from "../../../config/firebase";
 import DateTimePicker from "react-datetime-picker";
 import Toast from "../../../component/toast/Toast";
-import Ruangan from "../Ruangan";
+// import Ruangan from "../Ruangan";
 
 function PesanRuangan(props) {
   const [isloaded, setLoaded] = useState(false);
@@ -14,7 +14,7 @@ function PesanRuangan(props) {
   const [nameCostumer, setNameCostumer] = useState("");
   const [room, setRoom] = useState("ROOM 000");
 
-  const [tanggalSekarang, setTanggalSekarang] = useState("");
+  // const [tanggalSekarang, setTanggalSekarang] = useState("");
   const [tglMulai, setTglMulai] = useState("");
   const [convertTglMulai, setConvertTglMulai] = useState("");
   const [tglSelesai, setTglSelesai] = useState("");
@@ -33,21 +33,21 @@ function PesanRuangan(props) {
     //   format: "DD-MM-YYYY",
     // });
 
-    function convertTanggalSekarang() {
-      let hariini = new Date();
+    // function convertTanggalSekarang() {
+    //   let hariini = new Date();
 
-      let tgl =
-        hariini.getDate() +
-        "-" +
-        parseInt(hariini.getMonth() + 1) +
-        "-" +
-        hariini.getFullYear();
+    //   let tgl =
+    //     hariini.getDate() +
+    //     "-" +
+    //     parseInt(hariini.getMonth() + 1) +
+    //     "-" +
+    //     hariini.getFullYear();
 
-      setTanggalSekarang(hariini);
-    }
+    //   setTanggalSekarang(hariini);
+    // }
 
     if (isloaded === false) {
-      convertTanggalSekarang();
+      // convertTanggalSekarang();
 
       // console.log(new Date());
 
@@ -229,7 +229,7 @@ function PesanRuangan(props) {
                 id: key,
                 data: snapshot.val()[key],
               });
-              // return dataHasil;
+              return dataHasil;
             });
 
             console.log(dataHasil);
@@ -369,7 +369,7 @@ function PesanRuangan(props) {
             //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
             // );
 
-            var IncreseDate = new Date(tglMulai);
+            var IncreseDate2 = new Date(tglMulai);
 
             if (
               paket === "PERJAM" ||
@@ -378,10 +378,10 @@ function PesanRuangan(props) {
             ) {
               console.log("Perjam/Perhari");
             } else {
-              IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
+              IncreseDate2.setMonth(IncreseDate2.getMonth() + totalPaket);
             }
 
-            let DateAfterIncresed = IncreseDate;
+            let DateAfterIncresed = IncreseDate2;
 
             let FinishDay =
               DateAfterIncresed.getDate() +
@@ -406,38 +406,38 @@ function PesanRuangan(props) {
     }
   };
 
-  const handleChange = (e) => {
-    console.log(e.target.value);
-    // console.log(e.target.parentElement[3].value);
-    // params.target.parentNode.children[0].innerText;
-    // console.log("Tanggal Sewa: ", e.target[3].value);
-    // console.log("Tanggal Selesai: ", e.target[4].value);
-  };
+  // const handleChange = (e) => {
+  //   console.log(e.target.value);
+  //   console.log(e.target.parentElement[3].value);
+  //   params.target.parentNode.children[0].innerText;
+  //   console.log("Tanggal Sewa: ", e.target[3].value);
+  //   console.log("Tanggal Selesai: ", e.target[4].value);
+  // };
 
-  const handleTotalPayment = async () => {
-    if (paket !== "") {
-      setTotalPayment("1.000.000");
-      // console.log("Totalnya adalah");
-    } else {
-      // console.log("inputan masih ada yang kosong");
-    }
+  // const handleTotalPayment = async () => {
+  //   if (paket !== "") {
+  //     setTotalPayment("1.000.000");
+  //     // console.log("Totalnya adalah");
+  //   } else {
+  //     // console.log("inputan masih ada yang kosong");
+  //   }
 
-    console.log("handleTotalPayment");
-  };
+  //   console.log("handleTotalPayment");
+  // };
 
-  const toastSucces = () => {
-    var Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-    });
+  // const toastSucces = () => {
+  //   var Toast = Swal.mixin({
+  //     toast: true,
+  //     position: "top-end",
+  //     showConfirmButton: false,
+  //     timer: 3000,
+  //   });
 
-    Toast.fire({
-      icon: "success",
-      title: "Pemesanan Ruangan Berhasil",
-    });
-  };
+  //   Toast.fire({
+  //     icon: "success",
+  //     title: "Pemesanan Ruangan Berhasil",
+  //   });
+  // };
 
   return (
     <div
@@ -615,7 +615,7 @@ function PesanRuangan(props) {
                       type="radio"
                       id="radioPrimary1"
                       name="r1"
-                      onClick={() => console.log("Active")}
+                      onClick={() => setStatusPembayaran("Active")}
                       defaultChecked
                     />
                     <label htmlFor="radioPrimary1">Active</label>
@@ -624,18 +624,33 @@ function PesanRuangan(props) {
                     className="icheck-sunflower d-inline"
                     style={{ marginRight: 10 }}
                   >
-                    <input type="radio" id="radioPrimary2" name="r1" />
+                    <input
+                      type="radio"
+                      id="radioPrimary2"
+                      name="r1"
+                      onClick={() => setStatusPembayaran("Menunggu Pembayaran")}
+                    />
                     <label htmlFor="radioPrimary2">Menunggu Pembayaran</label>
                   </div>
                   <div
                     className="icheck-concrete d-inline"
                     style={{ marginRight: 10 }}
                   >
-                    <input type="radio" id="radioPrimary3" name="r1" />
+                    <input
+                      type="radio"
+                      id="radioPrimary3"
+                      name="r1"
+                      onClick={() => setStatusPembayaran("Selesai")}
+                    />
                     <label htmlFor="radioPrimary3">Selesai</label>
                   </div>
                   <div className="icheck-danger d-inline">
-                    <input type="radio" id="radioPrimary4" name="r1" />
+                    <input
+                      type="radio"
+                      id="radioPrimary4"
+                      name="r1"
+                      onClick={() => setStatusPembayaran("Batal")}
+                    />
                     <label htmlFor="radioPrimary4">Batal</label>
                   </div>
                 </div>
