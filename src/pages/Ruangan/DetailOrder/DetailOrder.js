@@ -68,6 +68,7 @@ function DetailOrder(props) {
     console.log("Tanggal Sewa: ", valDetailOrder.tglSewa);
     console.log("Tanggal Selesai: ", valDetailOrder.tglSelesai);
     console.log("Status Pembayaran", valDetailOrder.statPembayaran);
+    console.log("Bukti Pembayaran", valDetailOrder.BuktiPembayaran);
 
     // if (e.target[5].checked === true) {
     //   StatusPembayaran = "Active";
@@ -107,49 +108,49 @@ function DetailOrder(props) {
         },
       ]);
 
-      // firebase
-      //   .database()
-      //   .ref("order/" + PrimaryKey)
-      //   .set(
-      //     {
-      //       OrderId: valDetailOrder.idOrder,
-      //       Paket: valDetailOrder.Paket,
-      //       NamaPemesan: valDetailOrder.pemesan,
-      //       Ruangan: valDetailOrder.ruangannya,
-      //       TanggalSewa: valDetailOrder.tglSewa,
-      //       TanggalSelesai: valDetailOrder.tglSelesai,
-      //       Status: valDetailOrder.statPembayaran,
-      //       BuktiPembayaran: valDetailOrder.BuktiPembayaran,
-      //     },
-      //     (error) => {
-      //       if (error) {
-      //         // The write failed...
-      //         alert("Gagal Simpan");
-      //       } else {
-      //         // Data saved successfully!
-      //         // alert("Order Berhasil Di Simpan");
+      firebase
+        .database()
+        .ref("order/" + PrimaryKey)
+        .set(
+          {
+            OrderId: valDetailOrder.idOrder,
+            Paket: valDetailOrder.Paket,
+            NamaPemesan: valDetailOrder.pemesan,
+            Ruangan: valDetailOrder.ruangannya,
+            TanggalSewa: valDetailOrder.tglSewa,
+            TanggalSelesai: valDetailOrder.tglSelesai,
+            Status: valDetailOrder.statPembayaran,
+            BuktiPembayaran: valDetailOrder.BuktiPembayaran,
+          },
+          (error) => {
+            if (error) {
+              // The write failed...
+              alert("Gagal Simpan");
+            } else {
+              // Data saved successfully!
+              // alert("Order Berhasil Di Simpan");
 
-      //         Toast([
-      //           {
-      //             icon: "success",
-      //             title: "Perbaruan Pemesanan Ruangan Berhasil",
-      //           },
-      //         ]);
+              Toast([
+                {
+                  icon: "success",
+                  title: "Perbaruan Pemesanan Ruangan Berhasil",
+                },
+              ]);
 
-      //         console.log(
-      //           "send value: ",
-      //           e.target[0].value,
-      //           e.target[1].value,
-      //           e.target[2].value,
-      //           e.target[3].value,
-      //           e.target[4].value,
-      //           StatusPembayaran,
-      //           valDetailOrder.BuktiPembayaran
-      //         );
-      //         // window.location.reload();
-      //       }
-      //     }
-      //   );
+              console.log(
+                "send value: ",
+                e.target[0].value,
+                e.target[1].value,
+                e.target[2].value,
+                e.target[3].value,
+                e.target[4].value,
+                StatusPembayaran,
+                valDetailOrder.BuktiPembayaran
+              );
+              // window.location.reload();
+            }
+          }
+        );
 
       window.$("#form-edit").modal("hide");
 
@@ -338,7 +339,7 @@ function DetailOrder(props) {
             //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
             // );
 
-            var IncreseDate = new Date(convertTglMulai);
+            var IncreseDate = new Date(unConvert);
 
             if (
               paket === "PERJAM" ||
@@ -428,7 +429,7 @@ function DetailOrder(props) {
               Toast([
                 {
                   icon: "success",
-                  title: `Ruangan ${valDetailOrder.ruangannya} Pada tanggal ${dateStart} - ${dateEnd} tersedia`,
+                  title: `Ruangan tersedia`,
                 },
               ]);
             } else {
@@ -436,7 +437,7 @@ function DetailOrder(props) {
               Toast([
                 {
                   icon: "error",
-                  title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
+                  title: `Ruangan Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
                 },
               ]);
             }
@@ -444,8 +445,8 @@ function DetailOrder(props) {
             console.log("Data tidak ditemukan");
 
             //////////////////// Formating Start Date ////////////////////
-            console.log("tglMulai ", convertTglMulai);
-            let startDay = convertTglMulai;
+            console.log("tglMulai ", unConvert);
+            let startDay = unConvert;
 
             let StartDate =
               startDay.getDate() +
@@ -500,7 +501,7 @@ function DetailOrder(props) {
             Toast([
               {
                 icon: "success",
-                title: `Ruangan ${valDetailOrder.ruangannya} tersedia`,
+                title: `Ruangan tersedia`,
               },
             ]);
           }
