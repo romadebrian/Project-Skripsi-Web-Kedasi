@@ -86,12 +86,13 @@ function PesanRuangan(props) {
 
     console.log("Order Id: ", e.target[0].value);
     console.log("Paket: ", paket);
-    // console.log("Jumlah Durasi: ", e.target[2].value);
+    console.log("Jumlah Paket: ", totalPaket);
     console.log("Nama Costumer: ", e.target[3].value);
     console.log("Ruangan: ", e.target[4].value);
     console.log("Tanggal Mulai: ", convertTglMulai);
     console.log("Tanggal Selesai: ", tglSelesai);
     console.log("StatusPembayaran: ", statusPembayaran);
+    console.log("Total Pembayaran", totalPayment);
 
     // if (e.target[58].checked === true) {
     //   StatusPembayaran = "Active";
@@ -138,11 +139,13 @@ function PesanRuangan(props) {
           {
             OrderId: e.target[0].value,
             Paket: paket,
+            JumlahPaket: totalPaket,
             NamaPemesan: e.target[3].value,
             Ruangan: e.target[4].value,
             TanggalSewa: convertTglMulai,
             TanggalSelesai: tglSelesai,
             Status: statusPembayaran,
+            TotalPembayaran: totalPayment,
             BuktiPembayaran: "",
           },
           (error) => {
@@ -153,32 +156,30 @@ function PesanRuangan(props) {
               // Data saved successfully!
               // alert("Profile Berhasil Di Simpan");
               // toastSucces();
-
               Toast([
                 {
                   icon: "success",
                   title: "Pemesanan Ruangan Berhasil",
                 },
               ]);
-
               console.log(
                 "send value: ",
                 e.target[0].value,
                 paket,
+                totalPaket,
                 e.target[3].value,
                 e.target[4].value,
                 convertTglMulai,
                 tglSelesai,
+                statusPembayaran,
+                totalPayment,
                 statusPembayaran
               );
-
               window.$("#modal-lg").modal("hide");
-
               window.location.reload();
 
               // window.$(this.modal).modal("hide");
               // window.$(this.modal).on("hidden.bs.modal");
-
               // e.target[10].dismiss = "modal";
             }
           }
