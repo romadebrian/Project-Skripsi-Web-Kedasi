@@ -22,6 +22,7 @@ function DetailOrder(props) {
   const [valDetailOrder, setValDetailOrder] = useState({
     idOrder: "",
     Paket: "",
+    JumlahPaket: "",
     pemesan: "",
     ruangannya: "",
     tglSewa: "",
@@ -186,6 +187,7 @@ function DetailOrder(props) {
       setValDetailOrder({
         idOrder: data.OrderId,
         Paket: data.Paket,
+        JumlahPaket: data.JumlahPaket,
         pemesan: data.NamaPemesan,
         ruangannya: data.Ruangan,
         tglSewa: data.TanggalSewa,
@@ -258,7 +260,7 @@ function DetailOrder(props) {
     var paket = valDetailOrder.Paket;
 
     console.log("paket", paket);
-    console.log("total paket", totalPaket);
+    console.log("total paket", valDetailOrder.JumlahPaket);
     console.log("ruanggannya", valDetailOrder.ruangannya);
     console.log("tgl sewa", unConvert);
 
@@ -348,7 +350,9 @@ function DetailOrder(props) {
             ) {
               console.log("Perjam/Perhari");
             } else {
-              IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
+              IncreseDate.setMonth(
+                IncreseDate.getMonth() + valDetailOrder.JumlahPaket
+              );
             }
 
             let DateAfterIncresed = IncreseDate;
@@ -478,7 +482,9 @@ function DetailOrder(props) {
             ) {
               console.log("Perjam/Perhari");
             } else {
-              IncreseDate2.setMonth(IncreseDate2.getMonth() + totalPaket);
+              IncreseDate2.setMonth(
+                IncreseDate2.getMonth() + valDetailOrder.JumlahPaket
+              );
             }
 
             let DateAfterIncresed = IncreseDate2;
@@ -706,9 +712,12 @@ function DetailOrder(props) {
                         id="quantity"
                         name="quantity"
                         min="1"
-                        defaultValue={totalPaket}
+                        defaultValue={valDetailOrder.JumlahPaket}
                         onChange={(e) => {
-                          setTotalPaket(e.target.value);
+                          setValDetailOrder({
+                            ...valDetailOrder,
+                            JumlahPaket: e.target.value,
+                          });
                           setPeriksa(false);
                         }}
                       />
