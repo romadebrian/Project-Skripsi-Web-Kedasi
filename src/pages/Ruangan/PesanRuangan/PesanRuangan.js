@@ -10,7 +10,7 @@ function PesanRuangan(props) {
   const [isloaded, setLoaded] = useState(false);
 
   const [paket, setPaket] = useState("");
-  const [totalPaket, setTotalPaket] = useState(1);
+  const [totalPaket, setTotalPaket] = useState("1");
   const [nameCostumer, setNameCostumer] = useState("");
   const [room, setRoom] = useState("ROOM 000");
 
@@ -256,10 +256,13 @@ function PesanRuangan(props) {
             //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
             // );
 
-            var PickerDate = new Date(20, 12, 1998);
-            console.log("test", PickerDate);
+            var PickerDate = new Date(tglMulai);
+
+            let jmlPaket = Number(totalPaket); //convert string to number
+            console.log(jmlPaket);
+
             var IncreseDate = new Date(
-              new Date(PickerDate).setMonth(PickerDate.getMonth() + 5)
+              new Date(PickerDate).setMonth(PickerDate.getMonth() + jmlPaket)
             );
 
             if (
@@ -272,6 +275,7 @@ function PesanRuangan(props) {
               // IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
 
               // IncreseDate = dateStart.setMonth(dateStart.getMonth() + 2);
+              console.log("test", PickerDate);
               console.log(totalPaket);
               console.log(IncreseDate);
             }
