@@ -6,7 +6,7 @@ import DateTimePicker from "react-datetime-picker";
 import Toast from "../../../component/toast/Toast";
 
 function DetailOrder(props) {
-  const [totalPaket, setTotalPaket] = useState(1);
+  // const [totalPaket, setTotalPaket] = useState(1);
 
   // const [nameCostumer, setNameCostumer] = useState("");
 
@@ -31,7 +31,7 @@ function DetailOrder(props) {
     BuktiPembayaran: "",
   });
 
-  const [convertTglMulai, setConvertTglMulai] = useState("");
+  // const [convertTglMulai, setConvertTglMulai] = useState("");
   const [unConvert, setUnConvert] = useState("");
 
   // console.log("data update", valDetailOrder);
@@ -651,7 +651,7 @@ function DetailOrder(props) {
       });
   };
 
-  const convertTanggal = (val) => {};
+  // const convertTanggal = (val) => {};
 
   return (
     <div
