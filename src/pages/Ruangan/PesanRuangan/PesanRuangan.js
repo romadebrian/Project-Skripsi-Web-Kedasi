@@ -256,7 +256,11 @@ function PesanRuangan(props) {
             //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
             // );
 
-            var IncreseDate = new Date(tglMulai);
+            var PickerDate = new Date(20, 12, 1998);
+            console.log("test", PickerDate);
+            var IncreseDate = new Date(
+              new Date(PickerDate).setMonth(PickerDate.getMonth() + 5)
+            );
 
             if (
               paket === "PERJAM" ||
@@ -265,7 +269,11 @@ function PesanRuangan(props) {
             ) {
               console.log("Perjam/Perhari");
             } else {
-              IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
+              // IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
+
+              // IncreseDate = dateStart.setMonth(dateStart.getMonth() + 2);
+              console.log(totalPaket);
+              console.log(IncreseDate);
             }
 
             let DateAfterIncresed = IncreseDate;
