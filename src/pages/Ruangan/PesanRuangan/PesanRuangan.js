@@ -259,22 +259,26 @@ function PesanRuangan(props) {
             var PickerDate = new Date(tglMulai);
 
             let jmlPaket = Number(totalPaket); //convert string to number
-            console.log(jmlPaket);
-
-            var IncreseDate = new Date(
-              new Date(PickerDate).setMonth(PickerDate.getMonth() + jmlPaket)
-            );
+            var IncreseDate = "";
 
             if (
               paket === "PERJAM" ||
               paket === "HARIAN" ||
               paket === "HARIAN(PELAJAR)"
             ) {
+              IncreseDate = PickerDate;
               console.log("Perjam/Perhari");
             } else {
               // IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
 
-              // IncreseDate = dateStart.setMonth(dateStart.getMonth() + 2);
+              // IncreseDate = PickerDate.setMonth(
+              //   PickerDate.getMonth() + jmlPaket
+              // );
+
+              IncreseDate = new Date(
+                new Date(PickerDate).setMonth(PickerDate.getMonth() + jmlPaket)
+              );
+
               console.log("test", PickerDate);
               console.log(totalPaket);
               console.log(IncreseDate);
