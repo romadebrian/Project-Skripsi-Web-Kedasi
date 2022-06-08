@@ -28,6 +28,7 @@ function DetailOrder(props) {
     tglSewa: "",
     tglSelesai: "",
     statPembayaran: "",
+    totalPayment: "",
     BuktiPembayaran: "",
   });
 
@@ -193,6 +194,7 @@ function DetailOrder(props) {
         tglSewa: data.TanggalSewa,
         tglSelesai: data.TanggalSelesai,
         statPembayaran: data.Status,
+        totalPayment: data.TotalPembayaran,
         BuktiPembayaran: data.BuktiPembayaran,
       });
 
@@ -851,6 +853,20 @@ function DetailOrder(props) {
                 </div>
               </div>
               {/* /.card-body */}
+
+              {/* <div style={{ marginRight: "10px", color: "green" }}>
+                <h3 className="float-right">
+                  Total Rp {valDetailOrder.totalPayment}
+                </h3>
+              </div> */}
+
+              <div
+                className="d-flex  flex-row-reverse "
+                style={{ marginRight: "10px", color: "green" }}
+              >
+                <h3>Total Rp {valDetailOrder.totalPayment}</h3>
+              </div>
+
               <div className="card-footer">
                 <div className="row">
                   <div className="col-3">
