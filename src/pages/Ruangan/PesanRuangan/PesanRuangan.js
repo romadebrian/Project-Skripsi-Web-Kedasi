@@ -278,10 +278,6 @@ function PesanRuangan(props) {
               IncreseDate = new Date(
                 new Date(PickerDate).setMonth(PickerDate.getMonth() + jmlPaket)
               );
-
-              console.log("test", PickerDate);
-              console.log(totalPaket);
-              console.log(IncreseDate);
             }
 
             let DateAfterIncresed = IncreseDate;
