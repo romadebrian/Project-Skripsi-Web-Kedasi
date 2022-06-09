@@ -601,11 +601,14 @@ function DetailOrder(props) {
                   .set(
                     {
                       OrderId: valDetailOrder.idOrder,
+                      Paket: paket,
+                      JumlahPaket: totalPaket,
                       NamaPemesan: valDetailOrder.pemesan,
                       Ruangan: valDetailOrder.ruangannya,
                       TanggalSewa: valDetailOrder.tglSewa,
                       TanggalSelesai: valDetailOrder.tglSelesai,
                       Status: valDetailOrder.statPembayaran,
+                      TotalPembayaran: totalPayment,
                       BuktiPembayaran: MetaDataFoto.name,
                     },
                     (error) => {
