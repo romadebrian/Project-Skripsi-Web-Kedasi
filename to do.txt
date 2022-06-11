@@ -1,1 +1,5 @@
 perbaiki upload bukti permbayaran di detail order
+tidak bisa upload bukti jika status periksa belum true
+jika orderan di cancel atau finish gak di cek
+
+range list order untuk mempermudah resepsionist mencari tgl 

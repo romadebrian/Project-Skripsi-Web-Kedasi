@@ -31,6 +31,8 @@ function DetailOrder(props) {
     BuktiPembayaran: "",
   });
 
+  const [dataBeforeUpdate, setdataBeforeUpdate] = useState({});
+
   // const [convertTglMulai, setConvertTglMulai] = useState("");
   const [unConvert, setUnConvert] = useState("");
 
@@ -103,6 +105,19 @@ function DetailOrder(props) {
       setPaket(data.Paket);
       setTotalPaket(data.JumlahPaket);
       setTotalPayment(data.TotalPembayaran);
+
+      setdataBeforeUpdate({
+        OrderId: data.OrderId,
+        Paket: data.Paket,
+        JumlahPaket: data.JumlahPaket,
+        NamaPemesan: data.NamaPemesan,
+        Ruangan: data.Ruangan,
+        TanggalSewa: data.TanggalSewa,
+        TanggalSelesai: data.TanggalSelesai,
+        Status: data.Status,
+        TotalPembayaran: data.TotalPembayaran,
+        BuktiPembayaran: data.BuktiPembayaran,
+      });
 
       if (data.BuktiPembayaran === "") {
         setStatusUpload("Add File");
@@ -600,15 +615,16 @@ function DetailOrder(props) {
                   .ref("order/" + PrimaryKey)
                   .set(
                     {
-                      OrderId: valDetailOrder.idOrder,
-                      Paket: paket,
-                      JumlahPaket: totalPaket,
-                      NamaPemesan: valDetailOrder.pemesan,
-                      Ruangan: valDetailOrder.ruangannya,
-                      TanggalSewa: valDetailOrder.tglSewa,
-                      TanggalSelesai: valDetailOrder.tglSelesai,
-                      Status: valDetailOrder.statPembayaran,
-                      TotalPembayaran: totalPayment,
+                      OrderId: dataBeforeUpdate.idOrder,
+                      Paket: dataBeforeUpdate.Paket,
+                      JumlahPaket: dataBeforeUpdate.JumlahPaket,
+                      NamaPemesan: dataBeforeUpdate.NamaPemesan,
+                      Ruangan: dataBeforeUpdate.Ruangan,
+                      TanggalSewa: dataBeforeUpdate.TanggalSewa,
+                      TanggalSelesai: dataBeforeUpdate.TanggalSelesai,
+                      Status: dataBeforeUpdate.Status,
+                      TotalPembayaran: dataBeforeUpdate.TotalPembayaran,
+
                       BuktiPembayaran: MetaDataFoto.name,
                     },
                     (error) => {
