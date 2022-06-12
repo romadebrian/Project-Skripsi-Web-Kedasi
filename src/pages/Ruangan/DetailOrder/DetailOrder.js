@@ -4,6 +4,7 @@ import firebase, { storage } from "../../../config/firebase";
 import DateTimePicker from "react-datetime-picker";
 
 import Toast from "../../../component/toast/Toast";
+import { Link } from "react-router-dom";
 
 function DetailOrder(props) {
   const [paket, setPaket] = useState("");
@@ -615,7 +616,7 @@ function DetailOrder(props) {
                   .ref("order/" + PrimaryKey)
                   .set(
                     {
-                      OrderId: dataBeforeUpdate.idOrder,
+                      OrderId: dataBeforeUpdate.OrderId,
                       Paket: dataBeforeUpdate.Paket,
                       JumlahPaket: dataBeforeUpdate.JumlahPaket,
                       NamaPemesan: dataBeforeUpdate.NamaPemesan,
@@ -708,6 +709,9 @@ function DetailOrder(props) {
           <div className="card card-primary">
             <div className="card-header">
               <h3 className="card-title">Detail Pesan Ruangan</h3>
+              <Link to="/print" target="_blank">
+                <i className="fa fa-print float-right"></i>
+              </Link>
             </div>
             {/* /.card-header */}
             {/* form start */}
@@ -947,7 +951,7 @@ function DetailOrder(props) {
                           className="custom-file-label"
                           htmlFor="exampleInputFile"
                         >
-                          {fotoName}
+                          <b>{fotoName}</b>
                         </label>
                       </div>
                     </div>
