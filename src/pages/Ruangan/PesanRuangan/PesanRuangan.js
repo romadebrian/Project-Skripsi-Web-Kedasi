@@ -298,44 +298,57 @@ function PesanRuangan(props) {
             var statusAvaliable = true;
 
             do {
-              var dateFrom = dataHasil[i].data.TanggalSewa;
-              var dateTo = dataHasil[i].data.TanggalSelesai;
-              var dateStart = StartDate;
-              var dateEnd = FinishDay;
+              if (
+                dataHasil[i].data.Status === "Batal" ||
+                dataHasil[i].data.Status === "Selesai"
+              ) {
+                console.log(i);
+                console.log(
+                  "Order ",
+                  dataHasil[i].data.OrderId,
+                  "Status ",
+                  dataHasil[i].data.Status
+                );
+              } else {
+                var dateFrom = dataHasil[i].data.TanggalSewa;
+                var dateTo = dataHasil[i].data.TanggalSelesai;
+                var dateStart = StartDate;
+                var dateEnd = FinishDay;
 
-              var d1 = dateFrom.split("-");
-              var d2 = dateTo.split("-");
-              var c1 = dateStart.split("-");
-              var c2 = dateEnd.split("-");
+                var d1 = dateFrom.split("-");
+                var d2 = dateTo.split("-");
+                var c1 = dateStart.split("-");
+                var c2 = dateEnd.split("-");
 
-              // console.log(d1);
-              // console.log(d2);
-              // console.log(c);
+                // console.log(d1);
+                // console.log(d2);
+                // console.log(c);
 
-              var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
-              var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
-              var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
-              var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
+                var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+                var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
+                var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
+                var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
 
-              var resultStart = check1 >= from && check1 <= to;
-              var resultStart2 = from >= check1 && from <= check2;
+                var resultStart = check1 >= from && check1 <= to;
+                var resultStart2 = from >= check1 && from <= check2;
 
-              // var resultEnd = check2 >= from && check2 <= to;
-              // var resultEnd = check2 >= from && check2 <= to;
+                // var resultEnd = check2 >= from && check2 <= to;
+                // var resultEnd = check2 >= from && check2 <= to;
 
-              // console.log("Start", check1);
-              // console.log("End", check2);
-              // console.log("From ", from);
-              // console.log("to", to);
+                // console.log("Start", check1);
+                // console.log("End", check2);
+                // console.log("From ", from);
+                // console.log("to", to);
 
-              console.log("resultStart", resultStart);
-              console.log("resultStart2", resultStart2);
-              // console.log("resultEnd", resultEnd);
+                console.log("resultStart", resultStart);
+                console.log("resultStart2", resultStart2);
+                // console.log("resultEnd", resultEnd);
 
-              // use or (||) operator
-              if (statusAvaliable === true) {
-                if (resultStart === true || resultStart2 === true) {
-                  statusAvaliable = false;
+                // use or (||) operator
+                if (statusAvaliable === true) {
+                  if (resultStart === true || resultStart2 === true) {
+                    statusAvaliable = false;
+                  }
                 }
               }
 

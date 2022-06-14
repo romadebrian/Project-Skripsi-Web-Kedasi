@@ -1,4 +1,6 @@
 
-jika orderan di cancel atau finish gak di cek
+
 
 range list order untuk mempermudah resepsionist mencari tgl 
+
+print detail order (pakai Contex Api)
