@@ -311,6 +311,17 @@ function DetailOrder(props) {
               if (dataHasil[i].data.OrderId === valDetailOrder.idOrder) {
                 console.log(i);
                 console.log("current Order", dataHasil[i].data.OrderId);
+              } else if (
+                dataHasil[i].data.Status === "Batal" ||
+                dataHasil[i].data.Status === "Selesai"
+              ) {
+                console.log(i);
+                console.log(
+                  "Order ",
+                  dataHasil[i].data.OrderId,
+                  "Status ",
+                  dataHasil[i].data.Status
+                );
               } else {
                 console.log(i);
                 var dateFrom = dataHasil[i].data.TanggalSewa;

@@ -1,6 +1,3 @@
-
-
-
 range list order untuk mempermudah resepsionist mencari tgl 
 
-print detail order (pakai Contex Api)
+print invoice (pakai Contex Api)
