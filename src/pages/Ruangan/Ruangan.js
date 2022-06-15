@@ -119,10 +119,16 @@ class Ruangan extends Component {
     this.setState({ valDateRange: params });
 
     // delete this.state.orderList[1];
+
+    console.log(this.state.orderList);
   };
 
   trunOffModeEdit = () => {
     this.setState({ modeEdit: false });
+  };
+
+  handleFilter = (val) => {
+    return val.data.NamaPemesan.includes("Roma");
   };
 
   render() {
@@ -167,35 +173,39 @@ class Ruangan extends Component {
             <tbody>
               {this.state.orderList.length > 0 ? (
                 <Fragment>
-                  {this.state.orderList.map((pesanan) => {
-                    // console.log("Data Pesanan ", pesanan.data.OrderId);
-                    var badge;
-                    if (pesanan.data.Status === "Active") {
-                      badge = "badge badge-success";
-                    } else if (pesanan.data.Status === "Menunggu Pembayaran") {
-                      badge = "badge badge-warning";
-                    } else if (pesanan.data.Status === "Selesai") {
-                      badge = "badge badge-secondary";
-                    } else {
-                      badge = "badge badge-danger";
-                    }
-                    return (
-                      <tr
-                        className="row-pesanan"
-                        key={pesanan.id}
-                        data-toggle="modal"
-                        data-target="#form-edit"
-                        onClick={(pesanan) => this.handleEdit(pesanan)}
-                      >
-                        <td>{pesanan.data.OrderId}</td>
-                        <td>{pesanan.data.NamaPemesan} </td>
-                        <td>{pesanan.data.Ruangan} </td>
-                        <td>{pesanan.data.TanggalSewa} </td>
-                        <td>{pesanan.data.TanggalSelesai} </td>
-                        <td className={badge}>{pesanan.data.Status}</td>
-                      </tr>
-                    );
-                  })}
+                  {this.state.orderList
+                    .filter(this.handleFilter)
+                    .map((pesanan) => {
+                      // console.log("Data Pesanan ", pesanan.data.OrderId);
+                      var badge;
+                      if (pesanan.data.Status === "Active") {
+                        badge = "badge badge-success";
+                      } else if (
+                        pesanan.data.Status === "Menunggu Pembayaran"
+                      ) {
+                        badge = "badge badge-warning";
+                      } else if (pesanan.data.Status === "Selesai") {
+                        badge = "badge badge-secondary";
+                      } else {
+                        badge = "badge badge-danger";
+                      }
+                      return (
+                        <tr
+                          className="row-pesanan"
+                          key={pesanan.id}
+                          data-toggle="modal"
+                          data-target="#form-edit"
+                          onClick={(pesanan) => this.handleEdit(pesanan)}
+                        >
+                          <td>{pesanan.data.OrderId}</td>
+                          <td>{pesanan.data.NamaPemesan} </td>
+                          <td>{pesanan.data.Ruangan} </td>
+                          <td>{pesanan.data.TanggalSewa} </td>
+                          <td>{pesanan.data.TanggalSelesai} </td>
+                          <td className={badge}>{pesanan.data.Status}</td>
+                        </tr>
+                      );
+                    })}
                 </Fragment>
               ) : null}
             </tbody>
@@ -239,9 +249,12 @@ class Ruangan extends Component {
             style={{ marginRight: "20px" }}
           /> */}
         </div>
+
         {/* /.card-footer */}
 
         <PesanRuangan newOrderId={this.state.nextOrderId} />
+
+        {/* hide detail order form/ */}
         <DetailOrder
           dataDetail={this.state.orderDetail}
           ref={this.child}
