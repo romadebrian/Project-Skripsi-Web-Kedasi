@@ -16,6 +16,7 @@ class Ruangan extends Component {
     modeEdit: false,
     nextOrderId: "",
     valDateRange: [new Date(), new Date()],
+    isFilterActive: false,
   };
 
   componentDidMount() {
@@ -109,122 +110,133 @@ class Ruangan extends Component {
       });
   };
 
-  handleTanggalJarak = (params) => {
-    let tglMulai = params[0];
-    let tglSampai = params[1];
-
-    console.log("awal", tglMulai);
-    console.log("sampai", tglSampai);
-
-    this.setState({ valDateRange: params });
-
-    // delete this.state.orderList[1];
-
-    console.log(this.state.orderList);
-  };
-
   trunOffModeEdit = () => {
     this.setState({ modeEdit: false });
   };
 
   handleFilter = (val) => {
-    return val.data.NamaPemesan.includes("Roma");
+    //unConvert tanggal sewa
+    var tglSewa = val.data.TanggalSewa;
+    var d1 = tglSewa.split("-");
+    var resultTglSewa = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+
+    //unConvert tanggal selesai
+    var tglSelesai = val.data.TanggalSelesai;
+    var d2 = tglSelesai.split("-");
+    var resultTglSelesai = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]); // -1 because months are from 0 to 11
+
+    if (this.state.isFilterActive === true) {
+      return (
+        resultTglSewa >= this.state.valDateRange[0] &&
+        resultTglSelesai <= this.state.valDateRange[1]
+      );
+    } else {
+      return val;
+    }
   };
 
   render() {
     return (
-      <div className="card">
-        <div className="card-header border-transparent">
-          <h3 className="card-title">Latest Orders</h3>
-          <div className="card-tools">
+      <div>
+        <div className="card">
+          <div className="card-header border-transparent">
+            {/* <h3 className="card-title">Latest Orders</h3> */}
             <button
-              type="button"
-              className="btn btn-tool"
-              data-card-widget="collapse"
+              className="btn btn-sm btn-info float-left"
+              // onClick={this.toestSucces}
+              data-toggle="modal"
+              data-target="#modal-lg"
+              onClick={this.handleInputOrder}
             >
-              <i className="fas fa-minus" />
+              Buat Pesanan Baru
             </button>
-            <button
-              type="button"
-              className="btn btn-tool"
-              data-card-widget="remove"
-            >
-              <i className="fas fa-times" />
-            </button>
+            <div className="card-tools">
+              <DateRangePicker
+                className="float-right text-center"
+                style={{ marginRight: "20px" }}
+                onChange={(e) =>
+                  this.setState({ valDateRange: e, isFilterActive: true })
+                }
+                value={this.state.valDateRange}
+              />
+              {/* <button
+                type="button"
+                className="btn btn-tool"
+                data-card-widget="collapse"
+              >
+                <i className="fas fa-minus" />
+              </button>
+              <button
+                type="button"
+                className="btn btn-tool"
+                data-card-widget="remove"
+              >
+                <i className="fas fa-times" />
+              </button> */}
+            </div>
           </div>
-        </div>
-        {/* /.card-header */}
-        {/* Table Responsive */}
-        <div className="card-body p-0">
-          <div className="table-responsive"></div>
-          <table className="table m-0">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Nama</th>
-                <th>Ruangan</th>
-                <th>Tanggal Sewa</th>
-                <th>Tanggal Selesai</th>
-                <th>Status</th>
-                {/* Pennding, Active, Contract has ended, dan cancelled */}
-              </tr>
-            </thead>
+          {/* /.card-header */}
+          {/* Table Responsive */}
+          <div className="card-body p-0">
+            <div className="table-responsive"></div>
+            <table className="table m-0">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Nama</th>
+                  <th>Ruangan</th>
+                  <th>Tanggal Sewa</th>
+                  <th>Tanggal Selesai</th>
+                  <th>Status</th>
+                  {/* Pennding, Active, Contract has ended, dan cancelled */}
+                </tr>
+              </thead>
 
-            <tbody>
-              {this.state.orderList.length > 0 ? (
-                <Fragment>
-                  {this.state.orderList
-                    .filter(this.handleFilter)
-                    .map((pesanan) => {
-                      // console.log("Data Pesanan ", pesanan.data.OrderId);
-                      var badge;
-                      if (pesanan.data.Status === "Active") {
-                        badge = "badge badge-success";
-                      } else if (
-                        pesanan.data.Status === "Menunggu Pembayaran"
-                      ) {
-                        badge = "badge badge-warning";
-                      } else if (pesanan.data.Status === "Selesai") {
-                        badge = "badge badge-secondary";
-                      } else {
-                        badge = "badge badge-danger";
-                      }
-                      return (
-                        <tr
-                          className="row-pesanan"
-                          key={pesanan.id}
-                          data-toggle="modal"
-                          data-target="#form-edit"
-                          onClick={(pesanan) => this.handleEdit(pesanan)}
-                        >
-                          <td>{pesanan.data.OrderId}</td>
-                          <td>{pesanan.data.NamaPemesan} </td>
-                          <td>{pesanan.data.Ruangan} </td>
-                          <td>{pesanan.data.TanggalSewa} </td>
-                          <td>{pesanan.data.TanggalSelesai} </td>
-                          <td className={badge}>{pesanan.data.Status}</td>
-                        </tr>
-                      );
-                    })}
-                </Fragment>
-              ) : null}
-            </tbody>
-          </table>
-          {/* /.table-responsive */}
-        </div>
-        {/* /.card-body */}
-        <div className="card-footer clearfix">
-          <button
-            className="btn btn-sm btn-info float-left"
-            // onClick={this.toestSucces}
-            data-toggle="modal"
-            data-target="#modal-lg"
-            onClick={this.handleInputOrder}
-          >
-            Buat Pesanan Baru
-          </button>
-
-          {/* <Link to="/print">
+              <tbody>
+                {this.state.orderList.length > 0 ? (
+                  <Fragment>
+                    {this.state.orderList
+                      .filter(this.handleFilter)
+                      .map((pesanan) => {
+                        // console.log("Data Pesanan ", pesanan.data.OrderId);
+                        var badge;
+                        if (pesanan.data.Status === "Active") {
+                          badge = "badge badge-success";
+                        } else if (
+                          pesanan.data.Status === "Menunggu Pembayaran"
+                        ) {
+                          badge = "badge badge-warning";
+                        } else if (pesanan.data.Status === "Selesai") {
+                          badge = "badge badge-secondary";
+                        } else {
+                          badge = "badge badge-danger";
+                        }
+                        return (
+                          <tr
+                            className="row-pesanan"
+                            key={pesanan.id}
+                            data-toggle="modal"
+                            data-target="#form-edit"
+                            onClick={(pesanan) => this.handleEdit(pesanan)}
+                          >
+                            <td>{pesanan.data.OrderId}</td>
+                            <td>{pesanan.data.NamaPemesan} </td>
+                            <td>{pesanan.data.Ruangan} </td>
+                            <td>{pesanan.data.TanggalSewa} </td>
+                            <td>{pesanan.data.TanggalSelesai} </td>
+                            <td className={badge}>{pesanan.data.Status}</td>
+                          </tr>
+                        );
+                      })}
+                  </Fragment>
+                ) : null}
+              </tbody>
+            </table>
+            {/* /.table-responsive */}
+          </div>
+          {/* /.card-body */}
+          <div className="card-footer clearfix">
+            {/* <Link to="/print">
             <button
               className="btn btn-sm btn-secondary float-right"
               onClick={this.handletes}
@@ -233,14 +245,7 @@ class Ruangan extends Component {
             </button>
           </Link> */}
 
-          <DateRangePicker
-            className="float-right text-center"
-            style={{ marginRight: "20px" }}
-            onChange={(e) => this.handleTanggalJarak(e)}
-            value={this.state.valDateRange}
-          />
-
-          {/* <input
+            {/* <input
             type="text"
             className="float-right"
             name="daterange"
@@ -248,10 +253,10 @@ class Ruangan extends Component {
             onChange={this.handleTanggalJarak}
             style={{ marginRight: "20px" }}
           /> */}
+          </div>
+
+          {/* /.card-footer */}
         </div>
-
-        {/* /.card-footer */}
-
         <PesanRuangan newOrderId={this.state.nextOrderId} />
 
         {/* hide detail order form/ */}
