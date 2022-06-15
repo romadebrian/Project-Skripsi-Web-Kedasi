@@ -4,6 +4,7 @@ import PesanRuangan from "./PesanRuangan/PesanRuangan";
 // import ItemRuangan from "./props/Ruangan/ItemRuangan";
 import firebase from "../../config/firebase";
 import DetailOrder from "./DetailOrder/DetailOrder";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 
 import "./Ruangan.css";
 
@@ -14,6 +15,7 @@ class Ruangan extends Component {
     orderDetail: "",
     modeEdit: false,
     nextOrderId: "",
+    valDateRange: [new Date(), new Date()],
   };
 
   componentDidMount() {
@@ -107,7 +109,17 @@ class Ruangan extends Component {
       });
   };
 
-  handleTanggalJarak = (params) => {};
+  handleTanggalJarak = (params) => {
+    let tglMulai = params[0];
+    let tglSampai = params[1];
+
+    console.log("awal", tglMulai);
+    console.log("sampai", tglSampai);
+
+    this.setState({ valDateRange: params });
+
+    // delete this.state.orderList[1];
+  };
 
   trunOffModeEdit = () => {
     this.setState({ modeEdit: false });
@@ -202,23 +214,30 @@ class Ruangan extends Component {
             Buat Pesanan Baru
           </button>
 
-          <Link to="/print">
+          {/* <Link to="/print">
             <button
               className="btn btn-sm btn-secondary float-right"
               onClick={this.handletes}
             >
               Print Laporan
             </button>
-          </Link>
+          </Link> */}
 
-          <input
+          <DateRangePicker
+            className="float-right text-center"
+            style={{ marginRight: "20px" }}
+            onChange={(e) => this.handleTanggalJarak(e)}
+            value={this.state.valDateRange}
+          />
+
+          {/* <input
             type="text"
             className="float-right"
             name="daterange"
             value={this.state.tanggalJarak}
             onChange={this.handleTanggalJarak}
             style={{ marginRight: "20px" }}
-          />
+          /> */}
         </div>
         {/* /.card-footer */}
 
