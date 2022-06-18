@@ -147,6 +147,10 @@ class Ruangan extends Component {
     }
   };
 
+  handleSorting = (a, b) => {
+    return b.OrderId - a.OrderId;
+  };
+
   render() {
     return (
       <div>
@@ -209,6 +213,7 @@ class Ruangan extends Component {
                   <Fragment>
                     {this.state.orderList
                       .filter(this.handleFilter)
+                      .sort(this.handleSorting)
                       .map((pesanan) => {
                         // console.log("Data Pesanan ", pesanan.data.OrderId);
                         var badge;
