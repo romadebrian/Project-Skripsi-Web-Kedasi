@@ -148,7 +148,25 @@ class Ruangan extends Component {
   };
 
   handleSorting = (a, b) => {
-    return b.OrderId - a.OrderId;
+    // console.log("val A", a);
+    // console.log("val B", b);
+
+    var valA = a.data.OrderId;
+    var valB = b.data.OrderId;
+
+    var arrA = Array.from(valA);
+    arrA.splice(0, 3);
+    var convertA = Number(arrA.join(""));
+
+    var arrB = Array.from(valB);
+    arrB.splice(0, 3);
+    var convertB = Number(arrB.join(""));
+
+    // console.log(convertA);
+    // console.log(convertB);
+
+    // Sorting dari terbaru
+    return convertB - convertA;
   };
 
   render() {
