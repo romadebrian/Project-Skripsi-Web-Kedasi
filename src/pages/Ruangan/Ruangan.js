@@ -126,7 +126,9 @@ class Ruangan extends Component {
     var resultTglSelesai = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]); // -1 because months are from 0 to 11
 
     if (this.state.isFilterActive === true) {
-      if (
+      if (this.state.valDateRange === null) {
+        return val;
+      } else if (
         resultTglSewa >= this.state.valDateRange[0] &&
         resultTglSewa <= this.state.valDateRange[1]
       ) {
