@@ -5,6 +5,7 @@ import PesanRuangan from "./PesanRuangan/PesanRuangan";
 import firebase from "../../config/firebase";
 import DetailOrder from "./DetailOrder/DetailOrder";
 import DateRangePicker from "@wojtekmaj/react-daterange-picker";
+import { MDBDataTable } from "mdbreact";
 
 import "./Ruangan.css";
 
@@ -17,10 +18,37 @@ class Ruangan extends Component {
     nextOrderId: "",
     valDateRange: [new Date(), new Date()],
     isFilterActive: false,
+    dataTable: [
+      {
+        columns: [
+          {
+            label: "Name",
+            field: "NamaPemesan",
+            sort: "asc",
+            width: 150,
+          },
+          {
+            label: "Position",
+            field: "position",
+            sort: "asc",
+            width: 270,
+          },
+          {
+            label: "Office",
+            field: "office",
+            sort: "asc",
+            width: 200,
+          },
+        ],
+        rows: [],
+      },
+    ],
   };
 
   componentDidMount() {
     this.handleGetData();
+
+    console.log("data table", this.state.dataTable);
   }
 
   componentDidUpdate() {}
@@ -38,12 +66,15 @@ class Ruangan extends Component {
         // console.log("get data firebase : ", snapshot.val());
 
         const data = [];
+        const data2 = [];
         if (snapshot.exists()) {
           Object.keys(snapshot.val()).map((key) => {
             data.push({
               id: key,
               data: snapshot.val()[key],
             });
+
+            data2.push(snapshot.val()[key]);
             return data;
           });
         } else {
@@ -51,6 +82,13 @@ class Ruangan extends Component {
         }
 
         this.setState({ orderList: data });
+
+        this.setState(
+          {
+            dataTable: [{ ...this.state.dataTable[0], rows: data2 }],
+          },
+          () => console.log(this.state.dataTable)
+        );
 
         // console.log(this.state.orderList.length);
 
@@ -214,64 +252,68 @@ class Ruangan extends Component {
           {/* /.card-header */}
           {/* Table Responsive */}
           <div className="card-body p-0">
-            <div className="table-responsive"></div>
-            <table className="table m-0">
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Nama</th>
-                  <th>Ruangan</th>
-                  <th>Tanggal Sewa</th>
-                  <th>Tanggal Selesai</th>
-                  <th>Status</th>
-                  {/* Pennding, Active, Contract has ended, dan cancelled */}
-                </tr>
-              </thead>
+            <div className="table-responsive">
+              <table className="table m-0">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Nama</th>
+                    <th>Ruangan</th>
+                    <th>Tanggal Sewa</th>
+                    <th>Tanggal Selesai</th>
+                    <th>Status</th>
+                    {/* Pennding, Active, Contract has ended, dan cancelled */}
+                  </tr>
+                </thead>
 
-              <tbody>
-                {this.state.orderList.length > 0 ? (
-                  <Fragment>
-                    {this.state.orderList
-                      .filter(this.handleFilter)
-                      .sort(this.handleSorting)
-                      .map((pesanan) => {
-                        // console.log("Data Pesanan ", pesanan.data.OrderId);
-                        var badge;
-                        if (pesanan.data.Status === "Active") {
-                          badge = "badge badge-success";
-                        } else if (
-                          pesanan.data.Status === "Menunggu Pembayaran"
-                        ) {
-                          badge = "badge badge-warning";
-                        } else if (pesanan.data.Status === "Selesai") {
-                          badge = "badge badge-secondary";
-                        } else {
-                          badge = "badge badge-danger";
-                        }
-                        return (
-                          <tr
-                            className="row-pesanan"
-                            key={pesanan.id}
-                            data-toggle="modal"
-                            data-target="#form-edit"
-                            onClick={(pesanan) => this.handleEdit(pesanan)}
-                          >
-                            <td>{pesanan.data.OrderId}</td>
-                            <td>{pesanan.data.NamaPemesan} </td>
-                            <td>{pesanan.data.Ruangan} </td>
-                            <td>{pesanan.data.TanggalSewa} </td>
-                            <td>{pesanan.data.TanggalSelesai} </td>
-                            <td className={badge}>{pesanan.data.Status}</td>
-                          </tr>
-                        );
-                      })}
-                  </Fragment>
-                ) : null}
-              </tbody>
-            </table>
+                <tbody>
+                  {this.state.orderList.length > 0 ? (
+                    <Fragment>
+                      {this.state.orderList
+                        .filter(this.handleFilter)
+                        .sort(this.handleSorting)
+                        .map((pesanan) => {
+                          // console.log("Data Pesanan ", pesanan.data.OrderId);
+                          var badge;
+                          if (pesanan.data.Status === "Active") {
+                            badge = "badge badge-success";
+                          } else if (
+                            pesanan.data.Status === "Menunggu Pembayaran"
+                          ) {
+                            badge = "badge badge-warning";
+                          } else if (pesanan.data.Status === "Selesai") {
+                            badge = "badge badge-secondary";
+                          } else {
+                            badge = "badge badge-danger";
+                          }
+                          return (
+                            <tr
+                              className="row-pesanan"
+                              key={pesanan.id}
+                              data-toggle="modal"
+                              data-target="#form-edit"
+                              onClick={(pesanan) => this.handleEdit(pesanan)}
+                            >
+                              <td>{pesanan.data.OrderId}</td>
+                              <td>{pesanan.data.NamaPemesan} </td>
+                              <td>{pesanan.data.Ruangan} </td>
+                              <td>{pesanan.data.TanggalSewa} </td>
+                              <td>{pesanan.data.TanggalSelesai} </td>
+                              <td className={badge}>{pesanan.data.Status}</td>
+                            </tr>
+                          );
+                        })}
+                    </Fragment>
+                  ) : null}
+                </tbody>
+              </table>
+            </div>
             {/* /.table-responsive */}
           </div>
           {/* /.card-body */}
+
+          <MDBDataTable striped bordered small data={this.state.dataTable[0]} />
+
           <div className="card-footer clearfix">
             {/* <Link to="/print">
             <button
