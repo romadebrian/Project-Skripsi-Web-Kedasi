@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from "react"; //rce
-import { Link } from "react-router-dom";
 import PesanRuangan from "./PesanRuangan/PesanRuangan";
-// import ItemRuangan from "./props/Ruangan/ItemRuangan";
 import firebase from "../../config/firebase";
 import DetailOrder from "./DetailOrder/DetailOrder";
 import DateRangePicker from "@wojtekmaj/react-daterange-picker";
-import { MDBDataTable } from "mdbreact";
+
+// import $ from "jquery";
 
 import "./Ruangan.css";
 
@@ -22,22 +21,30 @@ class Ruangan extends Component {
       {
         columns: [
           {
+            label: "Order ID",
+            field: "OrderId",
+            sort: "descs",
+            // width: 270,
+          },
+          {
             label: "Name",
             field: "NamaPemesan",
-            sort: "asc",
-            width: 150,
           },
           {
-            label: "Position",
-            field: "position",
-            sort: "asc",
-            width: 270,
+            label: "Ruangan",
+            field: "Ruangan",
           },
           {
-            label: "Office",
-            field: "office",
-            sort: "asc",
-            width: 200,
+            label: "Tanggal Sewa",
+            field: "TanggalSewa",
+          },
+          {
+            label: "Tanggal Selesai",
+            field: "TanggalSelesai",
+          },
+          {
+            label: "Status",
+            field: "Status",
           },
         ],
         rows: [],
@@ -46,6 +53,10 @@ class Ruangan extends Component {
   };
 
   componentDidMount() {
+    // window.$("#TanggalSelesai").datetimepicker({
+    //   format: "DD-MM-YYYY",
+    // });
+
     this.handleGetData();
 
     console.log("data table", this.state.dataTable);
@@ -81,7 +92,17 @@ class Ruangan extends Component {
           console.log("Data tidak ditemukan");
         }
 
-        this.setState({ orderList: data });
+        this.setState({ orderList: data }, () => {
+          window.$("#table_ruangan").DataTable({
+            paging: true,
+            lengthChange: false,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+          });
+        });
 
         this.setState(
           {
@@ -119,6 +140,8 @@ class Ruangan extends Component {
     this.setState({ modeEdit: true });
 
     const idPesanan = params.target.parentNode.children[0].innerText;
+
+    console.log(idPesanan);
 
     return firebase
       .database()
@@ -250,69 +273,84 @@ class Ruangan extends Component {
             </div>
           </div>
           {/* /.card-header */}
+
           {/* Table Responsive */}
-          <div className="card-body p-0">
-            <div className="table-responsive">
-              <table className="table m-0">
-                <thead>
-                  <tr>
-                    <th>Order ID</th>
-                    <th>Nama</th>
-                    <th>Ruangan</th>
-                    <th>Tanggal Sewa</th>
-                    <th>Tanggal Selesai</th>
-                    <th>Status</th>
-                    {/* Pennding, Active, Contract has ended, dan cancelled */}
-                  </tr>
-                </thead>
+          {this.state.orderList.length > 0 ? (
+            <div className="card-body p-0">
+              <div className="table-responsive ">
+                <table id="table_ruangan" className="table m-0">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Nama</th>
+                      <th>Ruangan</th>
+                      <th>Tanggal Sewa</th>
+                      <th>Tanggal Selesai</th>
+                      <th>Status</th>
+                      {/* Pennding, Active, Contract has ended, dan cancelled */}
+                    </tr>
+                  </thead>
 
-                <tbody>
-                  {this.state.orderList.length > 0 ? (
-                    <Fragment>
-                      {this.state.orderList
-                        .filter(this.handleFilter)
-                        .sort(this.handleSorting)
-                        .map((pesanan) => {
-                          // console.log("Data Pesanan ", pesanan.data.OrderId);
-                          var badge;
-                          if (pesanan.data.Status === "Active") {
-                            badge = "badge badge-success";
-                          } else if (
-                            pesanan.data.Status === "Menunggu Pembayaran"
-                          ) {
-                            badge = "badge badge-warning";
-                          } else if (pesanan.data.Status === "Selesai") {
-                            badge = "badge badge-secondary";
-                          } else {
-                            badge = "badge badge-danger";
-                          }
-                          return (
-                            <tr
-                              className="row-pesanan"
-                              key={pesanan.id}
-                              data-toggle="modal"
-                              data-target="#form-edit"
-                              onClick={(pesanan) => this.handleEdit(pesanan)}
-                            >
-                              <td>{pesanan.data.OrderId}</td>
-                              <td>{pesanan.data.NamaPemesan} </td>
-                              <td>{pesanan.data.Ruangan} </td>
-                              <td>{pesanan.data.TanggalSewa} </td>
-                              <td>{pesanan.data.TanggalSelesai} </td>
-                              <td className={badge}>{pesanan.data.Status}</td>
-                            </tr>
-                          );
-                        })}
-                    </Fragment>
-                  ) : null}
-                </tbody>
-              </table>
+                  <tbody>
+                    {this.state.orderList.length > 0 ? (
+                      <Fragment>
+                        {this.state.orderList
+                          .filter(this.handleFilter)
+                          .sort(this.handleSorting)
+                          .map((pesanan) => {
+                            // console.log("Data Pesanan ", pesanan.data.OrderId);
+                            var badge;
+                            if (pesanan.data.Status === "Active") {
+                              badge = "badge badge-success";
+                            } else if (
+                              pesanan.data.Status === "Menunggu Pembayaran"
+                            ) {
+                              badge = "badge badge-warning";
+                            } else if (pesanan.data.Status === "Selesai") {
+                              badge = "badge badge-secondary";
+                            } else {
+                              badge = "badge badge-danger";
+                            }
+                            return (
+                              <tr
+                                className="row-pesanan"
+                                key={pesanan.id}
+                                data-toggle="modal"
+                                data-target="#form-edit"
+                                onClick={(pesanan) => this.handleEdit(pesanan)}
+                              >
+                                <td>{pesanan.data.OrderId}</td>
+                                <td>{pesanan.data.NamaPemesan} </td>
+                                <td>{pesanan.data.Ruangan} </td>
+                                <td>{pesanan.data.TanggalSewa} </td>
+                                <td>{pesanan.data.TanggalSelesai} </td>
+                                <td className={badge}>{pesanan.data.Status}</td>
+                              </tr>
+                            );
+                          })}
+                      </Fragment>
+                    ) : (
+                      <tr
+                        className="row-pesanan"
+                        data-toggle="modal"
+                        data-target="#form-edit"
+                      >
+                        <td>loading...</td>
+                        <td>loading...</td>
+                        <td>loading...</td>
+                        <td>loading...</td>
+                        <td>loading...</td>
+                        <td className="badge badge-success">loading...</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              {/* /.table-responsive */}
             </div>
-            {/* /.table-responsive */}
-          </div>
-          {/* /.card-body */}
+          ) : null}
 
-          <MDBDataTable striped bordered small data={this.state.dataTable[0]} />
+          {/* /.card-body */}
 
           <div className="card-footer clearfix">
             {/* <Link to="/print">
@@ -323,15 +361,6 @@ class Ruangan extends Component {
               Print Laporan
             </button>
           </Link> */}
-
-            {/* <input
-            type="text"
-            className="float-right"
-            name="daterange"
-            value={this.state.tanggalJarak}
-            onChange={this.handleTanggalJarak}
-            style={{ marginRight: "20px" }}
-          /> */}
           </div>
 
           {/* /.card-footer */}
