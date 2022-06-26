@@ -27,7 +27,64 @@ class Ruangan extends Component {
     this.handleGetData();
   }
 
-  componentDidUpdate() {}
+  componentDidUpdate(data1, data2) {
+    // console.log(data1, data2);
+    window.$.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+      // var min = parseInt(window.$("#min").val(), 10);
+      // var max = parseInt(window.$("#max").val(), 10);
+      // var age = parseFloat(data[3]) || 0;
+
+      // if (
+      //   (isNaN(min) && isNaN(max)) ||
+      //   (isNaN(min) && age <= max) ||
+      //   (min <= age && isNaN(max)) ||
+      //   (min <= age && age <= max)
+      // ) {
+      //   return true;
+      // }
+
+      //unConvert tanggal sewa
+      console.log(data[3]);
+      var tglSewa = data[3];
+      var d1 = tglSewa.split("-");
+      var resultTglSewa = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+
+      //unConvert tanggal selesai
+      console.log(data[4]);
+      var tglSelesai = data[4];
+      var d2 = tglSelesai.split("-");
+      var resultTglSelesai = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]); // -1 because months are from 0 to 11
+
+      if (this.state.isFilterActive === true) {
+        if (this.state.valDateRange === null) {
+          return true;
+        } else if (
+          resultTglSewa >= this.state.valDateRange[0] &&
+          resultTglSewa <= this.state.valDateRange[1]
+        ) {
+          return true;
+        } else if (
+          this.state.valDateRange[0] >= resultTglSewa &&
+          this.state.valDateRange[0] <= resultTglSelesai
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    });
+
+    window.$(document).ready(function () {
+      var table = window.$("#table_ruangan").DataTable();
+
+      // Event listener to the two range filtering inputs to redraw on input
+      window.$("#min, #max").keyup(function () {
+        table.draw();
+      });
+    });
+  }
 
   componentWillUnmount() {}
 
@@ -211,7 +268,9 @@ class Ruangan extends Component {
                 className="float-right text-center"
                 style={{ marginRight: "20px" }}
                 onChange={(e) =>
-                  this.setState({ valDateRange: e, isFilterActive: true })
+                  this.setState({ valDateRange: e, isFilterActive: true }, () =>
+                    console.log(this.state.valDateRange)
+                  )
                 }
                 value={this.state.valDateRange}
               />
@@ -254,7 +313,7 @@ class Ruangan extends Component {
                     {this.state.orderList.length > 0 ? (
                       <Fragment>
                         {this.state.orderList
-                          .filter(this.handleFilter)
+                          // .filter(this.handleFilter)
                           .map((pesanan) => {
                             // console.log("Data Pesanan ", pesanan.data.OrderId);
                             var badge;
