@@ -17,39 +17,6 @@ class Ruangan extends Component {
     nextOrderId: "",
     valDateRange: [new Date(), new Date()],
     isFilterActive: false,
-    dataTable: [
-      {
-        columns: [
-          {
-            label: "Order ID",
-            field: "OrderId",
-            sort: "descs",
-            // width: 270,
-          },
-          {
-            label: "Name",
-            field: "NamaPemesan",
-          },
-          {
-            label: "Ruangan",
-            field: "Ruangan",
-          },
-          {
-            label: "Tanggal Sewa",
-            field: "TanggalSewa",
-          },
-          {
-            label: "Tanggal Selesai",
-            field: "TanggalSelesai",
-          },
-          {
-            label: "Status",
-            field: "Status",
-          },
-        ],
-        rows: [],
-      },
-    ],
   };
 
   componentDidMount() {
@@ -58,8 +25,6 @@ class Ruangan extends Component {
     // });
 
     this.handleGetData();
-
-    console.log("data table", this.state.dataTable);
   }
 
   componentDidUpdate() {}
@@ -77,7 +42,7 @@ class Ruangan extends Component {
         // console.log("get data firebase : ", snapshot.val());
 
         const data = [];
-        const data2 = [];
+        // const data2 = [];
         if (snapshot.exists()) {
           Object.keys(snapshot.val()).map((key) => {
             data.push({
@@ -85,7 +50,7 @@ class Ruangan extends Component {
               data: snapshot.val()[key],
             });
 
-            data2.push(snapshot.val()[key]);
+            // data2.push(snapshot.val()[key]);
             return data;
           });
         } else {
@@ -100,16 +65,10 @@ class Ruangan extends Component {
             ordering: true,
             info: true,
             autoWidth: false,
-            responsive: true,
+            responsive: false,
+            order: [[0, "desc"]],
           });
         });
-
-        this.setState(
-          {
-            dataTable: [{ ...this.state.dataTable[0], rows: data2 }],
-          },
-          () => console.log(this.state.dataTable)
-        );
 
         // console.log(this.state.orderList.length);
 
@@ -296,7 +255,6 @@ class Ruangan extends Component {
                       <Fragment>
                         {this.state.orderList
                           .filter(this.handleFilter)
-                          .sort(this.handleSorting)
                           .map((pesanan) => {
                             // console.log("Data Pesanan ", pesanan.data.OrderId);
                             var badge;
@@ -329,20 +287,7 @@ class Ruangan extends Component {
                             );
                           })}
                       </Fragment>
-                    ) : (
-                      <tr
-                        className="row-pesanan"
-                        data-toggle="modal"
-                        data-target="#form-edit"
-                      >
-                        <td>loading...</td>
-                        <td>loading...</td>
-                        <td>loading...</td>
-                        <td>loading...</td>
-                        <td>loading...</td>
-                        <td className="badge badge-success">loading...</td>
-                      </tr>
-                    )}
+                    ) : null}
                   </tbody>
                 </table>
               </div>
