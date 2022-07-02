@@ -10,7 +10,6 @@ import "./Ruangan.css";
 
 class Ruangan extends Component {
   state = {
-    tanggalJarak: "01/01/2018 - 01/15/2018",
     orderList: "",
     orderDetail: "",
     modeEdit: false,
@@ -25,65 +24,70 @@ class Ruangan extends Component {
     // });
 
     this.handleGetData();
-  }
 
-  componentDidUpdate(data1, data2) {
-    // console.log(data1, data2);
+    var self = this;
+
     window.$.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-      // var min = parseInt(window.$("#min").val(), 10);
-      // var max = parseInt(window.$("#max").val(), 10);
-      // var age = parseFloat(data[3]) || 0;
-
-      // if (
-      //   (isNaN(min) && isNaN(max)) ||
-      //   (isNaN(min) && age <= max) ||
-      //   (min <= age && isNaN(max)) ||
-      //   (min <= age && age <= max)
-      // ) {
-      //   return true;
-      // }
+      // var min = window.$("#TestInput").val();
 
       //unConvert tanggal sewa
-      console.log(data[3]);
       var tglSewa = data[3];
       var d1 = tglSewa.split("-");
       var resultTglSewa = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
 
       //unConvert tanggal selesai
-      console.log(data[4]);
       var tglSelesai = data[4];
       var d2 = tglSelesai.split("-");
       var resultTglSelesai = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]); // -1 because months are from 0 to 11
 
-      if (this.state.isFilterActive === true) {
-        if (this.state.valDateRange === null) {
+      if (self.state.isFilterActive === true) {
+        if (self.state.valDateRange === null) {
           return true;
         } else if (
-          resultTglSewa >= this.state.valDateRange[0] &&
-          resultTglSewa <= this.state.valDateRange[1]
+          resultTglSewa >= self.state.valDateRange[0] &&
+          resultTglSewa <= self.state.valDateRange[1]
         ) {
           return true;
         } else if (
-          this.state.valDateRange[0] >= resultTglSewa &&
-          this.state.valDateRange[0] <= resultTglSelesai
+          self.state.valDateRange[0] >= resultTglSewa &&
+          self.state.valDateRange[0] <= resultTglSelesai
         ) {
           return true;
-        } else {
-          return false;
         }
       } else {
         return true;
       }
-    });
 
-    window.$(document).ready(function () {
-      var table = window.$("#table_ruangan").DataTable();
+      // window.$(document).ready(function () {
+      //   var table = window.$("#table_ruangan").DataTable();
 
       // Event listener to the two range filtering inputs to redraw on input
-      window.$("#min, #max").keyup(function () {
-        table.draw();
-      });
+      // window.$("#TestInput").keyup(function () {
+      //   console.log("ok");
+      //   table.draw();
+      // });
+
+      // window.$("#IdDateRangePicker").on("change", function () {
+      //   console.log("ok");
+      //   table.draw();
+      // });
+
+      // window.$(".IdDateRangePicker").change(function () {
+      //   alert("Handler for .change() called.");
+      // });
+      // });
     });
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // console.log(
+    //   "prevProps",
+    //   prevProps,
+    //   "prevState",
+    //   prevState,
+    //   "snapshot",
+    //   snapshot
+    // );
   }
 
   componentWillUnmount() {}
@@ -192,38 +196,8 @@ class Ruangan extends Component {
   };
 
   handleFilter = (val) => {
-    //unConvert tanggal sewa
-    var tglSewa = val.data.TanggalSewa;
-    var d1 = tglSewa.split("-");
-    var resultTglSewa = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
-
-    //unConvert tanggal selesai
-    var tglSelesai = val.data.TanggalSelesai;
-    var d2 = tglSelesai.split("-");
-    var resultTglSelesai = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]); // -1 because months are from 0 to 11
-
-    if (this.state.isFilterActive === true) {
-      if (this.state.valDateRange === null) {
-        return val;
-      } else if (
-        resultTglSewa >= this.state.valDateRange[0] &&
-        resultTglSewa <= this.state.valDateRange[1]
-      ) {
-        return (
-          // resultTglSewa >= this.state.valDateRange[0] &&
-          // resultTglSelesai <= this.state.valDateRange[1]
-
-          val
-        );
-      } else if (
-        this.state.valDateRange[0] >= resultTglSewa &&
-        this.state.valDateRange[0] <= resultTglSelesai
-      ) {
-        return val;
-      }
-    } else {
-      return val;
-    }
+    var table = window.$("#table_ruangan").DataTable();
+    table.draw();
   };
 
   handleSorting = (a, b) => {
@@ -264,12 +238,19 @@ class Ruangan extends Component {
               Buat Pesanan Baru
             </button>
             <div className="card-tools">
+              <input id="TestInput" defaultValue="Roma Debrian" />
               <DateRangePicker
                 className="float-right text-center"
+                id="IdDateRangePicker"
+                name="NameDateRangePicker"
                 style={{ marginRight: "20px" }}
                 onChange={(e) =>
-                  this.setState({ valDateRange: e, isFilterActive: true }, () =>
-                    console.log(this.state.valDateRange)
+                  this.setState(
+                    { valDateRange: e, isFilterActive: true },
+                    () => {
+                      console.log(this.state.valDateRange);
+                      this.handleFilter();
+                    }
                   )
                 }
                 value={this.state.valDateRange}
