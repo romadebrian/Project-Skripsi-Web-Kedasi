@@ -16,7 +16,7 @@ import Notifikasi from "../../pages/Notifikasi/Notifikasi";
 import Pesan from "../../pages/Pesan/Pesan";
 import Profile from "../../pages/Profile/Profile";
 
-import PrintOrder from "../../pages/Ruangan/DetailOrder/DetailOrderOld";
+import PrintOrder from "../../pages/Ruangan/DetailOrder/Invoice";
 import PrintLaporan from "../../pages/Ruangan/props/Ruangan/PrintLaporan";
 
 // Fungsi untuk yang di tampilkan ke index.html
