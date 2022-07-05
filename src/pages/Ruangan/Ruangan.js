@@ -238,7 +238,6 @@ class Ruangan extends Component {
               Buat Pesanan Baru
             </button>
             <div className="card-tools">
-              <input id="TestInput" defaultValue="Roma Debrian" />
               <DateRangePicker
                 className="float-right text-center"
                 id="IdDateRangePicker"

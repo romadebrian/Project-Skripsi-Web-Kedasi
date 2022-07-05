@@ -5,19 +5,43 @@ firebase.setLogLevel("silent");
 function Invoice() {
   const [orderDetail, setOrderDetail] = useState([]);
   const [isLoad, setIsLoad] = useState(false);
+  const [invoiceID, setInvoiceID] = useState();
 
   useEffect(() => {
     if (isLoad === false) {
-      console.log(isLoad);
       getDataOrder();
-
+      console.log("coba");
       setIsLoad(true);
     } else {
       console.log(orderDetail);
     }
+
+    const createInvoiceID = () => {
+      var idPesanan = orderDetail.OrderId;
+
+      if (idPesanan != null) {
+        // Comvert to Number
+        var arrA = Array.from(idPesanan);
+        arrA.splice(0, 3);
+        var convertA = Number(arrA.join(""));
+        // console.log(convertA);
+
+        // Formating ke 00000
+        var str = "" + convertA;
+        var pad = "000000";
+        var ans = pad.substring(0, pad.length - str.length) + str;
+        console.log(ans);
+
+        setInvoiceID(ans);
+      } else {
+        console.log("kosong");
+      }
+    };
+
+    createInvoiceID();
   }, [isLoad, orderDetail]);
 
-  const getDataOrder = () => {
+  const getDataOrder = async () => {
     const idPesanan = "ORD0012";
 
     console.log(idPesanan);
@@ -41,7 +65,7 @@ function Invoice() {
           console.log("Data tidak ditemukan");
         }
 
-        // console.log(dataHasil[0].data);
+        console.log(dataHasil[0].data);
         // this.setState({ orderDetail: dataHasil[0].data });
         setOrderDetail(dataHasil[0].data);
       });
@@ -102,7 +126,7 @@ function Invoice() {
                 </div>
                 {/* /.col */}
                 <div className="col-sm-4 invoice-col">
-                  <b>Invoice #007612</b>
+                  <b>Invoice #{invoiceID}</b>
                   <br />
                   <br />
                   <b>Order ID:</b> {orderDetail.OrderId}
