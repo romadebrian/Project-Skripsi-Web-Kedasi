@@ -6,11 +6,11 @@ function Invoice() {
   const [orderDetail, setOrderDetail] = useState([]);
   const [isLoad, setIsLoad] = useState(false);
   const [invoiceID, setInvoiceID] = useState();
+  const [roomNumber, setRoomNumber] = useState();
 
   useEffect(() => {
     if (isLoad === false) {
       getDataOrder();
-      console.log("coba");
       setIsLoad(true);
     } else {
       console.log(orderDetail);
@@ -30,19 +30,34 @@ function Invoice() {
         var str = "" + convertA;
         var pad = "000000";
         var ans = pad.substring(0, pad.length - str.length) + str;
-        console.log(ans);
+        // console.log(ans);
 
         setInvoiceID(ans);
       } else {
-        console.log("kosong");
+        // console.log("kosong");
+      }
+    };
+
+    const convertRoom = () => {
+      var IDRuangan = orderDetail.Ruangan;
+
+      if (IDRuangan != null) {
+        // Comvert to Number
+        var arrA = Array.from(IDRuangan);
+        arrA.splice(0, 5);
+        var convertA = Number(arrA.join(""));
+        // console.log(convertA);
+
+        setRoomNumber(convertA);
       }
     };
 
     createInvoiceID();
+    convertRoom();
   }, [isLoad, orderDetail]);
 
   const getDataOrder = async () => {
-    const idPesanan = "ORD0012";
+    const idPesanan = "ORD0011";
 
     console.log(idPesanan);
 
@@ -65,7 +80,7 @@ function Invoice() {
           console.log("Data tidak ditemukan");
         }
 
-        console.log(dataHasil[0].data);
+        // console.log(dataHasil[0].data);
         // this.setState({ orderDetail: dataHasil[0].data });
         setOrderDetail(dataHasil[0].data);
       });
@@ -153,7 +168,7 @@ function Invoice() {
                     <tbody>
                       <tr>
                         <td>{orderDetail.JumlahPaket}</td>
-                        <td>{orderDetail.Ruangan}</td>
+                        <td>Sewa Ruangan {roomNumber}</td>
                         <td>7 Days</td>
                         <td>Rp.700.000</td>
                       </tr>
