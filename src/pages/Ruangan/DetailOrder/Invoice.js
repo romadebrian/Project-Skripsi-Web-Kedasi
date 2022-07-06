@@ -7,6 +7,7 @@ function Invoice() {
   const [isLoad, setIsLoad] = useState(false);
   const [invoiceID, setInvoiceID] = useState();
   const [roomNumber, setRoomNumber] = useState();
+  const [subTotal, setSubTotal] = useState();
 
   useEffect(() => {
     if (isLoad === false) {
@@ -52,12 +53,43 @@ function Invoice() {
       }
     };
 
+    const getPriceRoom = () => {
+      var paket = orderDetail.Paket;
+      if (paket != null) {
+        if (paket === "PERJAM") {
+          setSubTotal("30,000");
+          // setTotalPayment(ConvertToCurrency.format(30000 * totalPaket));
+        } else if (paket === "HARIAN") {
+          setSubTotal("100,000");
+          // setTotalPayment(ConvertToCurrency.format(100000 * totalPaket));
+        } else if (paket === "HARIAN(PELAJAR)") {
+          setSubTotal("75.000");
+          // setTotalPayment(ConvertToCurrency.format(75000 * totalPaket));
+        } else if (paket === "BULANAN 25JAM") {
+          setSubTotal("450,000");
+          // setTotalPayment(ConvertToCurrency.format(450000 * totalPaket));
+        } else if (paket === "BULANAN 50JAM") {
+          setSubTotal("650,000");
+          // setTotalPayment(ConvertToCurrency.format(650000 * totalPaket));
+        } else if (paket === "BULANAN 100JAM") {
+          setSubTotal("900,000");
+          // setTotalPayment(ConvertToCurrency.format(900000 * totalPaket));
+        } else if (paket === "BULANAN TANPA BATAS") {
+          setSubTotal("1,200,000");
+          // setTotalPayment(ConvertToCurrency.format(1200000 * totalPaket));
+        } else {
+          setSubTotal("0");
+        }
+      }
+    };
+
     createInvoiceID();
     convertRoom();
+    getPriceRoom();
   }, [isLoad, orderDetail]);
 
   const getDataOrder = async () => {
-    const idPesanan = "ORD0011";
+    const idPesanan = "ORD0010";
 
     console.log(idPesanan);
 
@@ -168,9 +200,12 @@ function Invoice() {
                     <tbody>
                       <tr>
                         <td>{orderDetail.JumlahPaket}</td>
-                        <td>Sewa Ruangan {roomNumber}</td>
+                        <td>
+                          Sewa Ruangan {roomNumber}
+                          {orderDetail.Paket}
+                        </td>
                         <td>7 Days</td>
-                        <td>Rp.700.000</td>
+                        <td>Rp {subTotal}</td>
                       </tr>
                     </tbody>
                   </table>
