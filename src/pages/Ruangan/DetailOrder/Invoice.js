@@ -224,15 +224,15 @@ function Invoice() {
                       <tbody>
                         <tr>
                           <th style={{ width: "50%" }}>Subtotal:</th>
-                          <td>Rp.{orderDetail.TotalPembayaran}</td>
+                          <td>Rp {subTotal}</td>
                         </tr>
                         <tr>
-                          <th>Tax (10%)</th>
-                          <td>Rp.100.000</td>
+                          <th>Qty</th>
+                          <td>{orderDetail.JumlahPaket}</td>
                         </tr>
                         <tr>
                           <th>Total:</th>
-                          <td>Rp.1.100.000</td>
+                          <td>Rp {orderDetail.TotalPembayaran}</td>
                         </tr>
                       </tbody>
                     </table>
