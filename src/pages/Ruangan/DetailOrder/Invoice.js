@@ -7,7 +7,8 @@ function Invoice() {
   const [isLoad, setIsLoad] = useState(false);
   const [invoiceID, setInvoiceID] = useState();
   const [roomNumber, setRoomNumber] = useState();
-  const [subTotal, setSubTotal] = useState();
+  const [Price, setPrice] = useState();
+  const [durasi, setDurasi] = useState();
 
   useEffect(() => {
     if (isLoad === false) {
@@ -57,35 +58,60 @@ function Invoice() {
       var paket = orderDetail.Paket;
       if (paket != null) {
         if (paket === "PERJAM") {
-          setSubTotal("30,000");
+          setPrice("30,000");
           // setTotalPayment(ConvertToCurrency.format(30000 * totalPaket));
         } else if (paket === "HARIAN") {
-          setSubTotal("100,000");
+          setPrice("100,000");
           // setTotalPayment(ConvertToCurrency.format(100000 * totalPaket));
         } else if (paket === "HARIAN(PELAJAR)") {
-          setSubTotal("75.000");
+          setPrice("75.000");
           // setTotalPayment(ConvertToCurrency.format(75000 * totalPaket));
         } else if (paket === "BULANAN 25JAM") {
-          setSubTotal("450,000");
+          setPrice("450,000");
           // setTotalPayment(ConvertToCurrency.format(450000 * totalPaket));
         } else if (paket === "BULANAN 50JAM") {
-          setSubTotal("650,000");
+          setPrice("650,000");
           // setTotalPayment(ConvertToCurrency.format(650000 * totalPaket));
         } else if (paket === "BULANAN 100JAM") {
-          setSubTotal("900,000");
+          setPrice("900,000");
           // setTotalPayment(ConvertToCurrency.format(900000 * totalPaket));
         } else if (paket === "BULANAN TANPA BATAS") {
-          setSubTotal("1,200,000");
+          setPrice("1,200,000");
           // setTotalPayment(ConvertToCurrency.format(1200000 * totalPaket));
         } else {
-          setSubTotal("0");
+          setPrice("0");
         }
+      }
+    };
+
+    const getDurasi = () => {
+      var date1 = new Date("06/20/2019");
+      var date2 = new Date("06/25/2019");
+
+      var Difference_In_Time = date2.getTime() - date1.getTime();
+
+      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+      var Difference_In_Month = Math.floor(Difference_In_Days / 30);
+
+      var Difference_In_Year = Math.floor(Difference_In_Month / 12);
+
+      if (Difference_In_Year !== 0) {
+        console.log(Difference_In_Year, "Year");
+
+      } else if (Difference_In_Month !== 0) {
+        console.log(Difference_In_Month, "Month");
+      } else if (Difference_In_Days !== 0) {
+        console.log(Difference_In_Days, "Day");
+      } else {
+        console.log("Error");
       }
     };
 
     createInvoiceID();
     convertRoom();
     getPriceRoom();
+    getDurasi();
   }, [isLoad, orderDetail]);
 
   const getDataOrder = async () => {
@@ -193,7 +219,8 @@ function Invoice() {
                       <tr>
                         <th>Qty</th>
                         <th>Description</th>
-                        <th>Lama Sewa</th>
+                        <th>Price</th>
+                        <th>Duration</th>
                         <th>Subtotal</th>
                       </tr>
                     </thead>
@@ -204,8 +231,9 @@ function Invoice() {
                           Sewa Ruangan {roomNumber}
                           {orderDetail.Paket}
                         </td>
+                        <td>Rp {Price}</td>
                         <td>7 Days</td>
-                        <td>Rp {subTotal}</td>
+                        <td>Rp {orderDetail.TotalPembayaran}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -222,14 +250,14 @@ function Invoice() {
                   <div className="table-responsive">
                     <table className="table">
                       <tbody>
-                        <tr>
+                        {/* <tr>
                           <th style={{ width: "50%" }}>Subtotal:</th>
-                          <td>Rp {subTotal}</td>
+                          <td>Rp {Price}</td>
                         </tr>
                         <tr>
-                          <th>Qty</th>
+                          <th>Tax (10%)</th>
                           <td>{orderDetail.JumlahPaket}</td>
-                        </tr>
+                        </tr> */}
                         <tr>
                           <th>Total:</th>
                           <td>Rp {orderDetail.TotalPembayaran}</td>
