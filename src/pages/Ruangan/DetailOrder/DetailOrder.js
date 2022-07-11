@@ -121,7 +121,7 @@ function DetailOrder(props) {
       });
 
       if (data.BuktiPembayaran === "") {
-        setStatusUpload("Add File");
+        setStatusUpload("Submit Payment");
         setFotoName("Choose File");
         setStyleButton("btn-success");
       } else {
@@ -674,7 +674,7 @@ function DetailOrder(props) {
       }
     } else if (statusUpload === "View") {
       openFoto();
-    } else if (statusUpload === "Add File") {
+    } else if (statusUpload === "Submit Payment") {
     } else if (statusUpload === "Uploading") {
     }
   };
@@ -947,6 +947,8 @@ function DetailOrder(props) {
                           className={`btn ${styleButton}`}
                           onClick={handleUploadFoto}
                         >
+                          <i className="far fa-credit-card" />
+                          &nbsp;
                           {statusUpload}
                         </span>
                       </div>

@@ -125,7 +125,7 @@ function Invoice() {
   }, [isLoad, orderDetail]);
 
   const getDataOrder = async () => {
-    const idPesanan = "ORD0007";
+    const idPesanan = "ORD0011";
 
     console.log(idPesanan);
 
