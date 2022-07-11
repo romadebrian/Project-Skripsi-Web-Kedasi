@@ -97,12 +97,14 @@ function Invoice() {
       var Difference_In_Year = Math.floor(Difference_In_Month / 12);
 
       if (Difference_In_Year !== 0) {
-        console.log(Difference_In_Year, "Year");
-
+        // console.log(Difference_In_Year, "Year");
+        setDurasi(Difference_In_Year + "Year");
       } else if (Difference_In_Month !== 0) {
-        console.log(Difference_In_Month, "Month");
+        // console.log(Difference_In_Month, "Month");
+        setDurasi(Difference_In_Month + "Month");
       } else if (Difference_In_Days !== 0) {
-        console.log(Difference_In_Days, "Day");
+        // console.log(Difference_In_Days, "Days");
+        setDurasi(Difference_In_Days + " Days");
       } else {
         console.log("Error");
       }
@@ -232,7 +234,7 @@ function Invoice() {
                           {orderDetail.Paket}
                         </td>
                         <td>Rp {Price}</td>
-                        <td>7 Days</td>
+                        <td>{durasi}</td>
                         <td>Rp {orderDetail.TotalPembayaran}</td>
                       </tr>
                     </tbody>

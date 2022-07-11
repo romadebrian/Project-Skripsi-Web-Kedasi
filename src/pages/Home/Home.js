@@ -1,5 +1,6 @@
 import { Component } from "react";
 import firebase from "../../config/firebase";
+// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 class Home extends Component {
   state = {
@@ -100,6 +101,18 @@ class Home extends Component {
     );
   };
 
+  // setAdmin = () => {
+  //   firebase.auth().currentUser.getIdToken(true);
+  //   var uid = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
+  //   getAuth()
+  //     .setCustomUserClaims(uid, { admin: true })
+  //     .then(() => {
+  //       console.log("success");
+  //       // The new custom claims will propagate to the user's ID token the
+  //       // next time a new one is issued.
+  //     });
+  // };
+
   render() {
     return (
       <div>
@@ -198,6 +211,9 @@ class Home extends Component {
             </div>
           </div>
         </section>
+        {/* <button className="btn btn-primary" onClick={() => this.setAdmin()}>
+          Test Set Admin{" "}
+        </button> */}
       </div>
     );
   }
