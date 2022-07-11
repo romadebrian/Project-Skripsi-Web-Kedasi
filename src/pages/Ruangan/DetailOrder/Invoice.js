@@ -85,28 +85,36 @@ function Invoice() {
     };
 
     const getDurasi = () => {
-      var date1 = new Date("06/20/2019");
-      var date2 = new Date("06/25/2019");
+      if (orderDetail.TanggalSewa != null) {
+        var dateFrom = orderDetail.TanggalSewa;
+        var dateTo = orderDetail.TanggalSelesai;
 
-      var Difference_In_Time = date2.getTime() - date1.getTime();
+        var d1 = dateFrom.split("-");
+        var d2 = dateTo.split("-");
 
-      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+        var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+        var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
 
-      var Difference_In_Month = Math.floor(Difference_In_Days / 30);
+        var Difference_In_Time = to.getTime() - from.getTime();
 
-      var Difference_In_Year = Math.floor(Difference_In_Month / 12);
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
-      if (Difference_In_Year !== 0) {
-        // console.log(Difference_In_Year, "Year");
-        setDurasi(Difference_In_Year + "Year");
-      } else if (Difference_In_Month !== 0) {
-        // console.log(Difference_In_Month, "Month");
-        setDurasi(Difference_In_Month + "Month");
-      } else if (Difference_In_Days !== 0) {
-        // console.log(Difference_In_Days, "Days");
-        setDurasi(Difference_In_Days + " Days");
-      } else {
-        console.log("Error");
+        var Difference_In_Month = Math.floor(Difference_In_Days / 30);
+
+        var Difference_In_Year = Math.floor(Difference_In_Month / 12);
+
+        if (Difference_In_Year !== 0) {
+          // console.log(Difference_In_Year, "Year");
+          setDurasi(Difference_In_Year + " Year");
+        } else if (Difference_In_Month !== 0) {
+          // console.log(Difference_In_Month, "Month");
+          setDurasi(Difference_In_Month + " Month");
+        } else if (Difference_In_Days !== 0) {
+          // console.log(Difference_In_Days, "Days");
+          setDurasi(Difference_In_Days + " Days");
+        } else {
+          console.log("Error");
+        }
       }
     };
 
@@ -117,7 +125,7 @@ function Invoice() {
   }, [isLoad, orderDetail]);
 
   const getDataOrder = async () => {
-    const idPesanan = "ORD0010";
+    const idPesanan = "ORD0007";
 
     console.log(idPesanan);
 
