@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import firebase from "../../../config/firebase";
 firebase.setLogLevel("silent");
 
@@ -9,6 +9,7 @@ function Invoice() {
   const [roomNumber, setRoomNumber] = useState();
   const [Price, setPrice] = useState();
   const [durasi, setDurasi] = useState();
+  const [statusUpload, setStatusUpload] = useState("");
 
   useEffect(() => {
     if (isLoad === false) {
@@ -118,14 +119,25 @@ function Invoice() {
       }
     };
 
+    const getStatusPayment = () => {
+      if (orderDetail.BuktiPembayaran != null) {
+        if (orderDetail.BuktiPembayaran === "") {
+          setStatusUpload("Submit Payment");
+        } else {
+          setStatusUpload("View");
+        }
+      }
+    };
+
     createInvoiceID();
     convertRoom();
     getPriceRoom();
     getDurasi();
+    getStatusPayment();
   }, [isLoad, orderDetail]);
 
   const getDataOrder = async () => {
-    const idPesanan = "ORD0011";
+    const idPesanan = "ORD0005";
 
     console.log(idPesanan);
 
@@ -154,6 +166,9 @@ function Invoice() {
       });
   };
 
+  const thisFileUpload = () => {
+    document.getElementById("fileUpload").click();
+  };
   return (
     <section className="content">
       <div className="container-fluid">
@@ -290,9 +305,35 @@ function Invoice() {
                   >
                     <i className="fas fa-print" /> Print
                   </a>
-                  <button type="button" className="btn btn-success float-right">
-                    <i className="far fa-credit-card" /> Submit Payment
-                  </button>
+                  {statusUpload === "View" ? (
+                    <button
+                      type="button"
+                      className="btn btn-success float-right"
+                    >
+                      <i className="far fa-credit-card" /> View Payment
+                    </button>
+                  ) : (
+                    // <button
+                    //   type="button"
+                    //   className="btn btn-success float-right"
+                    // >
+                    //   <i className="far fa-credit-card" /> Submit Payment
+                    // </button>
+                    <Fragment>
+                      <input
+                        type="file"
+                        id="fileUpload"
+                        style={{ display: "none" }}
+                      />
+                      <button
+                        className="btn btn-success float-right"
+                        onClick={thisFileUpload}
+                      >
+                        <i className="far fa-credit-card" /> Submit Payment
+                      </button>
+                    </Fragment>
+                  )}
+
                   <button
                     type="button"
                     className="btn btn-primary float-right"
