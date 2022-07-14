@@ -80,8 +80,8 @@ function PesanRuangan(props) {
 
   const handleSubmit = async (e) => {
     // var StatusPembayaran;
-    var jatuhTempo = await paymentDue();
-
+    const TanggalTempo = await paymentDue();
+    let jatuhTempo = TanggalTempo.toString();
     e.preventDefault();
 
     console.log(e);
@@ -150,8 +150,7 @@ function PesanRuangan(props) {
             Status: statusPembayaran,
             TotalPembayaran: totalPayment,
             BuktiPembayaran: "",
-            JatuhTempo:
-              "Sat Jul 16 2022 19:04:01 GMT+0700 (Western Indonesia Time)",
+            JatuhTempo: jatuhTempo,
           },
           (error) => {
             if (error) {
