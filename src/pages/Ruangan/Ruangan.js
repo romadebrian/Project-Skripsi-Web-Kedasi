@@ -129,6 +129,17 @@ class Ruangan extends Component {
             responsive: false,
             order: [[0, "desc"]],
           });
+
+          window.$.fn.dataTable.ext.errMode = "none";
+
+          window
+            .$("#table_ruangan")
+            .on("error.dt", function (e, settings, techNote, message) {
+              console.log(
+                "An error has been reported by DataTables: ",
+                message
+              );
+            });
         });
 
         // console.log(this.state.orderList.length);

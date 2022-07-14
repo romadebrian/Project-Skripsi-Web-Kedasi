@@ -78,8 +78,10 @@ function PesanRuangan(props) {
     // console.log(paket);
   }, [isloaded, paket, totalPaket]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     // var StatusPembayaran;
+    var jatuhTempo = await paymentDue();
+
     e.preventDefault();
 
     console.log(e);
@@ -93,6 +95,7 @@ function PesanRuangan(props) {
     console.log("Tanggal Selesai: ", tglSelesai);
     console.log("StatusPembayaran: ", statusPembayaran);
     console.log("Total Pembayaran", totalPayment);
+    console.log("Jatuh Tempo", jatuhTempo);
 
     // if (e.target[58].checked === true) {
     //   StatusPembayaran = "Active";
@@ -147,6 +150,8 @@ function PesanRuangan(props) {
             Status: statusPembayaran,
             TotalPembayaran: totalPayment,
             BuktiPembayaran: "",
+            JatuhTempo:
+              "Sat Jul 16 2022 19:04:01 GMT+0700 (Western Indonesia Time)",
           },
           (error) => {
             if (error) {
@@ -173,10 +178,11 @@ function PesanRuangan(props) {
                 tglSelesai,
                 statusPembayaran,
                 totalPayment,
-                statusPembayaran
+                statusPembayaran,
+                jatuhTempo
               );
               window.$("#modal-lg").modal("hide");
-              window.location.reload();
+              // window.location.reload();
 
               // window.$(this.modal).modal("hide");
               // window.$(this.modal).on("hidden.bs.modal");
@@ -430,6 +436,17 @@ function PesanRuangan(props) {
           }
         });
     }
+  };
+
+  const paymentDue = () => {
+    var date = new Date();
+
+    // add a day
+    date.setDate(date.getDate() + 3);
+
+    return new Promise((resolve) => {
+      resolve(date);
+    });
   };
 
   // const handleChange = (e) => {
