@@ -10,6 +10,7 @@ function Invoice() {
   const [Price, setPrice] = useState();
   const [durasi, setDurasi] = useState();
   const [statusUpload, setStatusUpload] = useState("");
+  const [dateDue, setDateDue] = useState("");
 
   useEffect(() => {
     if (isLoad === false) {
@@ -129,15 +130,30 @@ function Invoice() {
       }
     };
 
+    const formatingPaymentDue = () => {
+      if (orderDetail.JatuhTempo != null) {
+        var DateD = new Date(orderDetail.JatuhTempo);
+        let DDue =
+          DateD.getDate() +
+          "/" +
+          parseInt(DateD.getMonth() + 1) +
+          "/" +
+          DateD.getFullYear();
+
+        setDateDue(DDue);
+      }
+    };
+
     createInvoiceID();
     convertRoom();
     getPriceRoom();
     getDurasi();
     getStatusPayment();
+    formatingPaymentDue();
   }, [isLoad, orderDetail]);
 
   const getDataOrder = async () => {
-    const idPesanan = "ORD0005";
+    const idPesanan = "ORD0026";
 
     console.log(idPesanan);
 
@@ -229,7 +245,7 @@ function Invoice() {
                   <br />
                   <b>Order ID:</b> {orderDetail.OrderId}
                   <br />
-                  <b>Payment Due:</b> 2/22/2014
+                  <b>Payment Due:</b> {dateDue}
                   <br />
                   <b>Account:</b> 968-34567
                 </div>
@@ -253,7 +269,7 @@ function Invoice() {
                       <tr>
                         <td>{orderDetail.JumlahPaket}</td>
                         <td>
-                          Sewa Ruangan {roomNumber}
+                          Sewa Ruangan {roomNumber}&nbsp;
                           {orderDetail.Paket}
                         </td>
                         <td>Rp {Price}</td>
@@ -271,7 +287,7 @@ function Invoice() {
                 <div className="col-6"></div>
                 {/* /.col */}
                 <div className="col-6">
-                  <p className="lead">Amount Due 2/22/2014</p>
+                  <p className="lead">Amount Due {dateDue}</p>
                   <div className="table-responsive">
                     <table className="table">
                       <tbody>
