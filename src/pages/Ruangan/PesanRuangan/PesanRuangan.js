@@ -150,7 +150,7 @@ function PesanRuangan(props) {
             Status: statusPembayaran,
             TotalPembayaran: totalPayment,
             BuktiPembayaran: "",
-            JatuhTempo: jatuhTempo,
+            JatuhTempo: jatuhTempo.toString(),
           },
           (error) => {
             if (error) {
@@ -181,7 +181,7 @@ function PesanRuangan(props) {
                 jatuhTempo
               );
               window.$("#modal-lg").modal("hide");
-              // window.location.reload();
+              window.location.reload();
 
               // window.$(this.modal).modal("hide");
               // window.$(this.modal).on("hidden.bs.modal");

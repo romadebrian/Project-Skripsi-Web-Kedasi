@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import firebase from "../../../config/firebase";
+import firebase, { storage } from "../../../config/firebase";
 firebase.setLogLevel("silent");
 
 function Invoice() {
@@ -11,6 +11,7 @@ function Invoice() {
   const [durasi, setDurasi] = useState();
   const [statusUpload, setStatusUpload] = useState("");
   const [dateDue, setDateDue] = useState("");
+  const [dateNow, setDateNow] = useState("");
 
   useEffect(() => {
     if (isLoad === false) {
@@ -144,16 +145,29 @@ function Invoice() {
       }
     };
 
+    const FormatingDateNow = () => {
+      var tglSekarang = new Date();
+      let TglSrg =
+        tglSekarang.getDate() +
+        "/" +
+        parseInt(tglSekarang.getMonth() + 1) +
+        "/" +
+        tglSekarang.getFullYear();
+
+      setDateNow(TglSrg);
+    };
+
     createInvoiceID();
     convertRoom();
     getPriceRoom();
     getDurasi();
     getStatusPayment();
     formatingPaymentDue();
+    FormatingDateNow();
   }, [isLoad, orderDetail]);
 
   const getDataOrder = async () => {
-    const idPesanan = "ORD0026";
+    const idPesanan = "ORD0029";
 
     console.log(idPesanan);
 
@@ -185,6 +199,16 @@ function Invoice() {
   const thisFileUpload = () => {
     document.getElementById("fileUpload").click();
   };
+
+  const viewPayment = () => {
+    storage
+      .ref("payment")
+      .child(orderDetail.BuktiPembayaran)
+      .getDownloadURL()
+      .then((url) => {
+        window.open(url, "_blank", "noopener,noreferrer");
+      });
+  };
   return (
     <section className="content">
       <div className="container-fluid">
@@ -201,7 +225,7 @@ function Invoice() {
                       alt="Logo Head"
                       style={{ height: "auto", width: 300 }}
                     />
-                    <small className="float-right">Date: 2/10/2014</small>
+                    <small className="float-right">Date: {dateNow} </small>
                   </h4>
                 </div>
                 {/* /.col */}
@@ -325,6 +349,7 @@ function Invoice() {
                     <button
                       type="button"
                       className="btn btn-success float-right"
+                      onClick={viewPayment}
                     >
                       <i className="far fa-credit-card" /> View Payment
                     </button>
