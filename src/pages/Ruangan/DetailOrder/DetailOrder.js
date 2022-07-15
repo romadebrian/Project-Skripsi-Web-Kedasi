@@ -648,7 +648,7 @@ function DetailOrder(props) {
                         Toast([
                           {
                             icon: "success",
-                            title: "Pesanan berhasil di perbarui 1.",
+                            title: "Bukti Pembayaran Berhasil Di Upload",
                           },
                         ]);
 
@@ -675,6 +675,7 @@ function DetailOrder(props) {
     } else if (statusUpload === "View") {
       openFoto();
     } else if (statusUpload === "Submit Payment") {
+      document.getElementById("InputPaymentFoto").click();
     } else if (statusUpload === "Uploading") {
     }
   };

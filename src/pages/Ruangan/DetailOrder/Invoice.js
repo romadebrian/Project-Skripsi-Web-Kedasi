@@ -172,7 +172,7 @@ function Invoice() {
   }, [isLoad, orderDetail]);
 
   const getDataOrder = async () => {
-    const idPesanan = "ORD0029";
+    const idPesanan = "ORD0024";
 
     console.log(idPesanan);
 
@@ -282,7 +282,7 @@ function Invoice() {
             );
 
             // setFotoName(progress + " %");
-            setStatusUpload("Uploading", progress + " %");
+            setStatusUpload(`Uploading... ${progress} %`);
             setStyleButton("btn-danger");
             console.log(progress + " %");
           },
@@ -322,7 +322,7 @@ function Invoice() {
                         Toast([
                           {
                             icon: "success",
-                            title: "Pesanan berhasil di perbarui 1.",
+                            title: "Bukti Pembayaran Berhasil Di Upload",
                           },
                         ]);
 
@@ -336,7 +336,7 @@ function Invoice() {
                         setFileDetail({ ...FileDetail, Filenya: null });
                         setStatusUpload("View");
                         // setFotoName(fileName);
-                        setStyleButton("btn-warning");
+                        // setStyleButton("btn-warning");
                       }
                     }
                   );
@@ -504,7 +504,7 @@ function Invoice() {
                   {statusUpload === "View" ? (
                     <button
                       type="button"
-                      className={`btn ${styleButton} float-right`}
+                      className={`btn btn-warning float-right`}
                       onClick={viewPayment}
                     >
                       <i className="far fa-credit-card" /> View Payment
@@ -525,10 +525,24 @@ function Invoice() {
                         onChange={fileSelectHandler}
                       />
                       <button
-                        className="btn btn-success float-right"
+                        className={`btn ${styleButton} float-right`}
                         onClick={thisFileUpload}
                       >
-                        <i className="far fa-credit-card" /> {statusUpload}
+                        {statusUpload !== "Upload" &&
+                        statusUpload !== "View" &&
+                        statusUpload !== "Submit Payment" ? (
+                          <span
+                            className="spinner-border spinner-border-sm"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                        ) : statusUpload === "Upload" ? (
+                          <i className="fas fa-upload" />
+                        ) : (
+                          <i className="far fa-credit-card" />
+                        )}
+                        &nbsp;
+                        {statusUpload}
                       </button>
                     </Fragment>
                   )}
