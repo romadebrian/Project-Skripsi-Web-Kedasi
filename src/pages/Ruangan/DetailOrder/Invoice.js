@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import firebase, { storage } from "../../../config/firebase";
+import Toast from "../../../component/toast/Toast";
 firebase.setLogLevel("silent");
 
 function Invoice() {
@@ -9,9 +10,13 @@ function Invoice() {
   const [roomNumber, setRoomNumber] = useState();
   const [Price, setPrice] = useState();
   const [durasi, setDurasi] = useState();
-  const [statusUpload, setStatusUpload] = useState("");
   const [dateDue, setDateDue] = useState("");
   const [dateNow, setDateNow] = useState("");
+
+  const [statusUpload, setStatusUpload] = useState("Submit Payment");
+  // const [uploadMode, setUploadMode] = useState(false);
+  const [FileDetail, setFileDetail] = useState();
+  const [styleButton, setStyleButton] = useState("btn-success");
 
   useEffect(() => {
     if (isLoad === false) {
@@ -197,7 +202,157 @@ function Invoice() {
   };
 
   const thisFileUpload = () => {
-    document.getElementById("fileUpload").click();
+    if (statusUpload === "Submit Payment") {
+      document.getElementById("fileUpload").click();
+    } else if (statusUpload === "Upload") {
+      handleUploadFoto();
+    }
+  };
+
+  const fileSelectHandler = (event) => {
+    console.log(event.target.files[0]);
+    // setFileFoto(event.target.files[0]);
+    // setFotoName(event.target.files[0]?.name);
+
+    setStatusUpload("Upload");
+    setStyleButton("btn-primary");
+    // setUploadMode(true);
+
+    if (event.target.files[0].type === "image/png") {
+      // setFileType(".png");
+      setFileDetail({
+        Filenya: event.target.files[0],
+        NamaFile: event.target.files[0]?.name,
+        Type: ".png",
+      });
+    } else if (event.target.files[0].type === "image/jpeg") {
+      // setFileType(".jpeg");
+      setFileDetail({
+        Filenya: event.target.files[0],
+        NamaFile: event.target.files[0]?.name,
+        Type: ".jpeg",
+      });
+    } else if (event.target.files[0].type === "image/jpg") {
+      // setFileType(".jpg");
+      setFileDetail({
+        Filenya: event.target.files[0],
+        NamaFile: event.target.files[0]?.name,
+        Type: ".jpg",
+      });
+    }
+  };
+
+  const getPrimaryKey = () => {
+    return new Promise((resolve) => {
+      const idPesanan = orderDetail.OrderId;
+      return firebase
+        .database()
+        .ref("/order/")
+        .orderByChild("OrderId")
+        .equalTo(idPesanan)
+        .once("value", (snapshot) => {
+          Object.keys(snapshot.val()).map((key) => {
+            // console.log(key);
+            resolve(key);
+            return key;
+          });
+        });
+    });
+  };
+
+  const handleUploadFoto = async (e) => {
+    const PrimaryKey = await getPrimaryKey();
+
+    if (statusUpload === "Upload") {
+      if (FileDetail.Filenya != null) {
+        // console.log(image.name);
+
+        // Save foto to firebase storage
+        const fileName = orderDetail.OrderId + FileDetail.Type;
+        const uploadTask = storage
+          .ref(`payment/${fileName}`)
+          .put(FileDetail.Filenya);
+
+        // Get Status Upload
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+
+            // setFotoName(progress + " %");
+            setStatusUpload("Uploading", progress + " %");
+            setStyleButton("btn-danger");
+            console.log(progress + " %");
+          },
+          (error) => {
+            console.log(error);
+          },
+          () => {
+            storage
+              .ref("payment")
+              .child(fileName)
+              .getMetadata()
+              .then((MetaDataFoto) => {
+                // Update Data Firebase
+                firebase
+                  .database()
+                  .ref("order/" + PrimaryKey)
+                  .set(
+                    {
+                      OrderId: orderDetail.OrderId,
+                      Paket: orderDetail.Paket,
+                      JumlahPaket: orderDetail.JumlahPaket,
+                      NamaPemesan: orderDetail.NamaPemesan,
+                      Ruangan: orderDetail.Ruangan,
+                      TanggalSewa: orderDetail.TanggalSewa,
+                      TanggalSelesai: orderDetail.TanggalSelesai,
+                      Status: orderDetail.Status,
+                      TotalPembayaran: orderDetail.TotalPembayaran,
+
+                      BuktiPembayaran: MetaDataFoto.name,
+                    },
+                    (error) => {
+                      if (error) {
+                        // The write failed...
+                        alert("Gagal Simpan Ke Database");
+                      } else {
+                        // Data saved successfully!
+                        Toast([
+                          {
+                            icon: "success",
+                            title: "Pesanan berhasil di perbarui 1.",
+                          },
+                        ]);
+
+                        // console.log(valDetailOrder.BuktiPembayaran);
+
+                        setOrderDetail({
+                          ...orderDetail,
+                          BuktiPembayaran: MetaDataFoto.name,
+                        });
+
+                        setFileDetail({ ...FileDetail, Filenya: null });
+                        setStatusUpload("View");
+                        // setFotoName(fileName);
+                        setStyleButton("btn-warning");
+                      }
+                    }
+                  );
+              });
+          }
+        );
+
+        // toastSucces();
+      } else {
+        console.log("Foto belum  di pilih");
+        Toast([{ icon: "error", title: "File belum di pilih" }]);
+      }
+    } else if (statusUpload === "View") {
+    } else if (statusUpload === "Submit Payment") {
+    } else if (statusUpload === "Uploading") {
+    }
   };
 
   const viewPayment = () => {
@@ -209,6 +364,7 @@ function Invoice() {
         window.open(url, "_blank", "noopener,noreferrer");
       });
   };
+
   return (
     <section className="content">
       <div className="container-fluid">
@@ -348,7 +504,7 @@ function Invoice() {
                   {statusUpload === "View" ? (
                     <button
                       type="button"
-                      className="btn btn-success float-right"
+                      className={`btn ${styleButton} float-right`}
                       onClick={viewPayment}
                     >
                       <i className="far fa-credit-card" /> View Payment
@@ -365,12 +521,14 @@ function Invoice() {
                         type="file"
                         id="fileUpload"
                         style={{ display: "none" }}
+                        accept="image/png, image/jpeg, image/jpg"
+                        onChange={fileSelectHandler}
                       />
                       <button
                         className="btn btn-success float-right"
                         onClick={thisFileUpload}
                       >
-                        <i className="far fa-credit-card" /> Submit Payment
+                        <i className="far fa-credit-card" /> {statusUpload}
                       </button>
                     </Fragment>
                   )}
