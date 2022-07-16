@@ -5,6 +5,7 @@ import DateTimePicker from "react-datetime-picker";
 
 import Toast from "../../../component/toast/Toast";
 import { Link } from "react-router-dom";
+// import { DataInvoice } from "../../../config/context/Context";
 
 function DetailOrder(props) {
   const [paket, setPaket] = useState("");
@@ -710,6 +711,13 @@ function DetailOrder(props) {
 
   // const convertTanggal = (val) => {};
 
+  const setKodeOrder = async () => {
+    // console.log(props.value.setKode);
+    // await props.value.setKode("ORD0033");
+
+    localStorage.setItem("OrderId", JSON.stringify(valDetailOrder.idOrder));
+  };
+
   return (
     <div
       className="detailorder modal fade "
@@ -721,7 +729,7 @@ function DetailOrder(props) {
           <div className="card card-primary">
             <div className="card-header">
               <h3 className="card-title">Detail Pesan Ruangan</h3>
-              <Link to="/print" target="_blank">
+              <Link to="/print" target="_blank" onClick={setKodeOrder}>
                 <i className="fa fa-print float-right"></i>
               </Link>
             </div>

@@ -1,9 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
 import firebase, { storage } from "../../../config/firebase";
 import Toast from "../../../component/toast/Toast";
+// import { DataInvoice } from "../../../config/context/Context";
 firebase.setLogLevel("silent");
 
-function Invoice() {
+function Invoice(props) {
   const [orderDetail, setOrderDetail] = useState([]);
   const [isLoad, setIsLoad] = useState(false);
   const [invoiceID, setInvoiceID] = useState();
@@ -19,6 +20,38 @@ function Invoice() {
   const [styleButton, setStyleButton] = useState("btn-success");
 
   useEffect(() => {
+    console.log(props);
+
+    const getDataOrder = () => {
+      const idPesanan = JSON.parse(localStorage.getItem("OrderId"));
+
+      console.log(idPesanan);
+
+      return firebase
+        .database()
+        .ref("/order/")
+        .orderByChild("OrderId")
+        .equalTo(idPesanan)
+        .on("value", (snapshot) => {
+          const dataHasil = [];
+          if (snapshot.exists()) {
+            Object.keys(snapshot.val()).map((key) => {
+              dataHasil.push({
+                id: key,
+                data: snapshot.val()[key],
+              });
+              return dataHasil;
+            });
+          } else {
+            console.log("Data tidak ditemukan");
+          }
+
+          // console.log(dataHasil[0].data);
+          // this.setState({ orderDetail: dataHasil[0].data });
+          setOrderDetail(dataHasil[0].data);
+        });
+    };
+
     if (isLoad === false) {
       getDataOrder();
       setIsLoad(true);
@@ -169,39 +202,11 @@ function Invoice() {
     getStatusPayment();
     formatingPaymentDue();
     FormatingDateNow();
-  }, [isLoad, orderDetail]);
-
-  const getDataOrder = async () => {
-    const idPesanan = "ORD0024";
-
-    console.log(idPesanan);
-
-    return firebase
-      .database()
-      .ref("/order/")
-      .orderByChild("OrderId")
-      .equalTo(idPesanan)
-      .on("value", (snapshot) => {
-        const dataHasil = [];
-        if (snapshot.exists()) {
-          Object.keys(snapshot.val()).map((key) => {
-            dataHasil.push({
-              id: key,
-              data: snapshot.val()[key],
-            });
-            return dataHasil;
-          });
-        } else {
-          console.log("Data tidak ditemukan");
-        }
-
-        // console.log(dataHasil[0].data);
-        // this.setState({ orderDetail: dataHasil[0].data });
-        setOrderDetail(dataHasil[0].data);
-      });
-  };
+  }, [isLoad, orderDetail, props]);
 
   const thisFileUpload = () => {
+    // props.value.setKode("ORD0025");
+
     if (statusUpload === "Submit Payment") {
       document.getElementById("fileUpload").click();
     } else if (statusUpload === "Upload") {
