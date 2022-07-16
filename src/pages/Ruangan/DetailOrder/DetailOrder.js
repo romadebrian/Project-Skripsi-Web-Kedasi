@@ -729,7 +729,7 @@ function DetailOrder(props) {
           <div className="card card-primary">
             <div className="card-header">
               <h3 className="card-title">Detail Pesan Ruangan</h3>
-              <Link to="/print" target="_blank" onClick={setKodeOrder}>
+              <Link to="/invoice" target="_blank" onClick={setKodeOrder}>
                 <i className="fa fa-print float-right"></i>
               </Link>
             </div>

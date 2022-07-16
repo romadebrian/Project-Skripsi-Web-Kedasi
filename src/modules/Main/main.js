@@ -16,8 +16,9 @@ import Notifikasi from "../../pages/Notifikasi/Notifikasi";
 import Pesan from "../../pages/Pesan/Pesan";
 import Profile from "../../pages/Profile/Profile";
 
-import PrintOrder from "../../pages/Ruangan/DetailOrder/Invoice";
-import PrintLaporan from "../../pages/Ruangan/props/Ruangan/PrintLaporan";
+import Invoice from "../../pages/Ruangan/DetailOrder/Invoice";
+import InvoicePrint from "../../pages/Ruangan/DetailOrder/InvoicePrint";
+// import PrintLaporan from "../../pages/Ruangan/props/Ruangan/PrintLaporan";
 
 // Fungsi untuk yang di tampilkan ke index.html
 function App(props) {
@@ -58,11 +59,11 @@ function App(props) {
               {/* <Route path="/logout">
                 <Pesan />
               </Route> */}
-              <Route path="/print">
-                <PrintOrder />
+              <Route path="/invoice">
+                <Invoice />
               </Route>
-              <Route path="/printlaporan">
-                <PrintLaporan />
+              <Route path="/invoice-print">
+                <InvoicePrint />
               </Route>
 
               <Route path="/">

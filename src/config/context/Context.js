@@ -55,7 +55,7 @@ export const DataCurrentUser = (Childern) => {
 export const DataInvoice = (Childern) => {
   return class ParentCosumer extends Component {
     state = {
-      KodeOrder: "ORD0023",
+      KodeOrder: "ORD0001",
     };
 
     setKodeOrder = (value) => {

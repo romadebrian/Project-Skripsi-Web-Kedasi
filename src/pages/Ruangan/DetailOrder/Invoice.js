@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import firebase, { storage } from "../../../config/firebase";
 import Toast from "../../../component/toast/Toast";
 // import { DataInvoice } from "../../../config/context/Context";
+// import { Link } from "react-router-dom";
 firebase.setLogLevel("silent");
 
 function Invoice(props) {
@@ -370,6 +371,10 @@ function Invoice(props) {
       });
   };
 
+  const handlePrint = () => {
+    window.addEventListener("load", window.print());
+  };
+
   return (
     <section className="content">
       <div className="container-fluid">
@@ -498,14 +503,15 @@ function Invoice(props) {
               {/* this row will not appear when printing */}
               <div className="row no-print">
                 <div className="col-12">
-                  <a
-                    href="invoice-print.html"
-                    rel="noopener"
-                    target="_blank"
+                  <button
+                    // to="invoice-print"
+                    // rel="noopener"
+                    // target="_blank"
                     className="btn btn-default"
+                    onClick={handlePrint}
                   >
                     <i className="fas fa-print" /> Print
-                  </a>
+                  </button>
                   {statusUpload === "View" ? (
                     <button
                       type="button"
