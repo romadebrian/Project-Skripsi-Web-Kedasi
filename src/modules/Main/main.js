@@ -4,6 +4,7 @@ import {
   Switch,
   Route,
   withRouter,
+  useLocation,
 } from "react-router-dom";
 // import $ from "jquery";
 import Header from "./Header/Header";
@@ -22,6 +23,7 @@ import InvoicePrint from "../../pages/Ruangan/DetailOrder/InvoicePrint";
 
 // Fungsi untuk yang di tampilkan ke index.html
 function App(props) {
+  let location = useLocation();
   // const history = useHistory();
 
   // useEffect(() => {
@@ -72,7 +74,7 @@ function App(props) {
             </Switch>
           </div>
 
-          <Footer />
+          {location.pathname === "/invoice" ? null : <Footer />}
         </div>
       </div>
     </Router>
