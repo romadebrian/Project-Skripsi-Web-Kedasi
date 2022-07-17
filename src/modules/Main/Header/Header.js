@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import firebase from "../../../config/firebase";
 
 // rafce (react)
+
 class Header extends Component {
   state = {
     listNotifikasi: [],
@@ -16,9 +17,7 @@ class Header extends Component {
     this.getListPrimarykeyUserWasChat();
   }
 
-  handleFullScreen = (e) => {
-    e.preventDefault();
-  };
+  componentDidUpdate() {}
 
   getDeferentTime = (tanggal) => {
     var date1 = new Date(tanggal);
@@ -360,7 +359,7 @@ class Header extends Component {
                 data-widget="fullscreen"
                 to="#"
                 role="button"
-                onClick={this.handleFullScreen}
+                onClick={(e) => e.preventDefault()}
               >
                 <i className="fas fa-expand-arrows-alt" />
               </Link>
