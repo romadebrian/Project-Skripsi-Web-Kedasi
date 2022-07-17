@@ -558,13 +558,13 @@ function Invoice(props) {
                     </Fragment>
                   )}
 
-                  <button
+                  {/* <button
                     type="button"
                     className="btn btn-primary float-right"
                     style={{ marginRight: 5 }}
                   >
                     <i className="fas fa-download" /> Generate PDF
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
