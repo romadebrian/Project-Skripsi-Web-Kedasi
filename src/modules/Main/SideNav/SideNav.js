@@ -104,6 +104,10 @@ function SideNav(props) {
                     className="img-circle elevation-2"
                     style={{ height: "34px" }}
                     alt="User_Image"
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      currentTarget.src = "dist/img/no-image.png";
+                    }}
                   />
                 ) : (
                   <img
@@ -111,6 +115,10 @@ function SideNav(props) {
                     className="img-circle elevation-2"
                     style={{ height: "34px" }}
                     alt="User_Image"
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      currentTarget.src = "dist/img/no-image.png";
+                    }}
                   />
                 )}
               </div>
