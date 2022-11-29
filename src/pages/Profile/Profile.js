@@ -257,12 +257,29 @@ class Profile extends Component {
             {/* <h5 className="widget-user-desc text-right">Web Designer</h5> */}
           </div>
           <div className="widget-user-image">
-            <img
-              className="img-circle"
-              src={this.state.setUrl}
-              alt="User Avatar"
-              style={{ width: 150, height: 150 }}
-            />
+            {this.state.setUrl != null ? (
+              <img
+                className="img-circle"
+                src={this.state.setUrl}
+                alt="User Avatar"
+                style={{ width: 150, height: 150 }}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src = "dist/img/no-image.png";
+                }}
+              />
+            ) : (
+              <img
+                className="img-circle"
+                src="dist/img/no-image.png"
+                alt="User Avatar"
+                style={{ width: 150, height: 150 }}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src = "dist/img/no-image.png";
+                }}
+              />
+            )}
           </div>
           <div className="card-footer">
             <div className="row" style={{ height: 20 }}></div>
