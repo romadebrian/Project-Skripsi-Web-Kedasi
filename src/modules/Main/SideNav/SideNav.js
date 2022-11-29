@@ -58,7 +58,7 @@ function SideNav(props) {
             nama: snapshot.val() && snapshot.val().Nama,
             foto: snapshot.val() && snapshot.val().Profile_Picture,
           });
-          // console.log(username);
+          // console.log(snapshot.val());
           // console.log("Photo Profile Link ", this.state.setUrl);
           // console.log(snapshot.val() && snapshot.val().Nama);
         },
