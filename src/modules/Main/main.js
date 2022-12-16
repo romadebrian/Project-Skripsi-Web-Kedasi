@@ -19,6 +19,7 @@ import Profile from "../../pages/Profile/Profile";
 
 import Invoice from "../../pages/Ruangan/DetailOrder/Invoice";
 import InvoicePrint from "../../pages/Ruangan/DetailOrder/InvoicePrint";
+import { useEffect } from "react";
 // import PrintLaporan from "../../pages/Ruangan/props/Ruangan/PrintLaporan";
 
 // Fungsi untuk yang di tampilkan ke index.html
@@ -26,15 +27,15 @@ function Main(props) {
   let location = useLocation();
   // const history = useHistory();
 
-  // useEffect(() => {
-  //   // const navigate = useNavigate();
-
-  //   const token = localStorage.getItem("UserId");
-  //   if (!token) {
-  //     props.history.push("/login");
-  //     // navigate("/login");
-  //   }
-  // });
+  useEffect(() => {
+    // const navigate = useNavigate();
+    // const token = localStorage.getItem("UserId");
+    // if (!token) {
+    //   props.history.push("/login");
+    //   // navigate("/login");
+    // }
+    // console.log(location);
+  }, []);
 
   return (
     <Router>
