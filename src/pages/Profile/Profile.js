@@ -19,6 +19,7 @@ class Profile extends Component {
     setimage: "",
     // url: "",
     setUrl: "",
+    tokenNotif: "",
     progress: "0",
     setProgress: "0",
     foto: "Pilih Foto",
@@ -39,14 +40,18 @@ class Profile extends Component {
       .once("value")
       .then(
         (snapshot) => {
-          this.setState({
-            nama: snapshot.val() && snapshot.val().Nama,
-            // email: snapshot.val() && snapshot.val().Email,
-            email: JSON.parse(localStorage.getItem("UserEmail")),
-            telepon: snapshot.val() && snapshot.val().Telepon,
-            alamat: snapshot.val() && snapshot.val().Alamat,
-            setUrl: snapshot.val() && snapshot.val().Profile_Picture,
-          });
+          this.setState(
+            {
+              nama: snapshot.val() && snapshot.val().Nama,
+              // email: snapshot.val() && snapshot.val().Email,
+              email: JSON.parse(localStorage.getItem("UserEmail")),
+              telepon: snapshot.val() && snapshot.val().Telepon,
+              alamat: snapshot.val() && snapshot.val().Alamat,
+              setUrl: snapshot.val() && snapshot.val().Profile_Picture,
+              tokenNotif: snapshot.val() && snapshot.val().TokenNotif,
+            },
+            () => console.log("result", this.state)
+          );
           // console.log(username);
           console.log("Photo Profile Link ", this.state.setUrl);
           // console.log(this.state.email);
@@ -92,6 +97,7 @@ class Profile extends Component {
           Telepon: this.state.telepon,
           Alamat: this.state.alamat,
           Profile_Picture: this.state.setUrl,
+          TokenNotif: this.state.tokenNotif ? this.state.tokenNotif : "",
         },
         (error) => {
           if (error) {
@@ -115,7 +121,8 @@ class Profile extends Component {
               this.state.email,
               this.state.telepon,
               this.state.alamat,
-              this.state.setUrl
+              this.state.setUrl,
+              this.state.tokenNotif
             );
           }
         }
@@ -175,6 +182,9 @@ class Profile extends Component {
                     Telepon: this.state.telepon,
                     Alamat: this.state.alamat,
                     Profile_Picture: this.state.setUrl,
+                    TokenNotif: this.state.tokenNotif
+                      ? this.state.tokenNotif
+                      : "",
                   },
                   (error) => {
                     if (error) {

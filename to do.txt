@@ -1,6 +1,6 @@
 perbaiki system pemesanan ruangan (kecocokan data dengan yang di android)
 
-selesaikan fitur kirim notifikasi
+selesaikan fitur kirim notifikasi (handle jika token tidak ada)
 
 ganti nama file photo profile berdasarkan id user
 
