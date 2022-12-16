@@ -22,7 +22,7 @@ import InvoicePrint from "../../pages/Ruangan/DetailOrder/InvoicePrint";
 // import PrintLaporan from "../../pages/Ruangan/props/Ruangan/PrintLaporan";
 
 // Fungsi untuk yang di tampilkan ke index.html
-function App(props) {
+function Main(props) {
   let location = useLocation();
   // const history = useHistory();
 
@@ -81,4 +81,4 @@ function App(props) {
   );
 }
 
-export default withRouter(App);
+export default withRouter(Main);
