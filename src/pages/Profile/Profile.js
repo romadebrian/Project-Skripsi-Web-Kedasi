@@ -130,7 +130,7 @@ class Profile extends Component {
       Toast([{ icon: "error", title: "File belum di pilih" }]);
     } else {
       const uploadTask = storage
-        .ref(`profile/${this.state.setimage.name}`)
+        .ref(`profile/${this.state.userId}.jpg`)
         .put(this.state.setimage);
 
       uploadTask.on(
@@ -156,7 +156,7 @@ class Profile extends Component {
         () => {
           storage
             .ref("profile")
-            .child(this.state.setimage.name)
+            .child(this.state.userId + ".jpg")
             .getDownloadURL()
             .then((url) => {
               // console.log(url);
