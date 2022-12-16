@@ -237,11 +237,11 @@ class Header extends Component {
                 <i className="fas fa-bars" />
               </Link>
             </li>
-            <li className="nav-item d-none d-sm-inline-block">
+            {/* <li className="nav-item d-none d-sm-inline-block">
               <Link to="/" className="nav-link">
                 Home
               </Link>
-            </li>
+            </li> */}
           </ul>
           {/* Right navbar links */}
           <ul className="navbar-nav ml-auto">
