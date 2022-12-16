@@ -265,12 +265,27 @@ class Header extends Component {
                           <Link to="/pesan" className="dropdown-item">
                             {/* Message Start */}
                             <div className="media">
-                              <img
+                              {/* <img
                                 src={chat.photo}
                                 alt="User Avatar"
                                 className="img-size-50 img-circle mr-3"
                                 style={{ height: "50px" }}
-                              />
+                              /> */}
+                              {chat.photo != null ? (
+                                <img
+                                  src={chat.photo}
+                                  alt="User Avatar"
+                                  className="img-size-50 img-circle mr-3"
+                                  style={{ height: "50px" }}
+                                />
+                              ) : (
+                                <img
+                                  src="dist/img/no-image.png"
+                                  alt="User Avatar"
+                                  className="img-size-50 img-circle mr-3"
+                                  style={{ height: "50px" }}
+                                />
+                              )}
                               <div className="media-body">
                                 <h3 className="dropdown-item-title">
                                   {chat.nama}
@@ -318,7 +333,7 @@ class Header extends Component {
                     {this.state.listNotifikasi.map((result) => {
                       // console.log(result.id);
                       const elapsedTime = this.getDeferentTime(
-                        result.data.waktu
+                        result.data.Date
                       );
                       return (
                         <Fragment key={result.id}>
