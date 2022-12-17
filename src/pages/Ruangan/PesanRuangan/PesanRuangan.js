@@ -80,8 +80,8 @@ function PesanRuangan(props) {
 
   const handleSubmit = async (e) => {
     // var StatusPembayaran;
-    const TanggalTempo = await paymentDue();
-    let jatuhTempo = TanggalTempo.toString();
+    const jatuhTempo = await handleDueDate();
+    // let jatuhTempo = TanggalTempo.toString();
     e.preventDefault();
 
     console.log(e);
@@ -437,15 +437,45 @@ function PesanRuangan(props) {
     }
   };
 
-  const paymentDue = () => {
-    var date = new Date();
+  // const paymentDue = () => {
+  //   var date = new Date();
+
+  //   // add a day
+  //   date.setDate(date.getDate() + 3);
+
+  //   return new Promise((resolve) => {
+  //     resolve(date);
+  //   });
+  // };
+
+  const handleDueDate = () => {
+    var dateNow = new Date();
 
     // add a day
-    date.setDate(date.getDate() + 3);
+    dateNow.setDate(dateNow.getDate() + 2);
+
+    console.log("Due Date", dateNow);
+
+    var result = handleFormatingDate(dateNow);
+
+    // return result;
 
     return new Promise((resolve) => {
-      resolve(date);
+      resolve(result);
     });
+  };
+
+  const handleFormatingDate = (date) => {
+    // console.log("input date ", input);
+
+    let convertDate =
+      date.getDate() +
+      "-" +
+      parseInt(date.getMonth() + 1) +
+      "-" +
+      date.getFullYear();
+
+    return convertDate;
   };
 
   // const handleChange = (e) => {
