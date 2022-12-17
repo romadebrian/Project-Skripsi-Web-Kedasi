@@ -150,7 +150,7 @@ function PesanRuangan(props) {
             Status: statusPembayaran,
             TotalPembayaran: totalPayment,
             BuktiPembayaran: "",
-            JatuhTempo: jatuhTempo.toString(),
+            JatuhTempo: jatuhTempo,
           },
           (error) => {
             if (error) {
@@ -374,7 +374,7 @@ function PesanRuangan(props) {
               Toast([
                 {
                   icon: "error",
-                  title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
+                  title: `Ruangan ${room} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
                 },
               ]);
             }
