@@ -171,7 +171,6 @@ function Invoice(props) {
     };
 
     const formatingPaymentDue = () => {
-      console.log(orderDetail.JatuhTempo, "===================");
       if (orderDetail.JatuhTempo != null) {
         var dateData = `${orderDetail.JatuhTempo}`;
 
