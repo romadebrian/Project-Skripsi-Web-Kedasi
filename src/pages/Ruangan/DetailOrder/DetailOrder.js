@@ -317,9 +317,6 @@ function DetailOrder(props) {
                 var dateStart = StartDate;
                 var dateEnd = FinishDay;
 
-                console.log(StartDate, "===========");
-                console.log(dateEnd, "===========");
-
                 var d1 = dateFrom.split("-");
                 var d2 = dateTo.split("-");
                 var c1 = dateStart.split("-");
