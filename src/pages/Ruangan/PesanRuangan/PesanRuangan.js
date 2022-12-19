@@ -379,8 +379,6 @@ function PesanRuangan(props) {
               ]);
             }
           } else {
-            console.log("Data tidak ditemukan");
-
             //////////////////// Formating Start Date ////////////////////
             console.log("tglMulai ", tglMulai);
             // let startDay = tglMulai;
