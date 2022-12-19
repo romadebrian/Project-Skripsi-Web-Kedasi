@@ -642,6 +642,7 @@ function DetailOrder(props) {
       });
   };
 
+  // Kode Order untuk Invoice (alternatif react redux)
   const setKodeOrder = async () => {
     // console.log(props.value.setKode);
     // await props.value.setKode("ORD0033");
