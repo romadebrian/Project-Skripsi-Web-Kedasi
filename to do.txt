@@ -1,11 +1,7 @@
-perbaiki system pemesanan ruangan (kecocokan data dengan yang di android)
-
 selesaikan fitur kirim notifikasi (handle jika token tidak ada)
 
-ganti nama file photo profile berdasarkan id user
-
-Kirim notifikasi ke user ketika user order (pesanan di terima), pesanan selesai
-
-format dulu jatuh tempo agar bisa di simpan ke database
+Kirim notifikasi ke user ketika konfirmasi pembayaran, pesanan selesai
 
 ganti header dari class component ke functional component agar bisa pakai useLocation
+
+otomatis ubah status pesanan ketika lewat jatuh tempo dan tanggal selesai
