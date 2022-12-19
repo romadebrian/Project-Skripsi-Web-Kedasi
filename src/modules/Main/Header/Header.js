@@ -324,9 +324,11 @@ class Header extends Component {
                 </span>
               </a>
               <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span className="dropdown-item dropdown-header">
-                  {this.state.listNotifikasi.length} Notifications
-                </span>
+                <Link to="/notifikasi">
+                  <span className="dropdown-item dropdown-header">
+                    {this.state.listNotifikasi.length} Notifications
+                  </span>
+                </Link>
 
                 {this.state.listNotifikasi.length > 0 ? (
                   <Fragment>
