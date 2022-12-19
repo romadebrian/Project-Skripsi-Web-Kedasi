@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import firebase, { storage } from "../../../config/firebase";
 import Toast from "../../../component/toast/Toast";
 // import { DataInvoice } from "../../../config/context/Context";
@@ -15,13 +15,57 @@ function Invoice(props) {
   const [dateDue, setDateDue] = useState("");
   const [dateNow, setDateNow] = useState("");
 
+  const [dataUser, setDataUser] = useState();
+
   const [statusUpload, setStatusUpload] = useState("Submit Payment");
   // const [uploadMode, setUploadMode] = useState(false);
   const [FileDetail, setFileDetail] = useState();
   const [styleButton, setStyleButton] = useState("btn-success");
 
+  const handleGetDataUser = useCallback(() => {
+    const idPesanan = JSON.parse(localStorage.getItem("OrderId"));
+    // const idPesanan = "ORD0067";
+
+    // Listing all user
+    return firebase
+      .database()
+      .ref("users")
+      .once("value", (snapshot) => {
+        // console.log(snapshot.val());
+        Object.keys(snapshot.val()).map((key) => {
+          // console.log(key);
+
+          // cari orderID di dalam order user
+          return firebase
+            .database()
+            .ref("users/" + key + "/order")
+            .orderByChild("OrderId")
+            .equalTo(idPesanan)
+            .once("value", (result) => {
+              // Jika ketemu, maka kumpulkan data user berdasarkan key user yang sekarang sedang di loop
+              if (result.exists()) {
+                console.log(result.val());
+                console.log(key);
+                return firebase
+                  .database()
+                  .ref("users/" + key)
+                  .once("value", (resultdatauser) => {
+                    console.log(resultdatauser.val());
+                    setDataUser({
+                      iduser: key,
+                      address: resultdatauser.val().Nama,
+                      phone: resultdatauser.val().Telepon,
+                      email: resultdatauser.val().Email,
+                    });
+                  });
+              }
+            });
+        });
+      });
+  }, []);
+
   useEffect(() => {
-    console.log(props);
+    // console.log(props);
 
     const getDataOrder = () => {
       const idPesanan = JSON.parse(localStorage.getItem("OrderId"));
@@ -52,13 +96,6 @@ function Invoice(props) {
           setOrderDetail(dataHasil[0].data);
         });
     };
-
-    if (isLoad === false) {
-      getDataOrder();
-      setIsLoad(true);
-    } else {
-      console.log(orderDetail);
-    }
 
     const createInvoiceID = () => {
       var idPesanan = orderDetail.OrderId;
@@ -202,6 +239,12 @@ function Invoice(props) {
       setDateNow(TglSrg);
     };
 
+    if (isLoad === false) {
+      getDataOrder();
+      handleGetDataUser();
+      setIsLoad(true);
+    }
+
     createInvoiceID();
     convertRoom();
     getPriceRoom();
@@ -209,7 +252,7 @@ function Invoice(props) {
     getStatusPayment();
     formatingPaymentDue();
     FormatingDateNow();
-  }, [isLoad, orderDetail, props]);
+  }, [isLoad, orderDetail, props, handleGetDataUser]);
 
   const thisFileUpload = () => {
     // props.value.setKode("ORD0025");
@@ -381,6 +424,12 @@ function Invoice(props) {
     window.addEventListener("load", window.print());
   };
 
+  // const coba = useCallback(() => {}, []);
+
+  // useEffect(() => {
+  //   console.log(dataUser);
+  // }, [dataUser]);
+
   return (
     <section className="content">
       <div className="container-fluid">
@@ -425,13 +474,11 @@ function Invoice(props) {
                   <address>
                     <strong>{orderDetail.NamaPemesan}</strong>
                     <br />
-                    Jl,GG Haji Awi, RT.6/RW.12, Jatiasih
+                    Address: {dataUser?.address}
                     <br />
-                    Pondok Gede, Bekasi 117413
+                    Phone: {dataUser?.phone}
                     <br />
-                    Phone: 083877434091
-                    <br />
-                    Email: romadebrian04@yahoo.co.id
+                    Email: {dataUser?.email}
                   </address>
                 </div>
                 {/* /.col */}
@@ -443,7 +490,7 @@ function Invoice(props) {
                   <br />
                   <b>Payment Due:</b> {dateDue}
                   <br />
-                  <b>Account:</b> 968-34567
+                  <b>Account:</b> {dataUser?.iduser}
                 </div>
                 {/* /.col */}
               </div>
