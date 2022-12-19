@@ -171,16 +171,23 @@ function Invoice(props) {
     };
 
     const formatingPaymentDue = () => {
+      console.log(orderDetail.JatuhTempo, "===================");
       if (orderDetail.JatuhTempo != null) {
-        var DateD = new Date(orderDetail.JatuhTempo);
-        let DDue =
-          DateD.getDate() +
-          "/" +
-          parseInt(DateD.getMonth() + 1) +
-          "/" +
-          DateD.getFullYear();
+        var dateData = `${orderDetail.JatuhTempo}`;
 
-        setDateDue(DDue);
+        const arr = dateData.split("");
+        let totArr = arr.length;
+
+        for (let i = 0; i < totArr; i++) {
+          // console.log(arr[i]);
+          if (arr[i] === "-") {
+            arr[i] = "/";
+          }
+        }
+
+        let joins = arr.join("");
+
+        setDateDue(joins);
       }
     };
 
