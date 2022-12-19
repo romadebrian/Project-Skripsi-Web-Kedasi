@@ -2,6 +2,8 @@ selesaikan fitur kirim notifikasi (handle jika token tidak ada)
 
 Kirim notifikasi ke user ketika konfirmasi pembayaran, pesanan selesai
 
+Perbaiki kecocokan data pada menu pesan/live chat
+
 ganti header dari class component ke functional component agar bisa pakai useLocation
 
 otomatis ubah status pesanan ketika lewat jatuh tempo dan tanggal selesai
