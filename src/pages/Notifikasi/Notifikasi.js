@@ -1,5 +1,5 @@
 // rce
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import CreateNotification from "./CreateNotification/CreateNotification";
 import ItemNotification from "./props/ItemNotification";
 import firebase from "../../config/firebase";
@@ -8,12 +8,9 @@ import DetailNotification from "./props/DetailNotification";
 function Notifikasi() {
   const [dataNotifikasi, setDataNotifikasi] = useState([]);
   const [dataDetail, setDataDetail] = useState([]);
+  const [isLoad, setIsLoad] = useState(false);
 
-  useEffect(() => {
-    handleGetData();
-  }, []);
-
-  const handleGetData = () => {
+  const handleGetData = useCallback(() => {
     return firebase
       .database()
       .ref("/notifikasi/")
@@ -31,11 +28,17 @@ function Notifikasi() {
           console.log("Data tidak ditemukan");
         }
 
-        setDataNotifikasi({ dataNotifikasi: data });
-
-        console.log("List Notification: ", this.state.dataNotifikasi);
+        setDataNotifikasi(data);
       });
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!isLoad) {
+      handleGetData();
+      setIsLoad(true);
+    }
+    // console.log(dataNotifikasi);
+  }, [handleGetData, isLoad, dataNotifikasi]);
 
   const setNewJudul = (params) => {
     // console.log("params", params);
@@ -94,16 +97,17 @@ function Notifikasi() {
         </div>
       </div>
 
-      {this.state.dataNotifikasi.length > 0 ? (
+      {dataNotifikasi.length > 0 ? (
         <Fragment>
           {dataNotifikasi.map((result) => {
-            // console.log(result.id);
+            console.log(result);
             return (
               <ItemNotification
                 key={result.id}
                 primaryKey={result.id}
-                tanggal="30-01-2021"
+                tanggal={result.data.Date}
                 judul={result.data.Judul}
+                metaData={result.data.Meta_Data}
                 isi={result.data.Isi}
                 pelanggan={result.data.Target}
                 aksi={result.data.Aksi}
