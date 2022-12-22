@@ -10,7 +10,7 @@ function CreateNotification(props) {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [user, setUser] = useState("All");
-  const [aksi, setAksi] = useState("");
+  const [aksi, setAksi] = useState("Pemberitahuan");
   const [orderId, setOrderID] = useState("");
 
   const [listOrderUser, setListOrderUser] = useState(["ORD001", "ORD002"]);
@@ -207,6 +207,7 @@ function CreateNotification(props) {
     setTitle("");
     setMessage("");
     setUser("All");
+    setAksi("Pemberitahuan");
   };
 
   return (
