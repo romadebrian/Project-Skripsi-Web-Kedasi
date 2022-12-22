@@ -183,11 +183,7 @@ function DetailOrder(props) {
     console.log("ruanggannya", valDetailOrder.ruangannya);
     console.log("tgl sewa", unConvert);
 
-    if (
-      paket === "" ||
-      paket === "--- Casual Coworking ---" ||
-      paket === "--- Monthly Coworking ---"
-    ) {
+    if (paket === "") {
       Toast([
         {
           icon: "error",
@@ -721,15 +717,17 @@ function DetailOrder(props) {
                         setPeriksa(false);
                       }}
                     >
-                      <option>--- Casual Coworking ---</option>
-                      <option>PERJAM</option>
-                      <option>HARIAN</option>
-                      <option>HARIAN(PELAJAR)</option>
-                      <option>--- Monthly Coworking ---</option>
-                      <option>BULANAN 25JAM</option>
-                      <option>BULANAN 50JAM</option>
-                      <option>BULANAN 100JAM</option>
-                      <option>BULANAN TANPA BATAS</option>
+                      <optgroup label="Casual Coworking">
+                        <option>PERJAM</option>
+                        <option>HARIAN</option>
+                        <option>HARIAN(PELAJAR)</option>
+                      </optgroup>
+                      <optgroup label="Monthly Coworking">
+                        <option>BULANAN 25JAM</option>
+                        <option>BULANAN 50JAM</option>
+                        <option>BULANAN 100JAM</option>
+                        <option>BULANAN TANPA BATAS</option>
+                      </optgroup>
                     </select>
 
                     <div className="input-group-append">
