@@ -9,7 +9,7 @@ import Toast from "../../../component/toast/Toast";
 function PesanRuangan(props) {
   const [isloaded, setLoaded] = useState(false);
 
-  const [paket, setPaket] = useState("");
+  const [paket, setPaket] = useState("PERJAM");
   const [totalPaket, setTotalPaket] = useState("1");
   const [nameCostumer, setNameCostumer] = useState("");
   const [room, setRoom] = useState("ROOM 000");
@@ -202,11 +202,7 @@ function PesanRuangan(props) {
     console.log(room);
     console.log(tglMulai);
 
-    if (
-      paket === "" ||
-      paket === "--- Casual Coworking ---" ||
-      paket === "--- Monthly Coworking ---"
-    ) {
+    if (paket === "") {
       Toast([
         {
           icon: "error",
@@ -543,15 +539,17 @@ function PesanRuangan(props) {
                       className="form-control"
                       onChange={(e) => setPaket(e.target.value)}
                     >
-                      <option>--- Casual Coworking ---</option>
-                      <option>PERJAM</option>
-                      <option>HARIAN</option>
-                      <option>HARIAN(PELAJAR)</option>
-                      <option>--- Monthly Coworking ---</option>
-                      <option>BULANAN 25JAM</option>
-                      <option>BULANAN 50JAM</option>
-                      <option>BULANAN 100JAM</option>
-                      <option>BULANAN TANPA BATAS</option>
+                      <optgroup label="Casual Coworking">
+                        <option>PERJAM</option>
+                        <option>HARIAN</option>
+                        <option>HARIAN(PELAJAR)</option>
+                      </optgroup>
+                      <optgroup label="Monthly Coworking">
+                        <option>BULANAN 25JAM</option>
+                        <option>BULANAN 50JAM</option>
+                        <option>BULANAN 100JAM</option>
+                        <option>BULANAN TANPA BATAS</option>
+                      </optgroup>
                     </select>
 
                     <div className="input-group-append">
