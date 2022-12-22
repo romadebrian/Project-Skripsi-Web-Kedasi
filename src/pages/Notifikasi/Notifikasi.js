@@ -45,6 +45,8 @@ function Notifikasi() {
     setDataDetail({ dataDetail: params });
   };
 
+  console.log(dataNotifikasi);
+
   return (
     <div>
       <div className="card-header ">
@@ -100,7 +102,7 @@ function Notifikasi() {
       {dataNotifikasi.length > 0 ? (
         <Fragment>
           {dataNotifikasi.map((result) => {
-            console.log(result);
+            // console.log(result);
             return (
               <ItemNotification
                 key={result.id}
