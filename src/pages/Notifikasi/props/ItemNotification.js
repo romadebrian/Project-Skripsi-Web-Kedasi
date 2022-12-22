@@ -6,7 +6,7 @@ function ItemNotification(props) {
   let history = useHistory();
 
   useEffect(() => {
-    console.log(props);
+    // console.log(props);
   }, [props]);
 
   const HandleAksi = () => {
