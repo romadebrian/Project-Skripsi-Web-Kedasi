@@ -11,9 +11,10 @@ function CreateNotification(props) {
   const [message, setMessage] = useState("");
   const [user, setUser] = useState("All");
   const [aksi, setAksi] = useState("Pemberitahuan");
-  const [orderId, setOrderID] = useState("");
+  const [orderId, setOrderId] = useState("");
 
-  const [listOrderUser, setListOrderUser] = useState(["ORD001", "ORD002"]);
+  const [listOrderUser, setListOrderUser] = useState([]);
+  const [listUser, setListUser] = useState([]);
 
   useEffect(() => {
     window.$("#TanggalSewa").datetimepicker({
@@ -24,9 +25,33 @@ function CreateNotification(props) {
     });
 
     if (isloaded === false) {
+      handleGetListUser();
       setLoaded(true);
     }
   }, [isloaded]);
+
+  const handleGetListUser = () => {
+    return firebase
+      .database()
+      .ref("users")
+      .once("value", (snapshot) => {
+        console.log(snapshot.val());
+
+        const data = [];
+        Object.keys(snapshot.val()).map((key) => {
+          // console.log(snapshot.val());
+          // console.log(snapshot.val()[key]);
+          data.push({
+            id: key,
+            data: snapshot.val()[key],
+          });
+          return data;
+        });
+
+        // console.log(data);
+        setListUser(data);
+      });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -89,14 +114,17 @@ function CreateNotification(props) {
     //   );
   };
 
-  const handleCreateNotificationToOneUser = (e) => {
-    // var idUser = e.target[2].value;
-    var idUser = "zAhbiHR06ZQbwSdTiT6ftB91BH62";
-    var to =
-      "dCupw9lMSuCPzo_d7PKjxh:APA91bFfOr4piBZ-16ac9XIGO-gHcOIJEyp_7QyMWKad61dpZ5lbNlK5NjC77gaBnuB6N1oV3dLpXt6uQPYxGZ1F7ZlmaVxeV6L43Mm1ZTKvUUIYGR9964jfTLcac49r_aP7Z_cIwNWe";
+  const handleCreateNotificationToOneUser = () => {
+    var idUser = user;
+    var to = "";
     var DateTimeNow = FormattingDateTime(new Date());
 
-    // console.log(DateTimeNow);
+    listUser.map((val) => {
+      if (val.id === user) {
+        to = val.data.TokenNotif;
+      }
+      return null;
+    });
 
     if (aksi === "Transaksi") {
       const data = { Action: "CheckOut", OrderID: orderId };
@@ -208,7 +236,46 @@ function CreateNotification(props) {
     setMessage("");
     setUser("All");
     setAksi("Pemberitahuan");
+    setOrderId("");
   };
+
+  // handle get list transaction user
+  useEffect(() => {
+    if (user !== "All") {
+      if (aksi === "Transaksi") {
+        return firebase
+          .database()
+          .ref("users/" + user + "/order")
+          .once("value", (snapshot) => {
+            // console.log(snapshot.val());
+
+            const data = [];
+            if (snapshot.exists()) {
+              Object.keys(snapshot.val()).map((key) => {
+                // console.log(snapshot.val());
+                // console.log(snapshot.val()[key].OrderId);
+                data.push(snapshot.val()[key].OrderId);
+                return data;
+              });
+              // console.log(data);
+              setListOrderUser(data);
+              setOrderId(data[0]);
+            } else {
+              setListOrderUser([]);
+              setOrderId("");
+            }
+          });
+      } else {
+        setOrderId("");
+      }
+    } else {
+      setOrderId("");
+    }
+  }, [user, aksi]);
+
+  useEffect(() => {
+    console.log(orderId);
+  }, [orderId]);
 
   return (
     <div className="modal fade" id="form-notifikasi">
@@ -253,11 +320,14 @@ function CreateNotification(props) {
                     onChange={({ target }) => setUser(target.value)}
                   >
                     <option>All</option>
-                    <option>User 1</option>
-                    <option>User 2</option>
-                    <option>User 3</option>
-                    <option>User 5</option>
-                    <option>User 6</option>
+                    {listUser.map((dataUser) => {
+                      // console.log(dataUser);
+                      return (
+                        <option value={dataUser.id} key={dataUser.id}>
+                          {dataUser.data.Nama}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
 
@@ -279,7 +349,7 @@ function CreateNotification(props) {
                     <label>ID Order</label>
                     <select
                       className="form-control"
-                      onChange={({ target }) => setOrderID(target.value)}
+                      onChange={({ target }) => setOrderId(target.value)}
                     >
                       {listOrderUser.length > 0 ? (
                         listOrderUser.map((IdOrder) => {
