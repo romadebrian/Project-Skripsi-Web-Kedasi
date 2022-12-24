@@ -1,5 +1,3 @@
-selesaikan fitur kirim notifikasi (handle jika token tidak ada)
-
 Kirim notifikasi ke user ketika konfirmasi pembayaran, pesanan selesai
 
 Perbaiki kecocokan data pada menu pesan/live chat
