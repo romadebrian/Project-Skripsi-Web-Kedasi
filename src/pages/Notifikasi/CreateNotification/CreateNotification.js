@@ -10,7 +10,7 @@ function CreateNotification(props) {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [user, setUser] = useState("All");
-  const [aksi, setAksi] = useState("Pemberitahuan");
+  const [aksi, setAksi] = useState("Notification");
   const [orderId, setOrderId] = useState("");
 
   const [listOrderUser, setListOrderUser] = useState([]);
@@ -66,130 +66,60 @@ function CreateNotification(props) {
       handleCreateNotificationToOneUser();
     }
 
-    // if (e.target[3].value === "Default") {
-    //   aksinya = "Default";
-    //   console.log("Default");
-    // } else if (e.target[3].value === "Buka Aplikasi") {
-    //   aksinya = e.target[4].value;
-    //   console.log("Buka Aplikasi", e.target[4].value);
-    // } else if (e.target[3].value === "Buka Url") {
-    //   aksinya = e.target[4].value;
-    //   console.log("Buka Url", e.target[4].value);
-    // } else {
-    //   console.log("error");
-    // }
-
-    // firebase
-    //   .database()
-    //   .ref("notifikasi")
-    //   .push(
-    //     {
-    //       Judul: e.target[0].value,
-    //       Isi: e.target[1].value,
-    //       Target: e.target[2].value,
-    //       Aksi: aksinya,
-    //       waktu: tanggal,
-    //       Status: "Unread",
-    //     },
-    //     (error) => {
-    //       if (error) {
-    //         // The write failed...
-    //         alert("Gagal Simpan");
-    //       } else {
-    //         // Data saved successfully!
-    //         // alert("Profile Berhasil Di Simpan");
-    //         toastSucces();
-    //         console.log(
-    //           "send value: ",
-    //           e.target[0].value,
-    //           e.target[1].value,
-    //           e.target[2].value,
-    //           aksinya,
-    //           "Unread"
-    //         );
-
-    //         window.$("#form-notifikasi").modal("hide");
-    //       }
-    //     }
-    //   );
+    clearValue();
+    window.$("#form-notifikasi").modal("hide");
+    window.location.reload();
   };
 
-  const handleCreateNotificationToOneUser = () => {
-    var idUser = user;
-    var to = "";
-    var DateTimeNow = FormattingDateTime(new Date());
-
+  const handleCreateNotificationToOneUser = async () => {
+    // search Token notification user and send remote notification
     listUser.map((val) => {
       if (val.id === user) {
-        to = val.data.TokenNotif;
+        var to = val.data?.TokenNotif;
+
+        if (aksi === "CheckOut") {
+          const data = { Action: "CheckOut", OrderID: orderId };
+          handleCreateRemoteNotification(to, data);
+        } else if (aksi === "Notification") {
+          const data = { Action: "Notification" };
+          handleCreateRemoteNotification(to, data);
+        }
       }
       return null;
     });
 
-    if (aksi === "Transaksi") {
-      const data = { Action: "CheckOut", OrderID: orderId };
-      handleCreateRemoteNotification(to, data);
-    } else if (aksi === "Pemberitahuan") {
-      const data = { Action: "Notification" };
-      handleCreateRemoteNotification(to, data);
+    // even though this variable is not called it will still run
+    const sendToFirebase = await handleCreateNotificationToDatabase(user);
+
+    // console.log(sendToFirebase);
+    if (sendToFirebase) {
+      toastSucces();
     }
-
-    var postListRef = firebase.database().ref(`users/${idUser}/notifikasi`);
-    var newPostRef = postListRef.push();
-    newPostRef.set(
-      {
-        Aksi: aksi,
-        Date: DateTimeNow,
-        Isi: message,
-        Judul: title,
-        Meta_Data: orderId,
-        Status: "Unread",
-        Target: idUser,
-      },
-      (error) => {
-        if (error) {
-          alert("Gagal Simpan");
-        } else {
-          toastSucces();
-          clearValue();
-          window.$("#form-notifikasi").modal("hide");
-        }
-      }
-    );
-
-    // const db = getDatabase();
-    // const addNotification = ref(db, `notifikasi`);
-    // const newNotificationRef = push(addNotification);
-
-    // set(newNotificationRef, {
-    //   Aksi: aksi,
-    //   Date: DateTimeNow,
-    //   Isi: e.target[1].value,
-    //   Judul: e.target[0].value,
-    //   Meta_Data: metaData,
-    //   Status: "Unread",
-    //   Target: idUser,
-    // });
   };
 
-  const handleCreateNotificationToAll = (e) => {
-    // var DateTimeNow = FormattingDateTime(new Date());
-    // console.log(DateTimeNow);
-    // var postListRef = firebase.database().ref(`users/${idUser}/notifikasi`);
-    // var newPostRef = postListRef.push();
-    // newPostRef.set({
-    //   Aksi: aksi,
-    //   Date: DateTimeNow,
-    //   Isi: e.target[1].value,
-    //   Judul: e.target[0].value,
-    //   Meta_Data: metaData,
-    //   Status: "Unread",
-    //   Target: idUser,
-    // });
+  const handleCreateNotificationToAll = async () => {
+    listUser.map(async (val) => {
+      console.log(val);
+      // if (val.id === user) {
+      //   to = val.data.TokenNotif;
+      // }
+      var idUser = val.id;
+      var to = val.data?.TokenNotif;
+
+      const data = { Action: "Notification" };
+      await handleCreateRemoteNotification(to, data);
+
+      handleCreateNotificationToDatabase(idUser);
+
+      return null;
+    });
+
+    toastSucces();
   };
 
   const handleCreateRemoteNotification = async (to, data) => {
     console.log(data);
+    console.log(title, message);
     const myData = {
       to: to,
       priority: "high",
@@ -197,7 +127,7 @@ function CreateNotification(props) {
         title: title,
         body: message,
       },
-      // data: { Action: "Chat" },
+      // data: { Action: "Notification" },
       // data: { Action: "CheckOut", OrderID: "ORD0047" },
       data: data,
       // foreground: true
@@ -211,10 +141,38 @@ function CreateNotification(props) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(myData),
-    });
+    }).then(console.log(myData));
 
     const resultJson = await result.json();
     console.log(resultJson);
+  };
+
+  const handleCreateNotificationToDatabase = async (idUser) => {
+    var DateTimeNow = FormattingDateTime(new Date());
+    var response = false;
+
+    var postListRef = firebase.database().ref(`users/${idUser}/notifikasi`);
+    var newPostRef = postListRef.push();
+    await newPostRef.set(
+      {
+        Aksi: aksi,
+        Date: DateTimeNow,
+        Isi: message,
+        Judul: title,
+        Meta_Data: orderId,
+        Status: "Unread",
+        Target: idUser,
+      },
+      (error) => {
+        if (error) {
+          alert("Gagal Simpan");
+        } else {
+          response = true;
+        }
+      }
+    );
+
+    return response;
   };
 
   const toastSucces = () => {
@@ -231,18 +189,10 @@ function CreateNotification(props) {
     });
   };
 
-  const clearValue = () => {
-    setTitle("");
-    setMessage("");
-    setUser("All");
-    setAksi("Pemberitahuan");
-    setOrderId("");
-  };
-
   // handle get list transaction user
   useEffect(() => {
     if (user !== "All") {
-      if (aksi === "Transaksi") {
+      if (aksi === "CheckOut") {
         return firebase
           .database()
           .ref("users/" + user + "/order")
@@ -273,9 +223,13 @@ function CreateNotification(props) {
     }
   }, [user, aksi]);
 
-  useEffect(() => {
-    console.log(orderId);
-  }, [orderId]);
+  const clearValue = () => {
+    setTitle("");
+    setMessage("");
+    setUser("All");
+    setAksi("Notification");
+    setOrderId("");
+  };
 
   return (
     <div className="modal fade" id="form-notifikasi">
@@ -338,12 +292,14 @@ function CreateNotification(props) {
                     id="Frm_Aksi"
                     onChange={({ target }) => setAksi(target.value)}
                   >
-                    <option>Pemberitahuan</option>
-                    {user === "All" ? null : <option>Transaksi</option>}
+                    <option value="Notification">Pemberitahuan</option>
+                    {user === "All" ? null : (
+                      <option value="CheckOut">Transaksi</option>
+                    )}
                   </select>
                 </div>
 
-                {aksi === "Transaksi" ? (
+                {aksi === "CheckOut" ? (
                   <div className="form-group">
                     {/* <input /> */}
                     <label>ID Order</label>
