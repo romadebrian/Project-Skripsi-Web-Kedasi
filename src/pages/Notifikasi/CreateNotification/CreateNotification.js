@@ -35,7 +35,7 @@ function CreateNotification(props) {
       .database()
       .ref("users")
       .once("value", (snapshot) => {
-        console.log(snapshot.val());
+        // console.log(snapshot.val());
 
         const data = [];
         Object.keys(snapshot.val()).map((key) => {
@@ -48,7 +48,7 @@ function CreateNotification(props) {
           return data;
         });
 
-        // console.log(data);
+        console.log(data);
         setListUser(data);
       });
   };
