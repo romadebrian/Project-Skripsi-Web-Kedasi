@@ -3,6 +3,7 @@ import firebase, { storage } from "../../../config/firebase";
 import DateTimePicker from "react-datetime-picker";
 import Toast from "../../../component/toast/Toast";
 import { Link } from "react-router-dom";
+import { FormattingDateTime } from "../../../config/formattingDateTime";
 
 function DetailOrder(props) {
   const [paket, setPaket] = useState("");
@@ -572,6 +573,8 @@ function DetailOrder(props) {
                         alert("Gagal Simpan Ke Database");
                       } else {
                         // Data saved successfully!
+                        handleSearchUserBasedOnOrderId();
+
                         Toast([
                           {
                             icon: "success",
@@ -671,6 +674,133 @@ function DetailOrder(props) {
 
   //   // return StartDate;
   // };
+
+  const handleSearchUserBasedOnOrderId = async () => {
+    // colect list data user
+    const handleGetListUser = async () => {
+      const listUser = [];
+      await firebase
+        .database()
+        .ref("users")
+        .once("value", (snapshot) => {
+          // console.log(snapshot.val());
+
+          Object.keys(snapshot.val()).map((key) => {
+            // console.log(snapshot.val());
+            // console.log(snapshot.val()[key]);
+            listUser.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
+            return null;
+          });
+          // console.log(listUser);
+        });
+      // console.log(listUser);
+      return listUser;
+    };
+
+    // After listing run this
+    handleGetListUser().then(async (list) => {
+      const listUser = list;
+      // console.log(listUser);
+
+      // search Token notification user and send remote notification
+      listUser.map((val) => {
+        
+        const listOrderUser = val.data.order;
+        // console.log(val);
+        // console.log(listOrderUser);
+
+        // If user don't have transaction, don't send remote notification
+        if (listOrderUser != null) {
+          // Mapping list order user
+          Object.keys(listOrderUser).map((key) => {
+            // console.log(key);
+            // console.log(listOrderUser[key].OrderId);
+
+            if (listOrderUser[key].OrderId === valDetailOrder.idOrder) {
+              var to = val.data?.TokenNotif;
+
+              if (to != null) {
+                // console.log("Found ==============", to);
+
+                // Create Notification to Aplication Mobile (client)
+                handleCreateRemoteNotification(to);
+
+                // Create notification to database
+                var user = val.id;
+                // console.log(user);
+                const sendToFirebase = handleCreateNotificationToDatabase(user);
+
+                console.log(sendToFirebase);
+              }
+            }
+            return null;
+          });
+        }
+
+        return null;
+      });
+    });
+  };
+
+  const handleCreateRemoteNotification = async (to) => {
+    const myData = {
+      to: to,
+      priority: "high",
+      notification: {
+        title: "Konfirmasi Pembayaran",
+        body: `Pesanan anda dengan OrderId ${valDetailOrder.idOrder} telah dikonfirmasi pembayarannya`,
+      },
+
+      data: {
+        Action: "CheckOut",
+        OrderID: valDetailOrder.idOrder,
+      },
+    };
+
+    const result = await fetch("https://fcm.googleapis.com/fcm/send", {
+      method: "POST",
+      headers: {
+        Authorization:
+          "key=AAAA6jj0k_w:APA91bFVagvVrQ1UsvzH-GglbdFAzvfuGhE1A6KABx3Y3QdiiyKNba9RG6zAkYqm3oAd23M-l7BuhzatGHAOHln6L2lho1ZrhMUM5DB678r2Z9_Bd79z46HCiezO9q9zD6CaiTa_h6C2",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(myData),
+    }).then(console.log(myData));
+
+    const resultJson = await result.json();
+    console.log(resultJson);
+  };
+
+  const handleCreateNotificationToDatabase = async (idUser) => {
+    var DateTimeNow = FormattingDateTime(new Date());
+    var response = "";
+
+    var postListRef = firebase.database().ref(`users/${idUser}/notifikasi`);
+    var newPostRef = postListRef.push();
+    await newPostRef.set(
+      {
+        Aksi: "CheckOut",
+        Date: DateTimeNow,
+        Isi: `Pesanan anda dengan OrderId ${valDetailOrder.idOrder} telah dikonfirmasi pembayarannya`,
+        Judul: "Konfirmasi Pembayaran",
+        Meta_Data: valDetailOrder.idOrder,
+        Status: "Unread",
+        Target: idUser,
+      },
+      (error) => {
+        if (error) {
+          alert("Gagal Simpan");
+        } else {
+          response = "Berhasil Membuat Notifikasi di Database";
+        }
+      }
+    );
+
+    return response;
+  };
 
   return (
     <div
