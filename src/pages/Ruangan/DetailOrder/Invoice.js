@@ -3,6 +3,7 @@ import firebase, { storage } from "../../../config/firebase";
 import Toast from "../../../component/toast/Toast";
 // import { DataInvoice } from "../../../config/context/Context";
 // import { Link } from "react-router-dom";
+import { FormattingDateTime } from "../../../config/formattingDateTime";
 firebase.setLogLevel("silent");
 
 function Invoice(props) {
@@ -56,6 +57,7 @@ function Invoice(props) {
                       address: resultdatauser.val().Nama,
                       phone: resultdatauser.val().Telepon,
                       email: resultdatauser.val().Email,
+                      token: resultdatauser.val()?.TokenNotif,
                     });
                   });
               }
@@ -374,6 +376,8 @@ function Invoice(props) {
                         alert("Gagal Simpan Ke Database");
                       } else {
                         // Data saved successfully!
+                        handleCreateRemoteNotification();
+                        handleCreateNotificationToDatabase();
                         Toast([
                           {
                             icon: "success",
@@ -424,11 +428,66 @@ function Invoice(props) {
     window.addEventListener("load", window.print());
   };
 
-  // const coba = useCallback(() => {}, []);
+  const handleCreateRemoteNotification = async () => {
+    const to = dataUser?.token;
+    const myData = {
+      to: to,
+      priority: "high",
+      notification: {
+        title: "Konfirmasi Pembayaran",
+        body: `Pesanan anda dengan OrderId ${orderDetail.OrderId} telah dikonfirmasi pembayarannya`,
+      },
 
-  // useEffect(() => {
-  //   console.log(dataUser);
-  // }, [dataUser]);
+      data: {
+        Action: "CheckOut",
+        OrderID: orderDetail.OrderId,
+      },
+    };
+
+    const result = await fetch("https://fcm.googleapis.com/fcm/send", {
+      method: "POST",
+      headers: {
+        Authorization:
+          "key=AAAA6jj0k_w:APA91bFVagvVrQ1UsvzH-GglbdFAzvfuGhE1A6KABx3Y3QdiiyKNba9RG6zAkYqm3oAd23M-l7BuhzatGHAOHln6L2lho1ZrhMUM5DB678r2Z9_Bd79z46HCiezO9q9zD6CaiTa_h6C2",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(myData),
+    }).then(console.log(myData));
+
+    const resultJson = await result.json();
+    console.log(resultJson);
+  };
+
+  const handleCreateNotificationToDatabase = async () => {
+    var DateTimeNow = FormattingDateTime(new Date());
+
+    var postListRef = firebase
+      .database()
+      .ref(`users/${dataUser.iduser}/notifikasi`);
+    var newPostRef = postListRef.push();
+    await newPostRef.set(
+      {
+        Aksi: "CheckOut",
+        Date: DateTimeNow,
+        Isi: `Pesanan anda dengan OrderId ${orderDetail.OrderId} telah dikonfirmasi pembayarannya`,
+        Judul: "Konfirmasi Pembayaran",
+        Meta_Data: orderDetail.OrderId,
+        Status: "Unread",
+        Target: dataUser.iduser,
+      },
+      (error) => {
+        if (error) {
+          alert("Gagal Simpan");
+        }
+      }
+    );
+
+    return null;
+  };
+
+  useEffect(() => {
+    console.log(dataUser);
+  }, [dataUser]);
 
   return (
     <section className="content">
