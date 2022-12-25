@@ -89,7 +89,7 @@ export default function ChatBox(props) {
                       nama={props.dataUser[0].nama}
                       waktu={result.data.Waktu}
                       pesan={result.data.Pesan}
-                      photo={props.dataUser[0].photo}
+                      photo={props.dataUser[0]?.photo}
                     />
                   );
                 }
