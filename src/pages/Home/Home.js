@@ -80,10 +80,12 @@ class Home extends Component {
     };
 
     let i = 0;
-    do {
-      checkStatus(i);
-      i++;
-    } while (i < totalOrder);
+    if (totalOrder >= 1) {
+      do {
+        checkStatus(i);
+        i++;
+      } while (i < totalOrder);
+    }
 
     this.setState(
       {

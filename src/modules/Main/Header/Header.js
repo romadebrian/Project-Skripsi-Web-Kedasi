@@ -92,10 +92,12 @@ class Header extends Component {
     };
 
     let i = 0;
-    do {
-      checkUnread(i);
-      i++;
-    } while (i < totalNotifikasi);
+    if (totalNotifikasi >= 1) {
+      do {
+        checkUnread(i);
+        i++;
+      } while (i < totalNotifikasi);
+    }
   };
 
   //

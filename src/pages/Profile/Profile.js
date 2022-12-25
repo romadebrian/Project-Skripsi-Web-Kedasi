@@ -348,7 +348,7 @@ class Profile extends Component {
                   className="form-control"
                   id="nama"
                   placeholder="Nama"
-                  value={this.state.nama}
+                  value={this.state.nama ? this.state.nama : ""}
                   onChange={this.handleChangeInput}
                 />
               </div>
@@ -359,7 +359,7 @@ class Profile extends Component {
                   className="form-control"
                   id="email"
                   placeholder="Email"
-                  value={this.state.email}
+                  value={this.state.email ? this.state.email : ""}
                   onChange={this.handleChangeInput}
                   disabled
                 />
@@ -371,7 +371,7 @@ class Profile extends Component {
                   className="form-control"
                   id="telepon"
                   placeholder="Nomor Telepon"
-                  value={this.state.telepon}
+                  value={this.state.telepon ? this.state.telepon : ""}
                   onChange={this.handleChangeInput}
                 />
               </div>
@@ -381,7 +381,7 @@ class Profile extends Component {
                   className="form-control"
                   rows={3}
                   placeholder="Alamat"
-                  value={this.state.alamat}
+                  value={this.state.alamat ? this.state.alamat : ""}
                   id="alamat"
                   onChange={this.handleChangeInput}
                 />

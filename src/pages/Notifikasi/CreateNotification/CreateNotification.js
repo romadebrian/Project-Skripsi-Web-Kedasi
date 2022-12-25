@@ -38,15 +38,17 @@ function CreateNotification(props) {
         // console.log(snapshot.val());
 
         const data = [];
-        Object.keys(snapshot.val()).map((key) => {
-          // console.log(snapshot.val());
-          // console.log(snapshot.val()[key]);
-          data.push({
-            id: key,
-            data: snapshot.val()[key],
+        if (snapshot.exists()) {
+          Object.keys(snapshot.val()).map((key) => {
+            // console.log(snapshot.val());
+            // console.log(snapshot.val()[key]);
+            data.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
+            return data;
           });
-          return data;
-        });
+        }
 
         console.log(data);
         setListUser(data);
