@@ -6,7 +6,7 @@ function ItemNotification(props) {
   let history = useHistory();
 
   useEffect(() => {
-    // console.log(props);
+    console.log(props);
   }, [props]);
 
   const HandleAksi = () => {
@@ -25,14 +25,7 @@ function ItemNotification(props) {
       .ref("notifikasi/" + props.primaryKey + "/Status")
       .set("Read");
 
-    const data = [
-      {
-        judul: props.judul,
-        isi: props.isi,
-      },
-    ];
-
-    props.sendData(data);
+    props.sendData(props);
   };
 
   return (

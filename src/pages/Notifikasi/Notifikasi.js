@@ -40,9 +40,9 @@ function Notifikasi() {
     // console.log(dataNotifikasi);
   }, [handleGetData, isLoad, dataNotifikasi]);
 
-  const setNewJudul = (params) => {
-    // console.log("params", params);
-    setDataDetail({ dataDetail: params });
+  const setTitleForDetail = (data) => {
+    console.log("params", data);
+    setDataDetail({ data });
   };
 
   console.log(dataNotifikasi);
@@ -57,46 +57,6 @@ function Notifikasi() {
         >
           Buat Pemperitahuan
         </button>
-        <div className="card-tools">
-          {/* Right navbar links */}
-          <ul className="navbar-nav ml-auto">
-            {/* Navbar Search */}
-            <li className="nav-item">
-              <a
-                className="nav-link"
-                data-widget="navbar-search"
-                href="/"
-                role="button"
-              >
-                <i className="fas fa-search" />
-              </a>
-              <div className="navbar-search-block">
-                <form className="form-inline">
-                  <div className="input-group input-group-sm">
-                    <input
-                      className="form-control form-control-navbar"
-                      type="search"
-                      placeholder="Search"
-                      aria-label="Search"
-                    />
-                    <div className="input-group-append">
-                      <button className="btn btn-navbar" type="submit">
-                        <i className="fas fa-search" />
-                      </button>
-                      <button
-                        className="btn btn-navbar"
-                        type="button"
-                        data-widget="navbar-search"
-                      >
-                        <i className="fas fa-times" />
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </li>
-          </ul>
-        </div>
       </div>
 
       {dataNotifikasi.length > 0 ? (
@@ -114,7 +74,7 @@ function Notifikasi() {
                 pelanggan={result.data.Target}
                 aksi={result.data.Aksi}
                 status={result.data.Status}
-                sendData={(e) => setNewJudul(e)}
+                sendData={(e) => setTitleForDetail(e)}
               />
             );
           })}
