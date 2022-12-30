@@ -39,9 +39,7 @@ function ItemNotification(props) {
         <div className="row align-items-center">
           <div className="col">
             <small>{props.tanggal}</small>
-            <p>
-              {props?.pelanggan} {props.isi}
-            </p>
+            <p>{props.isi}</p>
           </div>
           <span>
             {props.status !== "Read" ? (
