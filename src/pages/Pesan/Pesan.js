@@ -354,7 +354,11 @@ class Pesan extends Component {
                             <a href="/#">
                               <img
                                 className="contacts-list-img"
-                                src={list.photo}
+                                src={
+                                  list.photo
+                                    ? list.photo
+                                    : "dist/img/no-image.png"
+                                }
                                 width="40"
                                 height="40"
                                 alt="userkjahw.dh"
