@@ -1,5 +1,7 @@
-ganti nama file photo profile berdasarkan id user
+Perbaiki kecocokan data pada menu pesan/live chat
 
-Kirim notifikasi ke user ketika user order (pesanan di terima), pesanan selesai
+ganti header dari class component ke functional component agar bisa pakai useLocation
 
-format dulu jatuh tempo agar bisa di simpan ke database
+ketika planggan memesan ruangan, daftar transaksi tidak terupdate
+
+otomatis ubah status pesanan ketika lewat jatuh tempo dan tanggal selesai

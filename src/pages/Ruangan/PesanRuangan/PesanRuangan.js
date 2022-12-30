@@ -9,7 +9,7 @@ import Toast from "../../../component/toast/Toast";
 function PesanRuangan(props) {
   const [isloaded, setLoaded] = useState(false);
 
-  const [paket, setPaket] = useState("");
+  const [paket, setPaket] = useState("PERJAM");
   const [totalPaket, setTotalPaket] = useState("1");
   const [nameCostumer, setNameCostumer] = useState("");
   const [room, setRoom] = useState("ROOM 000");
@@ -78,10 +78,11 @@ function PesanRuangan(props) {
     // console.log(paket);
   }, [isloaded, paket, totalPaket]);
 
+  // Handle Submit
   const handleSubmit = async (e) => {
     // var StatusPembayaran;
-    const TanggalTempo = await paymentDue();
-    let jatuhTempo = TanggalTempo.toString();
+    const jatuhTempo = await handleDueDate();
+    // let jatuhTempo = TanggalTempo.toString();
     e.preventDefault();
 
     console.log(e);
@@ -150,7 +151,7 @@ function PesanRuangan(props) {
             Status: statusPembayaran,
             TotalPembayaran: totalPayment,
             BuktiPembayaran: "",
-            JatuhTempo: jatuhTempo.toString(),
+            JatuhTempo: jatuhTempo,
           },
           (error) => {
             if (error) {
@@ -202,11 +203,7 @@ function PesanRuangan(props) {
     console.log(room);
     console.log(tglMulai);
 
-    if (
-      paket === "" ||
-      paket === "--- Casual Coworking ---" ||
-      paket === "--- Monthly Coworking ---"
-    ) {
+    if (paket === "") {
       Toast([
         {
           icon: "error",
@@ -374,13 +371,11 @@ function PesanRuangan(props) {
               Toast([
                 {
                   icon: "error",
-                  title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
+                  title: `Ruangan ${room} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
                 },
               ]);
             }
           } else {
-            console.log("Data tidak ditemukan");
-
             //////////////////// Formating Start Date ////////////////////
             console.log("tglMulai ", tglMulai);
             // let startDay = tglMulai;
@@ -437,15 +432,45 @@ function PesanRuangan(props) {
     }
   };
 
-  const paymentDue = () => {
-    var date = new Date();
+  // const paymentDue = () => {
+  //   var date = new Date();
+
+  //   // add a day
+  //   date.setDate(date.getDate() + 3);
+
+  //   return new Promise((resolve) => {
+  //     resolve(date);
+  //   });
+  // };
+
+  const handleDueDate = () => {
+    var dateNow = new Date();
 
     // add a day
-    date.setDate(date.getDate() + 3);
+    dateNow.setDate(dateNow.getDate() + 2);
+
+    console.log("Due Date", dateNow);
+
+    var result = handleFormatingDate(dateNow);
+
+    // return result;
 
     return new Promise((resolve) => {
-      resolve(date);
+      resolve(result);
     });
+  };
+
+  const handleFormatingDate = (date) => {
+    // console.log("input date ", input);
+
+    let convertDate =
+      date.getDate() +
+      "-" +
+      parseInt(date.getMonth() + 1) +
+      "-" +
+      date.getFullYear();
+
+    return convertDate;
   };
 
   // const handleChange = (e) => {
@@ -515,15 +540,17 @@ function PesanRuangan(props) {
                       className="form-control"
                       onChange={(e) => setPaket(e.target.value)}
                     >
-                      <option>--- Casual Coworking ---</option>
-                      <option>PERJAM</option>
-                      <option>HARIAN</option>
-                      <option>HARIAN(PELAJAR)</option>
-                      <option>--- Monthly Coworking ---</option>
-                      <option>BULANAN 25JAM</option>
-                      <option>BULANAN 50JAM</option>
-                      <option>BULANAN 100JAM</option>
-                      <option>BULANAN TANPA BATAS</option>
+                      <optgroup label="Casual Coworking">
+                        <option>PERJAM</option>
+                        <option>HARIAN</option>
+                        <option>HARIAN(PELAJAR)</option>
+                      </optgroup>
+                      <optgroup label="Monthly Coworking">
+                        <option>BULANAN 25JAM</option>
+                        <option>BULANAN 50JAM</option>
+                        <option>BULANAN 100JAM</option>
+                        <option>BULANAN TANPA BATAS</option>
+                      </optgroup>
                     </select>
 
                     <div className="input-group-append">

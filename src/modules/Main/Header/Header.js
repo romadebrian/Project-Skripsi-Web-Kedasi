@@ -92,10 +92,12 @@ class Header extends Component {
     };
 
     let i = 0;
-    do {
-      checkUnread(i);
-      i++;
-    } while (i < totalNotifikasi);
+    if (totalNotifikasi >= 1) {
+      do {
+        checkUnread(i);
+        i++;
+      } while (i < totalNotifikasi);
+    }
   };
 
   //
@@ -237,11 +239,11 @@ class Header extends Component {
                 <i className="fas fa-bars" />
               </Link>
             </li>
-            <li className="nav-item d-none d-sm-inline-block">
+            {/* <li className="nav-item d-none d-sm-inline-block">
               <Link to="/" className="nav-link">
                 Home
               </Link>
-            </li>
+            </li> */}
           </ul>
           {/* Right navbar links */}
           <ul className="navbar-nav ml-auto">
@@ -265,12 +267,27 @@ class Header extends Component {
                           <Link to="/pesan" className="dropdown-item">
                             {/* Message Start */}
                             <div className="media">
-                              <img
+                              {/* <img
                                 src={chat.photo}
                                 alt="User Avatar"
                                 className="img-size-50 img-circle mr-3"
                                 style={{ height: "50px" }}
-                              />
+                              /> */}
+                              {chat.photo != null ? (
+                                <img
+                                  src={chat.photo}
+                                  alt="User Avatar"
+                                  className="img-size-50 img-circle mr-3"
+                                  style={{ height: "50px" }}
+                                />
+                              ) : (
+                                <img
+                                  src="dist/img/no-image.png"
+                                  alt="User Avatar"
+                                  className="img-size-50 img-circle mr-3"
+                                  style={{ height: "50px" }}
+                                />
+                              )}
                               <div className="media-body">
                                 <h3 className="dropdown-item-title">
                                   {chat.nama}
@@ -309,16 +326,18 @@ class Header extends Component {
                 </span>
               </a>
               <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span className="dropdown-item dropdown-header">
-                  {this.state.listNotifikasi.length} Notifications
-                </span>
+                <Link to="/notifikasi">
+                  <span className="dropdown-item dropdown-header">
+                    {this.state.listNotifikasi.length} Notifications
+                  </span>
+                </Link>
 
                 {this.state.listNotifikasi.length > 0 ? (
                   <Fragment>
                     {this.state.listNotifikasi.map((result) => {
                       // console.log(result.id);
                       const elapsedTime = this.getDeferentTime(
-                        result.data.waktu
+                        result.data.Date
                       );
                       return (
                         <Fragment key={result.id}>

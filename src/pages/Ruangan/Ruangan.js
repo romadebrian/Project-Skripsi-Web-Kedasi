@@ -10,7 +10,7 @@ import "./Ruangan.css";
 
 class Ruangan extends Component {
   state = {
-    orderList: "",
+    orderList: [],
     orderDetail: "",
     modeEdit: false,
     nextOrderId: "",
@@ -151,7 +151,7 @@ class Ruangan extends Component {
       });
   };
 
-  handleInputOrder = () => {
+  handleNextOrderId = () => {
     var totalOrderId = this.state.orderList.length;
     var init = totalOrderId + 1;
     var str = "" + init;
@@ -244,7 +244,7 @@ class Ruangan extends Component {
               // onClick={this.toestSucces}
               data-toggle="modal"
               data-target="#modal-lg"
-              onClick={this.handleInputOrder}
+              onClick={this.handleNextOrderId}
             >
               Buat Pesanan Baru
             </button>
