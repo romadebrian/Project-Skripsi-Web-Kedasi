@@ -2,3 +2,31 @@
   cursor: pointer;
   background-color: rgb(202, 202, 202);
 }
+
+.row-pesanan {
+  /* vertical-align: middle; */
+  /* align-items: center; */
+  /* justify-content: center; */
+}
+
+.row-pesanan td {
+  /* background-color: brown; */
+  /* align-items: center; */
+  /* align-content: center; */
+  /* justify-content: center; */
+  /* display: flex; */
+  /* height: 22px; */
+  vertical-align: middle;
+}
+
+.td-status {
+  /* background-color: black; */
+  align-items: center;
+  /* justify-content: center; */
+  /* text-align: center; */
+  /* line-height: 0; */
+  display: inline-flex;
+  font-size: 100%;
+  /* font-weight: 400; */
+  padding: 0.5em 0.5em;
+}
