@@ -18,7 +18,7 @@ function ItemUserChat(props) {
           <img
             className="direct-chat-img"
             // src="dist/img/user2-160x160.jpg"
-            src={props.photo}
+            src={props.photo ? props.photo : "dist/img/no-image.png"}
             alt="message_users_image"
           />
         </div>
