@@ -332,7 +332,11 @@ class Ruangan extends Component {
                                 <td>{pesanan.data.Ruangan} </td>
                                 <td>{pesanan.data.TanggalSewa} </td>
                                 <td>{pesanan.data.TanggalSelesai} </td>
-                                <td className={badge}>{pesanan.data.Status}</td>
+                                <td>
+                                  <div className={`${badge} td-status`}>
+                                    {pesanan.data.Status}
+                                  </div>
+                                </td>
                               </tr>
                             );
                           })}
