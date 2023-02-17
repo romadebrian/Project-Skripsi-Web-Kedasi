@@ -304,7 +304,7 @@ class Pesan extends Component {
         {/* List User Who Messege You */}
         <div className="direct-chat d-flex flex-column align-items-stretch flex-shrink-0 bg-white">
           <div className="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
-            <span className="fs-5 fw-semibold select-user">Pilih User</span>
+            {/* <span className="fs-5 fw-semibold select-user">Pilih User</span> */}
 
             <select
               className="form-control"

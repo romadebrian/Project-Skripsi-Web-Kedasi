@@ -1,5 +1,13 @@
+ketika ketik pesan, pesannya bersih kembali
+
+ketika ngirim pesan, kirim push notifikasi ke pelanggan
+
 ganti header dari class component ke functional component agar bisa pakai useLocation
 
 ketika planggan memesan ruangan, daftar transaksi tidak terupdate
+
+tgl jatuh tempo, tgl sewa, tanggal selesai simpan di database tanpa di format
+
+harus ferivikasi ulang ketika ubah detail pesanan ketika membuat pesanan baru
 
 otomatis ubah status pesanan ketika lewat jatuh tempo dan tanggal selesai
