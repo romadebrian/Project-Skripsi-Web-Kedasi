@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import firebase, { storage } from "../../config/firebase";
-import { sendPasswordResetEmail, getAuth } from "firebase/auth";
+import { sendPasswordResetEmail, getAuth, updateProfile } from "firebase/auth";
 import { DataCurrentUser } from "../../config/context/Context";
 
 import "./Profile.css";
@@ -19,10 +19,13 @@ class Profile extends Component {
     setimage: "",
     // url: "",
     setUrl: "",
+    tokenNotif: "",
     progress: "0",
     setProgress: "0",
     foto: "Pilih Foto",
     statusUpload: false,
+    notifikasiData: [],
+    orderData: [],
   };
 
   // const [image, setimage] = useState(null);
@@ -39,15 +42,21 @@ class Profile extends Component {
       .once("value")
       .then(
         (snapshot) => {
-          this.setState({
-            nama: snapshot.val() && snapshot.val().Nama,
-            // email: snapshot.val() && snapshot.val().Email,
-            email: JSON.parse(localStorage.getItem("UserEmail")),
-            telepon: snapshot.val() && snapshot.val().Telepon,
-            alamat: snapshot.val() && snapshot.val().Alamat,
-            setUrl: snapshot.val() && snapshot.val().Profile_Picture,
-          });
-          // console.log(username);
+          this.setState(
+            {
+              nama: snapshot.val() && snapshot.val().Nama,
+              // email: snapshot.val() && snapshot.val().Email,
+              email: JSON.parse(localStorage.getItem("UserEmail")),
+              telepon: snapshot.val() && snapshot.val().Telepon,
+              alamat: snapshot.val() && snapshot.val().Alamat,
+              setUrl: snapshot.val() && snapshot.val().Profile_Picture,
+              tokenNotif: snapshot.val() && snapshot.val().TokenNotif,
+              notifikasiData: snapshot.val() && snapshot.val().notifikasi,
+              orderData: snapshot.val() && snapshot.val().order,
+            },
+            () => console.log("result = ", this.state)
+          );
+          // console.log("======", snapshot.val().order);
           console.log("Photo Profile Link ", this.state.setUrl);
           // console.log(this.state.email);
         },
@@ -82,6 +91,17 @@ class Profile extends Component {
   };
 
   handleSaveProfile = () => {
+    // Update profile user in firebase auth
+    const user = getAuth().currentUser;
+
+    updateProfile(user, {
+      displayName: this.state.nama,
+      photoURL: this.state.setUrl,
+    }).then(() => {
+      // CheckCurrentUser();
+      console.log("Now Data User", user);
+    });
+
     firebase
       .database()
       .ref("users/" + this.state.userId)
@@ -92,6 +112,11 @@ class Profile extends Component {
           Telepon: this.state.telepon,
           Alamat: this.state.alamat,
           Profile_Picture: this.state.setUrl,
+          TokenNotif: this.state.tokenNotif ? this.state.tokenNotif : "",
+          notifikasi: this.state.notifikasiData
+            ? this.state.notifikasiData
+            : [],
+          order: this.state.orderData ? this.state.orderData : [],
         },
         (error) => {
           if (error) {
@@ -115,7 +140,8 @@ class Profile extends Component {
               this.state.email,
               this.state.telepon,
               this.state.alamat,
-              this.state.setUrl
+              this.state.setUrl,
+              this.state.tokenNotif
             );
           }
         }
@@ -130,7 +156,7 @@ class Profile extends Component {
       Toast([{ icon: "error", title: "File belum di pilih" }]);
     } else {
       const uploadTask = storage
-        .ref(`profile/${this.state.setimage.name}`)
+        .ref(`profile/${this.state.userId}.jpg`)
         .put(this.state.setimage);
 
       uploadTask.on(
@@ -156,7 +182,7 @@ class Profile extends Component {
         () => {
           storage
             .ref("profile")
-            .child(this.state.setimage.name)
+            .child(this.state.userId + ".jpg")
             .getDownloadURL()
             .then((url) => {
               // console.log(url);
@@ -164,6 +190,18 @@ class Profile extends Component {
               this.setState({
                 setUrl: url,
               });
+              // Update Foto Sucesss
+
+              // Update profile user in firebase auth
+              const user = getAuth().currentUser;
+
+              updateProfile(user, {
+                displayName: this.state.nama,
+                photoURL: this.state.setUrl,
+              }).then(() => {
+                console.log("New Data User", user);
+              });
+
               // alert("Update Foto Berhasil");
               firebase
                 .database()
@@ -175,6 +213,13 @@ class Profile extends Component {
                     Telepon: this.state.telepon,
                     Alamat: this.state.alamat,
                     Profile_Picture: this.state.setUrl,
+                    TokenNotif: this.state.tokenNotif
+                      ? this.state.tokenNotif
+                      : "",
+                    notifikasi: this.state.notifikasiData
+                      ? this.state.notifikasiData
+                      : [],
+                    order: this.state.orderData ? this.state.orderData : [],
                   },
                   (error) => {
                     if (error) {
@@ -303,7 +348,7 @@ class Profile extends Component {
                   className="form-control"
                   id="nama"
                   placeholder="Nama"
-                  value={this.state.nama}
+                  value={this.state.nama ? this.state.nama : ""}
                   onChange={this.handleChangeInput}
                 />
               </div>
@@ -314,7 +359,7 @@ class Profile extends Component {
                   className="form-control"
                   id="email"
                   placeholder="Email"
-                  value={this.state.email}
+                  value={this.state.email ? this.state.email : ""}
                   onChange={this.handleChangeInput}
                   disabled
                 />
@@ -326,7 +371,7 @@ class Profile extends Component {
                   className="form-control"
                   id="telepon"
                   placeholder="Nomor Telepon"
-                  value={this.state.telepon}
+                  value={this.state.telepon ? this.state.telepon : ""}
                   onChange={this.handleChangeInput}
                 />
               </div>
@@ -336,7 +381,7 @@ class Profile extends Component {
                   className="form-control"
                   rows={3}
                   placeholder="Alamat"
-                  value={this.state.alamat}
+                  value={this.state.alamat ? this.state.alamat : ""}
                   id="alamat"
                   onChange={this.handleChangeInput}
                 />

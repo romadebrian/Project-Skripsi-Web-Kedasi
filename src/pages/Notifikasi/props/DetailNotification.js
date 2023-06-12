@@ -5,9 +5,9 @@ function DetailNotification(props) {
   const [isiNotif, setisiNotif] = useState("");
 
   const HandleJudul = () => {
-    console.log("handle", props.dataDetail[0].judul);
-    setjudulNotif(props.dataDetail[0].judul);
-    setisiNotif(props.dataDetail[0].isi);
+    console.log("handle", props);
+    setjudulNotif(props.dataDetail.data.judul);
+    setisiNotif(props.dataDetail.data.isi);
   };
 
   return (

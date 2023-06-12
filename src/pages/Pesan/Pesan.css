@@ -119,12 +119,24 @@ html {
 }
 
 .chatbox .nama-contactnya {
-  margin-left: 50px;
-  margin-top: 5px;
+  margin-left: 15px;
+  /* margin-top: 5px; */
   color: white;
   font-size: 16px;
   font-weight: 600;
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol";
+  cursor: pointer;
+}
+
+.contacts-list li {
+  /* background-color: red; */
+
+  align-items: center;
+  display: flex;
+}
+
+.css-pointer {
+  cursor: pointer;
 }

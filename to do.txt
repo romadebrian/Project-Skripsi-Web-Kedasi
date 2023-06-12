@@ -1,5 +1,5 @@
-ganti nama file photo profile berdasarkan id user
+ganti header dari class component ke functional component agar bisa pakai useLocation
 
-Kirim notifikasi ke user ketika user order (pesanan di terima), pesanan selesai
+ketika planggan memesan ruangan, daftar transaksi tidak terupdate
 
-format dulu jatuh tempo agar bisa di simpan ke database
+otomatis ubah status pesanan ketika lewat jatuh tempo dan tanggal selesai

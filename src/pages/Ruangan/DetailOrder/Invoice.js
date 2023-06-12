@@ -1,8 +1,9 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import firebase, { storage } from "../../../config/firebase";
 import Toast from "../../../component/toast/Toast";
 // import { DataInvoice } from "../../../config/context/Context";
 // import { Link } from "react-router-dom";
+import { FormattingDateTime } from "../../../config/formattingDateTime";
 firebase.setLogLevel("silent");
 
 function Invoice(props) {
@@ -15,13 +16,58 @@ function Invoice(props) {
   const [dateDue, setDateDue] = useState("");
   const [dateNow, setDateNow] = useState("");
 
+  const [dataUser, setDataUser] = useState();
+
   const [statusUpload, setStatusUpload] = useState("Submit Payment");
   // const [uploadMode, setUploadMode] = useState(false);
   const [FileDetail, setFileDetail] = useState();
   const [styleButton, setStyleButton] = useState("btn-success");
 
+  const handleGetDataUser = useCallback(() => {
+    const idPesanan = JSON.parse(localStorage.getItem("OrderId"));
+    // const idPesanan = "ORD0067";
+
+    // Listing all user
+    return firebase
+      .database()
+      .ref("users")
+      .once("value", (snapshot) => {
+        // console.log(snapshot.val());
+        Object.keys(snapshot.val()).map((key) => {
+          // console.log(key);
+
+          // cari orderID di dalam order user
+          return firebase
+            .database()
+            .ref("users/" + key + "/order")
+            .orderByChild("OrderId")
+            .equalTo(idPesanan)
+            .once("value", (result) => {
+              // Jika ketemu, maka kumpulkan data user berdasarkan key user yang sekarang sedang di loop
+              if (result.exists()) {
+                console.log(result.val());
+                console.log(key);
+                return firebase
+                  .database()
+                  .ref("users/" + key)
+                  .once("value", (resultdatauser) => {
+                    console.log(resultdatauser.val());
+                    setDataUser({
+                      iduser: key,
+                      address: resultdatauser.val().Nama,
+                      phone: resultdatauser.val().Telepon,
+                      email: resultdatauser.val().Email,
+                      token: resultdatauser.val()?.TokenNotif,
+                    });
+                  });
+              }
+            });
+        });
+      });
+  }, []);
+
   useEffect(() => {
-    console.log(props);
+    // console.log(props);
 
     const getDataOrder = () => {
       const idPesanan = JSON.parse(localStorage.getItem("OrderId"));
@@ -52,13 +98,6 @@ function Invoice(props) {
           setOrderDetail(dataHasil[0].data);
         });
     };
-
-    if (isLoad === false) {
-      getDataOrder();
-      setIsLoad(true);
-    } else {
-      console.log(orderDetail);
-    }
 
     const createInvoiceID = () => {
       var idPesanan = orderDetail.OrderId;
@@ -172,15 +211,21 @@ function Invoice(props) {
 
     const formatingPaymentDue = () => {
       if (orderDetail.JatuhTempo != null) {
-        var DateD = new Date(orderDetail.JatuhTempo);
-        let DDue =
-          DateD.getDate() +
-          "/" +
-          parseInt(DateD.getMonth() + 1) +
-          "/" +
-          DateD.getFullYear();
+        var dateData = `${orderDetail.JatuhTempo}`;
 
-        setDateDue(DDue);
+        const arr = dateData.split("");
+        let totArr = arr.length;
+
+        for (let i = 0; i < totArr; i++) {
+          // console.log(arr[i]);
+          if (arr[i] === "-") {
+            arr[i] = "/";
+          }
+        }
+
+        let joins = arr.join("");
+
+        setDateDue(joins);
       }
     };
 
@@ -196,6 +241,12 @@ function Invoice(props) {
       setDateNow(TglSrg);
     };
 
+    if (isLoad === false) {
+      getDataOrder();
+      handleGetDataUser();
+      setIsLoad(true);
+    }
+
     createInvoiceID();
     convertRoom();
     getPriceRoom();
@@ -203,7 +254,7 @@ function Invoice(props) {
     getStatusPayment();
     formatingPaymentDue();
     FormatingDateNow();
-  }, [isLoad, orderDetail, props]);
+  }, [isLoad, orderDetail, props, handleGetDataUser]);
 
   const thisFileUpload = () => {
     // props.value.setKode("ORD0025");
@@ -325,6 +376,8 @@ function Invoice(props) {
                         alert("Gagal Simpan Ke Database");
                       } else {
                         // Data saved successfully!
+                        handleCreateRemoteNotification();
+                        handleCreateNotificationToDatabase();
                         Toast([
                           {
                             icon: "success",
@@ -375,6 +428,67 @@ function Invoice(props) {
     window.addEventListener("load", window.print());
   };
 
+  const handleCreateRemoteNotification = async () => {
+    const to = dataUser?.token;
+    const myData = {
+      to: to,
+      priority: "high",
+      notification: {
+        title: "Konfirmasi Pembayaran",
+        body: `Pesanan anda dengan OrderId ${orderDetail.OrderId} telah dikonfirmasi pembayarannya`,
+      },
+
+      data: {
+        Action: "CheckOut",
+        OrderID: orderDetail.OrderId,
+      },
+    };
+
+    const result = await fetch("https://fcm.googleapis.com/fcm/send", {
+      method: "POST",
+      headers: {
+        Authorization:
+          "key=AAAA6jj0k_w:APA91bFVagvVrQ1UsvzH-GglbdFAzvfuGhE1A6KABx3Y3QdiiyKNba9RG6zAkYqm3oAd23M-l7BuhzatGHAOHln6L2lho1ZrhMUM5DB678r2Z9_Bd79z46HCiezO9q9zD6CaiTa_h6C2",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(myData),
+    }).then(console.log(myData));
+
+    const resultJson = await result.json();
+    console.log(resultJson);
+  };
+
+  const handleCreateNotificationToDatabase = async () => {
+    var DateTimeNow = FormattingDateTime(new Date());
+
+    var postListRef = firebase
+      .database()
+      .ref(`users/${dataUser.iduser}/notifikasi`);
+    var newPostRef = postListRef.push();
+    await newPostRef.set(
+      {
+        Aksi: "CheckOut",
+        Date: DateTimeNow,
+        Isi: `Pesanan anda dengan OrderId ${orderDetail.OrderId} telah dikonfirmasi pembayarannya`,
+        Judul: "Konfirmasi Pembayaran",
+        Meta_Data: orderDetail.OrderId,
+        Status: "Unread",
+        Target: dataUser.iduser,
+      },
+      (error) => {
+        if (error) {
+          alert("Gagal Simpan");
+        }
+      }
+    );
+
+    return null;
+  };
+
+  useEffect(() => {
+    console.log(dataUser);
+  }, [dataUser]);
+
   return (
     <section className="content">
       <div className="container-fluid">
@@ -419,13 +533,11 @@ function Invoice(props) {
                   <address>
                     <strong>{orderDetail.NamaPemesan}</strong>
                     <br />
-                    Jl,GG Haji Awi, RT.6/RW.12, Jatiasih
+                    Address: {dataUser?.address}
                     <br />
-                    Pondok Gede, Bekasi 117413
+                    Phone: {dataUser?.phone}
                     <br />
-                    Phone: 083877434091
-                    <br />
-                    Email: romadebrian04@yahoo.co.id
+                    Email: {dataUser?.email}
                   </address>
                 </div>
                 {/* /.col */}
@@ -437,7 +549,7 @@ function Invoice(props) {
                   <br />
                   <b>Payment Due:</b> {dateDue}
                   <br />
-                  <b>Account:</b> 968-34567
+                  <b>Account:</b> {dataUser?.iduser}
                 </div>
                 {/* /.col */}
               </div>
