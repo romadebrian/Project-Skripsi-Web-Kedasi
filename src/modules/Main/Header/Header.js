@@ -273,21 +273,18 @@ class Header extends Component {
                                 className="img-size-50 img-circle mr-3"
                                 style={{ height: "50px" }}
                               /> */}
-                              {chat.photo != null ? (
-                                <img
-                                  src={chat.photo}
-                                  alt="User Avatar"
-                                  className="img-size-50 img-circle mr-3"
-                                  style={{ height: "50px" }}
-                                />
-                              ) : (
-                                <img
-                                  src="dist/img/no-image.png"
-                                  alt="User Avatar"
-                                  className="img-size-50 img-circle mr-3"
-                                  style={{ height: "50px" }}
-                                />
-                              )}
+
+                              <img
+                                src={
+                                  chat.photo
+                                    ? chat.photo
+                                    : "dist/img/no-image.png"
+                                }
+                                alt="User Avatar"
+                                className="img-size-50 img-circle mr-3"
+                                style={{ height: "50px" }}
+                              />
+
                               <div className="media-body">
                                 <h3 className="dropdown-item-title">
                                   {chat.nama}
