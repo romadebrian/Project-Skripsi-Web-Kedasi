@@ -30,7 +30,7 @@ function DetailOrder(props) {
     BuktiPembayaran: "",
   });
 
-  const [convertTglMulai, setConvertTglMulai] = useState("");
+  // const [convertTglMulai, setConvertTglMulai] = useState("");
   const [unConvert, setUnConvert] = useState("");
 
   // console.log("data update", valDetailOrder);
@@ -645,7 +645,7 @@ function DetailOrder(props) {
       });
   };
 
-  const convertTanggal = (val) => {};
+  // const convertTanggal = (val) => {};
 
   return (
     <div
@@ -693,7 +693,7 @@ function DetailOrder(props) {
                       <option>HARIAN</option>
                       <option>HARIAN(PELAJAR)</option>
                       <option>--- Monthly Coworking ---</option>
-                      <option>BULANAN 25JAM</option>
+                      <option>BULANAN 24JAM</option>
                       <option>BULANAN 50JAM</option>
                       <option>BULANAN 100JAM</option>
                       <option>BULANAN TANPA BATAS</option>
