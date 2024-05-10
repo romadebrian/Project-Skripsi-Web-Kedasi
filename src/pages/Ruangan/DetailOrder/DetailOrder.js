@@ -707,7 +707,6 @@ function DetailOrder(props) {
 
       // search Token notification user and send remote notification
       listUser.map((val) => {
-        
         const listOrderUser = val.data.order;
         // console.log(val);
         // console.log(listOrderUser);
