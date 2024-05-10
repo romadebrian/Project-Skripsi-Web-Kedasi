@@ -70,7 +70,7 @@ class Pesan extends Component {
   };
 
   handleClickItemUserChat = (ID) => {
-    // console.log("ID user chat", ID);
+    console.log("ID user chat", ID);
     // const ID = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
     this.setState({
       userID: ID,
@@ -350,17 +350,26 @@ class Pesan extends Component {
                       {this.state.listUser.map((list) => {
                         // console.log("render list", list);
                         return (
-                          <li key={list.id}>
-                            <a href="/#">
-                              <img
-                                className="contacts-list-img"
-                                src={list.photo}
-                                width="40"
-                                height="40"
-                                alt="userkjahw.dh"
-                              />
-                              <div className="nama-contactnya">{list.nama}</div>
-                            </a>
+                          <li
+                            key={list.id}
+                            onClick={() =>
+                              this.handleClickItemUserChat(list.id)
+                            }
+                          >
+                            {/* <a href="/#"> */}
+                            <img
+                              className="contacts-list-img css-pointer"
+                              src={
+                                list.photo
+                                  ? list.photo
+                                  : "dist/img/no-image.png"
+                              }
+                              width="40"
+                              height="40"
+                              alt="userkjahw.dh"
+                            />
+                            <div className="nama-contactnya">{list.nama}</div>
+                            {/* </a> */}
                           </li>
                         );
                       })}
@@ -375,7 +384,7 @@ class Pesan extends Component {
             {this.state.dataHistoryChat.length > 0 ? (
               <Fragment>
                 {this.state.dataHistoryChat.map((chat) => {
-                  // console.log("data yang di render", chat);
+                  console.log("data yang di render", chat);
                   // console.log("data yang di render", chat.dataSusun);
 
                   return (

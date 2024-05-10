@@ -48,6 +48,7 @@ function App() {
             width={60}
           />
         </div>
+
         <Switch>
           <Route exact path="/login">
             <Login />
@@ -59,6 +60,12 @@ function App() {
             <Main />
           </PrivateRoute>
         </Switch>
+
+        {/* <button
+          onClick={console.log("test value Context", AuthContextProvider())}
+        >
+          Test
+        </button> */}
 
         {/* <Footer /> */}
       </Router>

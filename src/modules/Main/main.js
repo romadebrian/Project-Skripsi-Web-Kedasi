@@ -4,6 +4,7 @@ import {
   Switch,
   Route,
   withRouter,
+  useLocation,
 } from "react-router-dom";
 // import $ from "jquery";
 import Header from "./Header/Header";
@@ -16,22 +17,25 @@ import Notifikasi from "../../pages/Notifikasi/Notifikasi";
 import Pesan from "../../pages/Pesan/Pesan";
 import Profile from "../../pages/Profile/Profile";
 
-import PrintOrder from "../../pages/Ruangan/DetailOrder/DetailOrderOld";
-import PrintLaporan from "../../pages/Ruangan/props/Ruangan/PrintLaporan";
+import Invoice from "../../pages/Ruangan/DetailOrder/Invoice";
+import InvoicePrint from "../../pages/Ruangan/DetailOrder/InvoicePrint";
+import { useEffect } from "react";
+// import PrintLaporan from "../../pages/Ruangan/props/Ruangan/PrintLaporan";
 
 // Fungsi untuk yang di tampilkan ke index.html
-function App(props) {
+function Main(props) {
+  let location = useLocation();
   // const history = useHistory();
 
-  // useEffect(() => {
-  //   // const navigate = useNavigate();
-
-  //   const token = localStorage.getItem("UserId");
-  //   if (!token) {
-  //     props.history.push("/login");
-  //     // navigate("/login");
-  //   }
-  // });
+  useEffect(() => {
+    // const navigate = useNavigate();
+    // const token = localStorage.getItem("UserId");
+    // if (!token) {
+    //   props.history.push("/login");
+    //   // navigate("/login");
+    // }
+    // console.log(location);
+  }, []);
 
   return (
     <Router>
@@ -58,11 +62,11 @@ function App(props) {
               {/* <Route path="/logout">
                 <Pesan />
               </Route> */}
-              <Route path="/print">
-                <PrintOrder />
+              <Route path="/invoice">
+                <Invoice />
               </Route>
-              <Route path="/printlaporan">
-                <PrintLaporan />
+              <Route path="/invoice-print">
+                <InvoicePrint />
               </Route>
 
               <Route path="/">
@@ -71,11 +75,11 @@ function App(props) {
             </Switch>
           </div>
 
-          <Footer />
+          {location.pathname === "/invoice" ? null : <Footer />}
         </div>
       </div>
     </Router>
   );
 }
 
-export default withRouter(App);
+export default withRouter(Main);

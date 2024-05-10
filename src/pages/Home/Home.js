@@ -1,5 +1,7 @@
 import { Component } from "react";
 import firebase from "../../config/firebase";
+import { Link } from "react-router-dom";
+// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 class Home extends Component {
   state = {
@@ -78,10 +80,12 @@ class Home extends Component {
     };
 
     let i = 0;
-    do {
-      checkStatus(i);
-      i++;
-    } while (i < totalOrder);
+    if (totalOrder >= 1) {
+      do {
+        checkStatus(i);
+        i++;
+      } while (i < totalOrder);
+    }
 
     this.setState(
       {
@@ -100,6 +104,18 @@ class Home extends Component {
     );
   };
 
+  // setAdmin = () => {
+  //   firebase.auth().currentUser.getIdToken(true);
+  //   var uid = "Q6oONNZcYTawpMtsrv6CsTa2uz43";
+  //   getAuth()
+  //     .setCustomUserClaims(uid, { admin: true })
+  //     .then(() => {
+  //       console.log("success");
+  //       // The new custom claims will propagate to the user's ID token the
+  //       // next time a new one is issued.
+  //     });
+  // };
+
   render() {
     return (
       <div>
@@ -116,7 +132,7 @@ class Home extends Component {
                   <li className="breadcrumb-item">
                     <a href="/">Home</a>
                   </li>
-                  <li className="breadcrumb-item active">Dashboard v1</li>
+                  <li className="breadcrumb-item active">Dashboard</li>
                 </ol>
               </div>
               {/* /.col */}
@@ -141,9 +157,9 @@ class Home extends Component {
                   <div className="icon">
                     <i className="ion ion-bag" />
                   </div>
-                  <a href="/" className="small-box-footer">
+                  <Link to="/ruangan" className="small-box-footer">
                     More info <i className="fas fa-arrow-circle-right" />
-                  </a>
+                  </Link>
                 </div>
               </div>
               {/* ./col */}
@@ -157,9 +173,9 @@ class Home extends Component {
                   <div className="icon">
                     <i className="ion ion-stats-bars" />
                   </div>
-                  <a href="/" className="small-box-footer">
+                  <Link to="/ruangan" className="small-box-footer">
                     More info <i className="fas fa-arrow-circle-right" />
-                  </a>
+                  </Link>
                 </div>
               </div>
               {/* ./col */}
@@ -173,9 +189,9 @@ class Home extends Component {
                   <div className="icon">
                     <i className="ion ion-person-add" />
                   </div>
-                  <a href="/" className="small-box-footer">
+                  <Link to="/ruangan" className="small-box-footer">
                     More info <i className="fas fa-arrow-circle-right" />
-                  </a>
+                  </Link>
                 </div>
               </div>
               {/* ./col */}
@@ -189,15 +205,18 @@ class Home extends Component {
                   <div className="icon">
                     <i className="ion ion-pie-graph" />
                   </div>
-                  <a href="/" className="small-box-footer">
+                  <Link to="/ruangan" className="small-box-footer">
                     More info <i className="fas fa-arrow-circle-right" />
-                  </a>
+                  </Link>
                 </div>
               </div>
               {/* ./col */}
             </div>
           </div>
         </section>
+        {/* <button className="btn btn-primary" onClick={() => this.setAdmin()}>
+          Test Set Admin{" "}
+        </button> */}
       </div>
     );
   }

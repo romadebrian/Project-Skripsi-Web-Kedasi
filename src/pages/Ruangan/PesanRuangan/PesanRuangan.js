@@ -9,8 +9,8 @@ import Toast from "../../../component/toast/Toast";
 function PesanRuangan(props) {
   const [isloaded, setLoaded] = useState(false);
 
-  const [paket, setPaket] = useState("");
-  const [totalPaket, setTotalPaket] = useState(1);
+  const [paket, setPaket] = useState("PERJAM");
+  const [totalPaket, setTotalPaket] = useState("1");
   const [nameCostumer, setNameCostumer] = useState("");
   const [room, setRoom] = useState("ROOM 000");
 
@@ -78,20 +78,25 @@ function PesanRuangan(props) {
     // console.log(paket);
   }, [isloaded, paket, totalPaket]);
 
-  const handleSubmit = (e) => {
+  // Handle Submit
+  const handleSubmit = async (e) => {
     // var StatusPembayaran;
+    const jatuhTempo = await handleDueDate();
+    // let jatuhTempo = TanggalTempo.toString();
     e.preventDefault();
 
     console.log(e);
 
     console.log("Order Id: ", e.target[0].value);
     console.log("Paket: ", paket);
-    // console.log("Jumlah Durasi: ", e.target[2].value);
+    console.log("Jumlah Paket: ", totalPaket);
     console.log("Nama Costumer: ", e.target[3].value);
     console.log("Ruangan: ", e.target[4].value);
     console.log("Tanggal Mulai: ", convertTglMulai);
     console.log("Tanggal Selesai: ", tglSelesai);
     console.log("StatusPembayaran: ", statusPembayaran);
+    console.log("Total Pembayaran", totalPayment);
+    console.log("Jatuh Tempo", jatuhTempo);
 
     // if (e.target[58].checked === true) {
     //   StatusPembayaran = "Active";
@@ -138,12 +143,15 @@ function PesanRuangan(props) {
           {
             OrderId: e.target[0].value,
             Paket: paket,
+            JumlahPaket: totalPaket,
             NamaPemesan: e.target[3].value,
             Ruangan: e.target[4].value,
             TanggalSewa: convertTglMulai,
             TanggalSelesai: tglSelesai,
             Status: statusPembayaran,
+            TotalPembayaran: totalPayment,
             BuktiPembayaran: "",
+            JatuhTempo: jatuhTempo,
           },
           (error) => {
             if (error) {
@@ -153,32 +161,31 @@ function PesanRuangan(props) {
               // Data saved successfully!
               // alert("Profile Berhasil Di Simpan");
               // toastSucces();
-
               Toast([
                 {
                   icon: "success",
                   title: "Pemesanan Ruangan Berhasil",
                 },
               ]);
-
               console.log(
                 "send value: ",
                 e.target[0].value,
                 paket,
+                totalPaket,
                 e.target[3].value,
                 e.target[4].value,
                 convertTglMulai,
                 tglSelesai,
-                statusPembayaran
+                statusPembayaran,
+                totalPayment,
+                statusPembayaran,
+                jatuhTempo
               );
-
               window.$("#modal-lg").modal("hide");
-
               window.location.reload();
 
               // window.$(this.modal).modal("hide");
               // window.$(this.modal).on("hidden.bs.modal");
-
               // e.target[10].dismiss = "modal";
             }
           }
@@ -196,11 +203,7 @@ function PesanRuangan(props) {
     console.log(room);
     console.log(tglMulai);
 
-    if (
-      paket === "" ||
-      paket === "--- Casual Coworking ---" ||
-      paket === "--- Monthly Coworking ---"
-    ) {
+    if (paket === "") {
       Toast([
         {
           icon: "error",
@@ -255,16 +258,28 @@ function PesanRuangan(props) {
             //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
             // );
 
-            var IncreseDate = new Date(tglMulai);
+            var PickerDate = new Date(tglMulai);
+
+            let jmlPaket = Number(totalPaket); //convert string to number
+            var IncreseDate = "";
 
             if (
               paket === "PERJAM" ||
               paket === "HARIAN" ||
               paket === "HARIAN(PELAJAR)"
             ) {
+              IncreseDate = PickerDate;
               console.log("Perjam/Perhari");
             } else {
-              IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
+              // IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
+
+              // IncreseDate = PickerDate.setMonth(
+              //   PickerDate.getMonth() + jmlPaket
+              // );
+
+              IncreseDate = new Date(
+                new Date(PickerDate).setMonth(PickerDate.getMonth() + jmlPaket)
+              );
             }
 
             let DateAfterIncresed = IncreseDate;
@@ -285,44 +300,57 @@ function PesanRuangan(props) {
             var statusAvaliable = true;
 
             do {
-              var dateFrom = dataHasil[i].data.TanggalSewa;
-              var dateTo = dataHasil[i].data.TanggalSelesai;
-              var dateStart = StartDate;
-              var dateEnd = FinishDay;
+              if (
+                dataHasil[i].data.Status === "Batal" ||
+                dataHasil[i].data.Status === "Selesai"
+              ) {
+                console.log(i);
+                console.log(
+                  "Order ",
+                  dataHasil[i].data.OrderId,
+                  "Status ",
+                  dataHasil[i].data.Status
+                );
+              } else {
+                var dateFrom = dataHasil[i].data.TanggalSewa;
+                var dateTo = dataHasil[i].data.TanggalSelesai;
+                var dateStart = StartDate;
+                var dateEnd = FinishDay;
 
-              var d1 = dateFrom.split("-");
-              var d2 = dateTo.split("-");
-              var c1 = dateStart.split("-");
-              var c2 = dateEnd.split("-");
+                var d1 = dateFrom.split("-");
+                var d2 = dateTo.split("-");
+                var c1 = dateStart.split("-");
+                var c2 = dateEnd.split("-");
 
-              // console.log(d1);
-              // console.log(d2);
-              // console.log(c);
+                // console.log(d1);
+                // console.log(d2);
+                // console.log(c);
 
-              var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
-              var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
-              var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
-              var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
+                var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
+                var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
+                var check1 = new Date(c1[2], parseInt(c1[1]) - 1, c1[0]);
+                var check2 = new Date(c2[2], parseInt(c2[1]) - 1, c2[0]);
 
-              var resultStart = check1 >= from && check1 <= to;
-              var resultStart2 = from >= check1 && from <= check2;
+                var resultStart = check1 >= from && check1 <= to;
+                var resultStart2 = from >= check1 && from <= check2;
 
-              // var resultEnd = check2 >= from && check2 <= to;
-              // var resultEnd = check2 >= from && check2 <= to;
+                // var resultEnd = check2 >= from && check2 <= to;
+                // var resultEnd = check2 >= from && check2 <= to;
 
-              // console.log("Start", check1);
-              // console.log("End", check2);
-              // console.log("From ", from);
-              // console.log("to", to);
+                // console.log("Start", check1);
+                // console.log("End", check2);
+                // console.log("From ", from);
+                // console.log("to", to);
 
-              console.log("resultStart", resultStart);
-              console.log("resultStart2", resultStart2);
-              // console.log("resultEnd", resultEnd);
+                console.log("resultStart", resultStart);
+                console.log("resultStart2", resultStart2);
+                // console.log("resultEnd", resultEnd);
 
-              // use or (||) operator
-              if (statusAvaliable === true) {
-                if (resultStart === true || resultStart2 === true) {
-                  statusAvaliable = false;
+                // use or (||) operator
+                if (statusAvaliable === true) {
+                  if (resultStart === true || resultStart2 === true) {
+                    statusAvaliable = false;
+                  }
                 }
               }
 
@@ -343,13 +371,11 @@ function PesanRuangan(props) {
               Toast([
                 {
                   icon: "error",
-                  title: `Ruangan ${resultStart} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
+                  title: `Ruangan ${room} Pada tanggal ${dateStart} - ${dateEnd} tidak bisa dipesan`,
                 },
               ]);
             }
           } else {
-            console.log("Data tidak ditemukan");
-
             //////////////////// Formating Start Date ////////////////////
             console.log("tglMulai ", tglMulai);
             // let startDay = tglMulai;
@@ -404,6 +430,47 @@ function PesanRuangan(props) {
           }
         });
     }
+  };
+
+  // const paymentDue = () => {
+  //   var date = new Date();
+
+  //   // add a day
+  //   date.setDate(date.getDate() + 3);
+
+  //   return new Promise((resolve) => {
+  //     resolve(date);
+  //   });
+  // };
+
+  const handleDueDate = () => {
+    var dateNow = new Date();
+
+    // add a day
+    dateNow.setDate(dateNow.getDate() + 2);
+
+    console.log("Due Date", dateNow);
+
+    var result = handleFormatingDate(dateNow);
+
+    // return result;
+
+    return new Promise((resolve) => {
+      resolve(result);
+    });
+  };
+
+  const handleFormatingDate = (date) => {
+    // console.log("input date ", input);
+
+    let convertDate =
+      date.getDate() +
+      "-" +
+      parseInt(date.getMonth() + 1) +
+      "-" +
+      date.getFullYear();
+
+    return convertDate;
   };
 
   // const handleChange = (e) => {
@@ -473,15 +540,17 @@ function PesanRuangan(props) {
                       className="form-control"
                       onChange={(e) => setPaket(e.target.value)}
                     >
-                      <option>--- Casual Coworking ---</option>
-                      <option>PERJAM</option>
-                      <option>HARIAN</option>
-                      <option>HARIAN(PELAJAR)</option>
-                      <option>--- Monthly Coworking ---</option>
-                      <option>BULANAN 24JAM</option>
-                      <option>BULANAN 50JAM</option>
-                      <option>BULANAN 100JAM</option>
-                      <option>BULANAN TANPA BATAS</option>
+                      <optgroup label="Casual Coworking">
+                        <option>PERJAM</option>
+                        <option>HARIAN</option>
+                        <option>HARIAN(PELAJAR)</option>
+                      </optgroup>
+                      <optgroup label="Monthly Coworking">
+                        <option>BULANAN 25JAM</option>
+                        <option>BULANAN 50JAM</option>
+                        <option>BULANAN 100JAM</option>
+                        <option>BULANAN TANPA BATAS</option>
+                      </optgroup>
                     </select>
 
                     <div className="input-group-append">

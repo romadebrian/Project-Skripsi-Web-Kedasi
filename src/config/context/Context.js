@@ -51,3 +51,31 @@ export const DataCurrentUser = (Childern) => {
     }
   };
 };
+
+export const DataInvoice = (Childern) => {
+  return class ParentCosumer extends Component {
+    state = {
+      KodeOrder: "ORD0001",
+    };
+
+    setKodeOrder = (value) => {
+      console.log(value);
+      this.setState({ KodeOrder: value });
+    };
+
+    render() {
+      return (
+        <Cosumer>
+          {(value) => {
+            return (
+              <Childern
+                {...this.props}
+                value={{ state: this.state, setKode: this.setKodeOrder }}
+              />
+            );
+          }}
+        </Cosumer>
+      );
+    }
+  };
+};

@@ -1,6 +1,6 @@
 import React from "react";
 
-function DetailOrderOld() {
+function InvoiceOld() {
   return (
     <section className="content">
       <div className="container-fluid">
@@ -162,4 +162,4 @@ function DetailOrderOld() {
   );
 }
 
-export default DetailOrderOld;
+export default InvoiceOld;

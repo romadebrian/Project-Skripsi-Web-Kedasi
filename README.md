@@ -1,3 +1,30 @@
+# Feature
+
+- Room Reservation
+- Invoice
+- List Transaction
+- Profile
+- Notification
+- Live Chat
+
+# Screenshot
+
+### Room Reservation
+
+<img src="https://github.com/romadebrian/Project-Skripsi-Web-Kedasi/blob/main/Screenshot/RoomReservation.png" />
+
+### Invoice
+
+<img src="https://github.com/romadebrian/Project-Skripsi-Web-Kedasi/blob/main/Screenshot/Invoice.png" />
+
+### Profile
+
+<img src="https://github.com/romadebrian/Project-Skripsi-Web-Kedasi/blob/main/Screenshot/Profile.png" />
+
+### Live Chat
+
+<img src="https://github.com/romadebrian/Project-Skripsi-Web-Kedasi/blob/main/Screenshot/Chat.png" />
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

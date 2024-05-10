@@ -58,7 +58,7 @@ function SideNav(props) {
             nama: snapshot.val() && snapshot.val().Nama,
             foto: snapshot.val() && snapshot.val().Profile_Picture,
           });
-          // console.log(username);
+          // console.log(snapshot.val());
           // console.log("Photo Profile Link ", this.state.setUrl);
           // console.log(snapshot.val() && snapshot.val().Nama);
         },
@@ -95,22 +95,36 @@ function SideNav(props) {
         {/* Sidebar */}
         <div className="sidebar">
           {/* Sidebar user panel (optional) */}
-          <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div className="image">
-              <img
-                // src="dist/img/romadebrian.png"
-                src={dataUser.foto}
-                className="img-circle elevation-2"
-                style={{ height: "34px" }}
-                alt="User_Image"
-              />
+          <Link to="/profile" className="d-block">
+            <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+              <div className="image">
+                {dataUser.foto != null ? (
+                  <img
+                    src={dataUser.foto}
+                    className="img-circle elevation-2"
+                    style={{ height: "34px" }}
+                    alt="User_Image"
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      currentTarget.src = "dist/img/no-image.png";
+                    }}
+                  />
+                ) : (
+                  <img
+                    src="dist/img/no-image.png"
+                    className="img-circle elevation-2"
+                    style={{ height: "34px" }}
+                    alt="User_Image"
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      currentTarget.src = "dist/img/no-image.png";
+                    }}
+                  />
+                )}
+              </div>
+              <div className="info">{dataUser.nama}</div>
             </div>
-            <div className="info">
-              <Link to="/profile" className="d-block">
-                {dataUser.nama}
-              </Link>
-            </div>
-          </div>
+          </Link>
           {/* Sidebar Menu */}
           <nav className="mt-2">
             <ul

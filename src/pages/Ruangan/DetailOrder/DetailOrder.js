@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-// import Swal from "sweetalert2";
 import firebase, { storage } from "../../../config/firebase";
 import DateTimePicker from "react-datetime-picker";
-
 import Toast from "../../../component/toast/Toast";
+import { Link } from "react-router-dom";
+import { FormattingDateTime } from "../../../config/formattingDateTime";
 
 function DetailOrder(props) {
-  const [totalPaket, setTotalPaket] = useState(1);
-
-  // const [nameCostumer, setNameCostumer] = useState("");
+  const [paket, setPaket] = useState("");
+  const [totalPaket, setTotalPaket] = useState();
+  const [totalPayment, setTotalPayment] = useState(0);
 
   const [periksa, setPeriksa] = useState(true);
 
@@ -21,142 +21,51 @@ function DetailOrder(props) {
 
   const [valDetailOrder, setValDetailOrder] = useState({
     idOrder: "",
-    Paket: "",
     pemesan: "",
     ruangannya: "",
     tglSewa: "",
     tglSelesai: "",
     statPembayaran: "",
-    BuktiPembayaran: "",
+    buktiPembayaran: "",
+    jatuhTempo: "",
   });
 
-  // const [convertTglMulai, setConvertTglMulai] = useState("");
+  const [dataBeforeUpdate, setdataBeforeUpdate] = useState({});
+
   const [unConvert, setUnConvert] = useState("");
 
-  // console.log("data update", valDetailOrder);
-
   useEffect(() => {
-    window.$("#EditTanggalSewa").datetimepicker({
-      format: "DD-MM-YYYY",
-    });
-    window.$("#EditTanggalSelesai").datetimepicker({
-      format: "DD-MM-YYYY",
-    });
-
     if (isloaded === false) {
       // console.log("DetailOrder Props: ", props);
 
       setLoaded(true);
     }
 
-    // metodeGetData();
-  }, [isloaded]);
+    // Handle Total Payment
+    let ConvertToCurrency = Intl.NumberFormat("en-US");
 
-  const handleSubmit = async (e) => {
-    var StatusPembayaran;
-    e.preventDefault();
-
-    const PrimaryKey = await getPrimaryKey();
-
-    console.log(PrimaryKey);
-
-    console.log("Order Id: ", valDetailOrder.idOrder);
-    console.log("Paket: ", valDetailOrder.Paket);
-    console.log("Jumlah Paket", e.target[2].value);
-    console.log("Nama Pemesan: ", valDetailOrder.pemesan);
-    console.log("Ruangan: ", valDetailOrder.ruangannya);
-    console.log("Tanggal Sewa: ", valDetailOrder.tglSewa);
-    console.log("Tanggal Selesai: ", valDetailOrder.tglSelesai);
-    console.log("Status Pembayaran", valDetailOrder.statPembayaran);
-    console.log("Bukti Pembayaran", valDetailOrder.BuktiPembayaran);
-
-    // if (e.target[5].checked === true) {
-    //   StatusPembayaran = "Active";
-    //   console.log("Active");
-    // } else if (e.target[6].checked === true) {
-    //   StatusPembayaran = "Menunggu Pembayaran";
-    //   console.log("Menunggu Pembayaran");
-    // } else if (e.target[7].checked === true) {
-    //   StatusPembayaran = "Selesai";
-    //   console.log("Selesai");
-    // } else if (e.target[8].checked === true) {
-    //   StatusPembayaran = "Batal";
-    //   console.log("Batal");
-    // } else {
-    //   console.log("error");
-    // }
-
-    if (valDetailOrder.pemesan === "") {
-      Toast([
-        {
-          icon: "error",
-          title: "Nama pemesan tidak boleh kosong",
-        },
-      ]);
-    } else if (periksa === false) {
-      Toast([
-        {
-          icon: "error",
-          title: "Anda harus memeriksa ketersediaan ruangan kembali",
-        },
-      ]);
+    if (paket === "PERJAM") {
+      setTotalPayment(ConvertToCurrency.format(30000 * totalPaket));
+    } else if (paket === "HARIAN") {
+      setTotalPayment(ConvertToCurrency.format(100000 * totalPaket));
+    } else if (paket === "HARIAN(PELAJAR)") {
+      setTotalPayment(ConvertToCurrency.format(75000 * totalPaket));
+    } else if (paket === "BULANAN 25JAM") {
+      setTotalPayment(ConvertToCurrency.format(450000 * totalPaket));
+    } else if (paket === "BULANAN 50JAM") {
+      setTotalPayment(ConvertToCurrency.format(650000 * totalPaket));
+    } else if (paket === "BULANAN 100JAM") {
+      setTotalPayment(ConvertToCurrency.format(900000 * totalPaket));
+    } else if (paket === "BULANAN TANPA BATAS") {
+      setTotalPayment(ConvertToCurrency.format(1200000 * totalPaket));
     } else {
-      Toast([
-        {
-          icon: "success",
-          title: "berhasil",
-        },
-      ]);
-
-      firebase
-        .database()
-        .ref("order/" + PrimaryKey)
-        .set(
-          {
-            OrderId: valDetailOrder.idOrder,
-            Paket: valDetailOrder.Paket,
-            NamaPemesan: valDetailOrder.pemesan,
-            Ruangan: valDetailOrder.ruangannya,
-            TanggalSewa: valDetailOrder.tglSewa,
-            TanggalSelesai: valDetailOrder.tglSelesai,
-            Status: valDetailOrder.statPembayaran,
-            BuktiPembayaran: valDetailOrder.BuktiPembayaran,
-          },
-          (error) => {
-            if (error) {
-              // The write failed...
-              alert("Gagal Simpan");
-            } else {
-              // Data saved successfully!
-              // alert("Order Berhasil Di Simpan");
-
-              Toast([
-                {
-                  icon: "success",
-                  title: "Perbaruan Pemesanan Ruangan Berhasil",
-                },
-              ]);
-
-              console.log(
-                "send value: ",
-                e.target[0].value,
-                e.target[1].value,
-                e.target[2].value,
-                e.target[3].value,
-                e.target[4].value,
-                StatusPembayaran,
-                valDetailOrder.BuktiPembayaran
-              );
-              // window.location.reload();
-            }
-          }
-        );
-
-      window.$("#form-edit").modal("hide");
-
-      window.location.reload();
+      setTotalPayment(0);
     }
-  };
+  }, [isloaded, paket, totalPaket]);
+
+  useEffect(() => {
+    console.log("Detail Data", valDetailOrder);
+  }, [valDetailOrder]);
 
   const getPrimaryKey = () => {
     return new Promise((resolve) => {
@@ -168,7 +77,6 @@ function DetailOrder(props) {
         .equalTo(idPesanan)
         .once("value", (snapshot) => {
           Object.keys(snapshot.val()).map((key) => {
-            // console.log(key);
             resolve(key);
             return key;
           });
@@ -180,22 +88,39 @@ function DetailOrder(props) {
     if (props.editStatus === true) {
       const data = props.dataDetail;
 
-      // props.editFunction();
       console.log("Datanya", data);
 
       setValDetailOrder({
         idOrder: data.OrderId,
-        Paket: data.Paket,
         pemesan: data.NamaPemesan,
         ruangannya: data.Ruangan,
         tglSewa: data.TanggalSewa,
         tglSelesai: data.TanggalSelesai,
         statPembayaran: data.Status,
+        buktiPembayaran: data.BuktiPembayaran,
+        jatuhTempo: data?.JatuhTempo,
+      });
+
+      setPaket(data.Paket);
+      setTotalPaket(data.JumlahPaket);
+      setTotalPayment(data.TotalPembayaran);
+
+      setdataBeforeUpdate({
+        OrderId: data.OrderId,
+        Paket: data.Paket,
+        JumlahPaket: data.JumlahPaket,
+        NamaPemesan: data.NamaPemesan,
+        Ruangan: data.Ruangan,
+        TanggalSewa: data.TanggalSewa,
+        TanggalSelesai: data.TanggalSelesai,
+        Status: data.Status,
+        TotalPembayaran: data.TotalPembayaran,
         BuktiPembayaran: data.BuktiPembayaran,
+        JatuhTempo: data.JatuhTempo,
       });
 
       if (data.BuktiPembayaran === "") {
-        setStatusUpload("Add File");
+        setStatusUpload("Submit Payment");
         setFotoName("Choose File");
         setStyleButton("btn-success");
       } else {
@@ -208,7 +133,6 @@ function DetailOrder(props) {
       var d1 = CurrentDateOrder.split("-");
       var resultConvert = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
 
-      // console.log(resultConvert);
       setUnConvert(resultConvert);
 
       props.disableModeEdit();
@@ -246,11 +170,9 @@ function DetailOrder(props) {
     } else {
       console.log("error");
     }
-
-    // console.log(e);
   };
 
-  const checkDateAvaliable = (e) => {
+  const checkDateAvaliable = async (e) => {
     // console.log(e.nativeEvent.path);
     // console.log(e.nativeEvent.path[5][4].value);
     // console.log(e.target.parentNode.firstChild.offsetParent);
@@ -258,38 +180,86 @@ function DetailOrder(props) {
     var paket = valDetailOrder.Paket;
 
     console.log("paket", paket);
-    console.log("total paket", totalPaket);
+    console.log("total paket", valDetailOrder.JumlahPaket);
     console.log("ruanggannya", valDetailOrder.ruangannya);
     console.log("tgl sewa", unConvert);
 
-    if (
-      paket === "" ||
-      paket === "--- Casual Coworking ---" ||
-      paket === "--- Monthly Coworking ---"
-    ) {
+    if (paket === "") {
       Toast([
         {
           icon: "error",
           title: "Paket pesanan belum di pilih",
         },
       ]);
-    }
-    // else if (tglMulai === "") {
-    //   Toast([
-    //     {
-    //       icon: "error",
-    //       title: "Tanggal sewa tidak boleh kosong",
-    //     },
-    //   ]);
-    // }
-    else {
+    } else {
       //////////////////// Colect data from firebase ////////////////////
       return firebase
         .database()
         .ref("/order/")
         .orderByChild("Ruangan")
         .equalTo(valDetailOrder.ruangannya)
-        .on("value", (snapshot) => {
+        .on("value", async (snapshot) => {
+          //////////////////// Formating Start Date ////////////////////
+          console.log("tglMulai ", unConvert);
+          let startDay = unConvert;
+
+          let StartDate =
+            startDay.getDate() +
+            "-" +
+            parseInt(startDay.getMonth() + 1) +
+            "-" +
+            startDay.getFullYear();
+
+          console.log("StartDate 123 ", StartDate);
+          console.log(startDay);
+
+          // setValDetailOrder({
+          //   ...valDetailOrder,
+          //   tglSewa: StartDate,
+          // });
+
+          //////////////////// Formating Finish Date ////////////////////
+          // var IncreseDate = new Date(
+          //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
+          // );
+
+          // var IncreseDate = new Date(unConvert);
+
+          var PickerDate = new Date(unConvert);
+
+          let jmlPaket = Number(totalPaket); //convert string to number
+          var IncreseDate = "";
+
+          if (
+            paket === "PERJAM" ||
+            paket === "HARIAN" ||
+            paket === "HARIAN(PELAJAR)"
+          ) {
+            IncreseDate = PickerDate;
+            console.log("Perjam/Perhari");
+          } else {
+            // IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
+            IncreseDate = new Date(
+              new Date(PickerDate).setMonth(PickerDate.getMonth() + jmlPaket)
+            );
+          }
+
+          let DateAfterIncresed = IncreseDate;
+
+          let FinishDay =
+            DateAfterIncresed.getDate() +
+            "-" +
+            parseInt(DateAfterIncresed.getMonth() + 1) +
+            "-" +
+            DateAfterIncresed.getFullYear();
+
+          console.log("FinishDay ", FinishDay);
+          // setTglSelesai(FinishDay);
+          // setValDetailOrder({
+          //   ...valDetailOrder,
+          //   tglSelesai: FinishDay,
+          // });
+
           const dataHasil = [];
           if (snapshot.exists()) {
             Object.keys(snapshot.val()).map((key) => {
@@ -316,66 +286,27 @@ function DetailOrder(props) {
             console.log(dataHasil[0].data.TanggalSewa);
             console.log(dataHasil[0].data.TanggalSelesai);
 
-            //////////////////// Formating Start Date ////////////////////
-            console.log("tglMulai ", unConvert);
-            let startDay = unConvert;
-
-            let StartDate =
-              startDay.getDate() +
-              "-" +
-              parseInt(startDay.getMonth() + 1) +
-              "-" +
-              startDay.getFullYear();
-
-            console.log("StartDate ", StartDate);
-            // setConvertTglMulai(StartDate);
-            setValDetailOrder({
-              ...valDetailOrder,
-              tglSewa: StartDate,
-            });
-
-            //////////////////// Formating Finish Date ////////////////////
-            // var IncreseDate = new Date(
-            //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
-            // );
-
-            var IncreseDate = new Date(unConvert);
-
-            if (
-              paket === "PERJAM" ||
-              paket === "HARIAN" ||
-              paket === "HARIAN(PELAJAR)"
-            ) {
-              console.log("Perjam/Perhari");
-            } else {
-              IncreseDate.setMonth(IncreseDate.getMonth() + totalPaket);
-            }
-
-            let DateAfterIncresed = IncreseDate;
-
-            let FinishDay =
-              DateAfterIncresed.getDate() +
-              "-" +
-              parseInt(DateAfterIncresed.getMonth() + 1) +
-              "-" +
-              DateAfterIncresed.getFullYear();
-
-            console.log("FinishDay ", FinishDay);
-            // setTglSelesai(FinishDay);
-            setValDetailOrder({
-              ...valDetailOrder,
-              tglSelesai: FinishDay,
-            });
-
             //////////////////// Check Avaliable Start Date ////////////////////
             let i = 0;
 
             var statusAvaliable = true;
 
             do {
+              // Check jika itu adalah orderan yang sama
               if (dataHasil[i].data.OrderId === valDetailOrder.idOrder) {
                 console.log(i);
                 console.log("current Order", dataHasil[i].data.OrderId);
+              } else if (
+                dataHasil[i].data.Status === "Batal" ||
+                dataHasil[i].data.Status === "Selesai"
+              ) {
+                console.log(i);
+                console.log(
+                  "Order ",
+                  dataHasil[i].data.OrderId,
+                  "Status ",
+                  dataHasil[i].data.Status
+                );
               } else {
                 console.log(i);
                 var dateFrom = dataHasil[i].data.TanggalSewa;
@@ -390,7 +321,7 @@ function DetailOrder(props) {
 
                 // console.log(d1);
                 // console.log(d2);
-                // console.log(c);
+                // console.log(c1);
 
                 var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]); // -1 because months are from 0 to 11
                 var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
@@ -442,59 +373,8 @@ function DetailOrder(props) {
               ]);
             }
           } else {
+            // Jika tidak ada order ruangan tersebut
             console.log("Data tidak ditemukan");
-
-            //////////////////// Formating Start Date ////////////////////
-            console.log("tglMulai ", unConvert);
-            let startDay = unConvert;
-
-            let StartDate =
-              startDay.getDate() +
-              "-" +
-              parseInt(startDay.getMonth() + 1) +
-              "-" +
-              startDay.getFullYear();
-
-            console.log("StartDate ", StartDate);
-            // setConvertTglMulai(StartDate);
-            setValDetailOrder({
-              ...valDetailOrder,
-              tglSewa: StartDate,
-            });
-
-            //////////////////// Formating Finish Date ////////////////////
-            // var IncreseDate = new Date(
-            //   "Fri Jul 1 2023 00:00:00 GMT+0700 (Western Indonesia Time)"
-            // );
-
-            var IncreseDate2 = new Date(valDetailOrder.tglSewa);
-
-            // var paket = valDetailOrder.Paket;
-
-            if (
-              paket === "PERJAM" ||
-              paket === "HARIAN" ||
-              paket === "HARIAN(PELAJAR)"
-            ) {
-              console.log("Perjam/Perhari");
-            } else {
-              IncreseDate2.setMonth(IncreseDate2.getMonth() + totalPaket);
-            }
-
-            let DateAfterIncresed = IncreseDate2;
-
-            let FinishDay =
-              DateAfterIncresed.getDate() +
-              "-" +
-              parseInt(DateAfterIncresed.getMonth() + 1) +
-              "-" +
-              DateAfterIncresed.getFullYear();
-
-            console.log("FinishDay ", FinishDay);
-            setValDetailOrder({
-              ...valDetailOrder,
-              tglSelesai: FinishDay,
-            });
 
             //////////////////// Toast ////////////////////
             setPeriksa(true);
@@ -505,7 +385,113 @@ function DetailOrder(props) {
               },
             ]);
           }
+
+          setValDetailOrder({
+            ...valDetailOrder,
+            tglSewa: StartDate,
+            tglSelesai: FinishDay,
+          });
         });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    // var StatusPembayaran;
+    e.preventDefault();
+
+    const PrimaryKey = await getPrimaryKey();
+    // const jatuhTempo = await handleDueDate();
+
+    console.log(PrimaryKey);
+
+    console.log("Order Id: ", valDetailOrder.idOrder);
+    console.log("Paket: ", paket);
+    console.log("Jumlah Paket", totalPaket);
+    console.log("Nama Pemesan: ", valDetailOrder.pemesan);
+    console.log("Ruangan: ", valDetailOrder.ruangannya);
+    console.log("Tanggal Sewa: ", valDetailOrder.tglSewa);
+    console.log("Tanggal Selesai: ", valDetailOrder.tglSelesai);
+    console.log("Status Pembayaran", valDetailOrder.statPembayaran);
+    console.log("Total Pembayaran", totalPayment);
+    console.log("Bukti Pembayaran", valDetailOrder.buktiPembayaran);
+    console.log("Jatuh Tempo", valDetailOrder.jatuhTempo);
+
+    if (valDetailOrder.pemesan === "") {
+      Toast([
+        {
+          icon: "error",
+          title: "Nama pemesan tidak boleh kosong",
+        },
+      ]);
+    } else if (periksa === false) {
+      Toast([
+        {
+          icon: "error",
+          title: "Anda harus memeriksa ketersediaan ruangan kembali",
+        },
+      ]);
+    } else {
+      Toast([
+        {
+          icon: "success",
+          title: "berhasil",
+        },
+      ]);
+
+      firebase
+        .database()
+        .ref("order/" + PrimaryKey)
+        .set(
+          {
+            OrderId: valDetailOrder.idOrder,
+            Paket: paket,
+            JumlahPaket: totalPaket,
+            NamaPemesan: valDetailOrder.pemesan,
+            Ruangan: valDetailOrder.ruangannya,
+            TanggalSewa: valDetailOrder.tglSewa,
+            TanggalSelesai: valDetailOrder.tglSelesai,
+            Status: valDetailOrder.statPembayaran,
+            TotalPembayaran: totalPayment,
+            BuktiPembayaran: valDetailOrder.buktiPembayaran,
+            JatuhTempo: valDetailOrder.jatuhTempo,
+          },
+          (error) => {
+            if (error) {
+              // The write failed...
+              alert("Gagal Simpan");
+            } else {
+              // Data saved successfully!
+              // alert("Order Berhasil Di Simpan");
+
+              Toast([
+                {
+                  icon: "success",
+                  title: "Perbaruan Pemesanan Ruangan Berhasil",
+                },
+              ]);
+
+              console.log(
+                "send value: ",
+                valDetailOrder.idOrder,
+                paket,
+                totalPaket,
+                valDetailOrder.pemesan,
+                valDetailOrder.ruangannya,
+                valDetailOrder.tglSewa,
+                valDetailOrder.tglSelesai,
+                valDetailOrder.statPembayaran,
+                totalPayment,
+                valDetailOrder.buktiPembayaran,
+                valDetailOrder.jatuhTempo
+              );
+              // window.location.reload();
+            }
+          }
+        );
+
+      window.$("#form-edit").modal("hide");
+
+      // window.location.reload();
     }
   };
 
@@ -569,13 +555,17 @@ function DetailOrder(props) {
                   .ref("order/" + PrimaryKey)
                   .set(
                     {
-                      OrderId: valDetailOrder.idOrder,
-                      NamaPemesan: valDetailOrder.pemesan,
-                      Ruangan: valDetailOrder.ruangannya,
-                      TanggalSewa: valDetailOrder.tglSewa,
-                      TanggalSelesai: valDetailOrder.tglSelesai,
-                      Status: valDetailOrder.statPembayaran,
+                      OrderId: dataBeforeUpdate.OrderId,
+                      Paket: dataBeforeUpdate.Paket,
+                      JumlahPaket: dataBeforeUpdate.JumlahPaket,
+                      NamaPemesan: dataBeforeUpdate.NamaPemesan,
+                      Ruangan: dataBeforeUpdate.Ruangan,
+                      TanggalSewa: dataBeforeUpdate.TanggalSewa,
+                      TanggalSelesai: dataBeforeUpdate.TanggalSelesai,
+                      Status: dataBeforeUpdate.Status,
+                      TotalPembayaran: dataBeforeUpdate.TotalPembayaran,
                       BuktiPembayaran: MetaDataFoto.name,
+                      JatuhTempo: dataBeforeUpdate.JatuhTempo,
                     },
                     (error) => {
                       if (error) {
@@ -583,18 +573,20 @@ function DetailOrder(props) {
                         alert("Gagal Simpan Ke Database");
                       } else {
                         // Data saved successfully!
+                        handleSearchUserBasedOnOrderId();
+
                         Toast([
                           {
                             icon: "success",
-                            title: "Pesanan berhasil di perbarui 1.",
+                            title: "Bukti Pembayaran Berhasil Di Upload",
                           },
                         ]);
 
-                        // console.log(valDetailOrder.BuktiPembayaran);
+                        // console.log(valDetailOrder.buktiPembayaran);
 
                         setValDetailOrder({
                           ...valDetailOrder,
-                          BuktiPembayaran: MetaDataFoto.name,
+                          buktiPembayaran: MetaDataFoto.name,
                         });
 
                         setFileFoto(null);
@@ -612,7 +604,8 @@ function DetailOrder(props) {
       }
     } else if (statusUpload === "View") {
       openFoto();
-    } else if (statusUpload === "Add File") {
+    } else if (statusUpload === "Submit Payment") {
+      document.getElementById("InputPaymentFoto").click();
     } else if (statusUpload === "Uploading") {
     }
   };
@@ -645,7 +638,168 @@ function DetailOrder(props) {
       });
   };
 
-  // const convertTanggal = (val) => {};
+  // Kode Order untuk Invoice (alternatif react redux)
+  const setKodeOrder = async () => {
+    // console.log(props.value.setKode);
+    // await props.value.setKode("ORD0033");
+
+    localStorage.setItem("OrderId", JSON.stringify(valDetailOrder.idOrder));
+  };
+
+  // const convertTanggal = async (D) => {
+  //   //////////////////// Formating Start Date ////////////////////
+  //   console.log("tglMulai ", unConvert);
+  //   let startDay = unConvert;
+
+  //   let StartDate =
+  //     startDay.getDate() +
+  //     "-" +
+  //     parseInt(startDay.getMonth() + 1) +
+  //     "-" +
+  //     startDay.getFullYear();
+
+  //   console.log("StartDate 123 ", StartDate);
+  //   console.log(startDay);
+
+  //   setValDetailOrder({
+  //     ...valDetailOrder,
+  //     tglSewa: StartDate,
+  //   });
+
+  //   console.log("Check Val Data", valDetailOrder);
+
+  //   return new Promise((resolve) => {
+  //     resolve(StartDate);
+  //   });
+
+  //   // return StartDate;
+  // };
+
+  const handleSearchUserBasedOnOrderId = async () => {
+    // colect list data user
+    const handleGetListUser = async () => {
+      const listUser = [];
+      await firebase
+        .database()
+        .ref("users")
+        .once("value", (snapshot) => {
+          // console.log(snapshot.val());
+
+          Object.keys(snapshot.val()).map((key) => {
+            // console.log(snapshot.val());
+            // console.log(snapshot.val()[key]);
+            listUser.push({
+              id: key,
+              data: snapshot.val()[key],
+            });
+            return null;
+          });
+          // console.log(listUser);
+        });
+      // console.log(listUser);
+      return listUser;
+    };
+
+    // After listing run this
+    handleGetListUser().then(async (list) => {
+      const listUser = list;
+      // console.log(listUser);
+
+      // search Token notification user and send remote notification
+      listUser.map((val) => {
+        const listOrderUser = val.data.order;
+        // console.log(val);
+        // console.log(listOrderUser);
+
+        // If user don't have transaction, don't send remote notification
+        if (listOrderUser != null) {
+          // Mapping list order user
+          Object.keys(listOrderUser).map((key) => {
+            // console.log(key);
+            // console.log(listOrderUser[key].OrderId);
+
+            if (listOrderUser[key].OrderId === valDetailOrder.idOrder) {
+              var to = val.data?.TokenNotif;
+
+              if (to != null) {
+                // console.log("Found ==============", to);
+
+                // Create Notification to Aplication Mobile (client)
+                handleCreateRemoteNotification(to);
+
+                // Create notification to database
+                var user = val.id;
+                // console.log(user);
+                const sendToFirebase = handleCreateNotificationToDatabase(user);
+
+                console.log(sendToFirebase);
+              }
+            }
+            return null;
+          });
+        }
+
+        return null;
+      });
+    });
+  };
+
+  const handleCreateRemoteNotification = async (to) => {
+    const myData = {
+      to: to,
+      priority: "high",
+      notification: {
+        title: "Konfirmasi Pembayaran",
+        body: `Pesanan anda dengan OrderId ${valDetailOrder.idOrder} telah dikonfirmasi pembayarannya`,
+      },
+
+      data: {
+        Action: "CheckOut",
+        OrderID: valDetailOrder.idOrder,
+      },
+    };
+
+    const result = await fetch("https://fcm.googleapis.com/fcm/send", {
+      method: "POST",
+      headers: {
+        Authorization:
+          "key=AAAA6jj0k_w:APA91bFVagvVrQ1UsvzH-GglbdFAzvfuGhE1A6KABx3Y3QdiiyKNba9RG6zAkYqm3oAd23M-l7BuhzatGHAOHln6L2lho1ZrhMUM5DB678r2Z9_Bd79z46HCiezO9q9zD6CaiTa_h6C2",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(myData),
+    }).then(console.log(myData));
+
+    const resultJson = await result.json();
+    console.log(resultJson);
+  };
+
+  const handleCreateNotificationToDatabase = async (idUser) => {
+    var DateTimeNow = FormattingDateTime(new Date());
+    var response = "";
+
+    var postListRef = firebase.database().ref(`users/${idUser}/notifikasi`);
+    var newPostRef = postListRef.push();
+    await newPostRef.set(
+      {
+        Aksi: "CheckOut",
+        Date: DateTimeNow,
+        Isi: `Pesanan anda dengan OrderId ${valDetailOrder.idOrder} telah dikonfirmasi pembayarannya`,
+        Judul: "Konfirmasi Pembayaran",
+        Meta_Data: valDetailOrder.idOrder,
+        Status: "Unread",
+        Target: idUser,
+      },
+      (error) => {
+        if (error) {
+          alert("Gagal Simpan");
+        } else {
+          response = "Berhasil Membuat Notifikasi di Database";
+        }
+      }
+    );
+
+    return response;
+  };
 
   return (
     <div
@@ -658,6 +812,9 @@ function DetailOrder(props) {
           <div className="card card-primary">
             <div className="card-header">
               <h3 className="card-title">Detail Pesan Ruangan</h3>
+              <Link to="/invoice" target="_blank" onClick={setKodeOrder}>
+                <i className="fa fa-print float-right"></i>
+              </Link>
             </div>
             {/* /.card-header */}
             {/* form start */}
@@ -679,24 +836,27 @@ function DetailOrder(props) {
                   <div className="input-group" id="Paket">
                     <select
                       className="form-control"
-                      value={valDetailOrder.Paket}
+                      value={paket}
                       onChange={(e) => {
-                        setValDetailOrder({
-                          ...valDetailOrder,
-                          Paket: e.target.value,
-                        });
+                        // setValDetailOrder({
+                        //   ...valDetailOrder,
+                        //   Paket: e.target.value,
+                        // });
+                        setPaket(e.target.value);
                         setPeriksa(false);
                       }}
                     >
-                      <option>--- Casual Coworking ---</option>
-                      <option>PERJAM</option>
-                      <option>HARIAN</option>
-                      <option>HARIAN(PELAJAR)</option>
-                      <option>--- Monthly Coworking ---</option>
-                      <option>BULANAN 24JAM</option>
-                      <option>BULANAN 50JAM</option>
-                      <option>BULANAN 100JAM</option>
-                      <option>BULANAN TANPA BATAS</option>
+                      <optgroup label="Casual Coworking">
+                        <option>PERJAM</option>
+                        <option>HARIAN</option>
+                        <option>HARIAN(PELAJAR)</option>
+                      </optgroup>
+                      <optgroup label="Monthly Coworking">
+                        <option>BULANAN 25JAM</option>
+                        <option>BULANAN 50JAM</option>
+                        <option>BULANAN 100JAM</option>
+                        <option>BULANAN TANPA BATAS</option>
+                      </optgroup>
                     </select>
 
                     <div className="input-group-append">
@@ -769,6 +929,7 @@ function DetailOrder(props) {
                         //   ...valDetailOrder,
                         //   tglSewa: e,
                         // });
+
                         setUnConvert(e);
                         setPeriksa(false);
                       }}
@@ -842,6 +1003,20 @@ function DetailOrder(props) {
                 </div>
               </div>
               {/* /.card-body */}
+
+              {/* <div style={{ marginRight: "10px", color: "green" }}>
+                <h3 className="float-right">
+                  Total Rp {valDetailOrder.totalPayment}
+                </h3>
+              </div> */}
+
+              <div
+                className="d-flex  flex-row-reverse "
+                style={{ marginRight: "10px", color: "green" }}
+              >
+                <h3>Total Rp {totalPayment}</h3>
+              </div>
+
               <div className="card-footer">
                 <div className="row">
                   <div className="col-3">
@@ -867,6 +1042,8 @@ function DetailOrder(props) {
                           className={`btn ${styleButton}`}
                           onClick={handleUploadFoto}
                         >
+                          <i className="far fa-credit-card" />
+                          &nbsp;
                           {statusUpload}
                         </span>
                       </div>
@@ -882,7 +1059,7 @@ function DetailOrder(props) {
                           className="custom-file-label"
                           htmlFor="exampleInputFile"
                         >
-                          {fotoName}
+                          <b>{fotoName}</b>
                         </label>
                       </div>
                     </div>
